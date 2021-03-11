@@ -73,7 +73,6 @@ public class PlayerController : BaseController
         }
         else
         {
-            Debug.Log("이동중");
             float moveDist = Mathf.Clamp(_walkSpeed * Time.deltaTime, 0, dir.magnitude);
             transform.position += dir.normalized * moveDist;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);
