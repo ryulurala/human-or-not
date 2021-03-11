@@ -1,2 +1,2 @@
-# ssu-open-world1
+# ssu-open-world
 RPG: Running arround campus in open world
