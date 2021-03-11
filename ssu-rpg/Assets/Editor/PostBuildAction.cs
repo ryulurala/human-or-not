@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEditor.Callbacks;
 
-public class PostBuildActions
+public class PostBuildAction
 {
     [PostProcessBuild]
     public static void OnPostProcessBuild(BuildTarget target, string targetPath)

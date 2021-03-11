@@ -33,4 +33,14 @@ public class Define
         Monster,
     }
     #endregion
+
+    #region  Scene
+    public enum Scene
+    {
+        UnKnown,
+        Start,
+        World,
+    }
+    #endregion
+
 }

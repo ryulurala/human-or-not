@@ -9,7 +9,9 @@ public class Manager : MonoBehaviour
 
     #region core
     InputManager _input = new InputManager();
+    SceneManagerEx _scene = new SceneManagerEx();
     public static InputManager Input { get { return Instance._input; } }
+    public static SceneManagerEx Scene { get { return Instance._scene; } }
     #endregion
 
     void Update()
@@ -27,5 +29,11 @@ public class Manager : MonoBehaviour
         }
         // Scene이 이동해도 삭제 [X]
         DontDestroyOnLoad(go);
+    }
+
+    public static void Clear()
+    {
+        Input.Clear();
+        Scene.Clear();
     }
 }
