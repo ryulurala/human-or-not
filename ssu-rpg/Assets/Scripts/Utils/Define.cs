@@ -8,10 +8,10 @@ public class Define
     public const float MousePressedTime = 0.5f;
     public enum MouseEvent
     {
-        Down,
-        Press,
-        Up,
-        Click,
+        LeftPress,
+        LeftClick,
+        RightClick,
+        ScrollWheel,
     }
     #endregion
 

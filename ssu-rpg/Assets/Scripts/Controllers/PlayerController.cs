@@ -87,28 +87,22 @@ public class PlayerController : BaseController
         if (_state == Define.State.Die)
             return;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-        bool isHit = Physics.Raycast(ray, out hitInfo, 100f, LayerMask.GetMask("Ground"));
-        Debug.DrawRay(Camera.main.transform.position, Input.mousePosition - Camera.main.transform.position * 100f, Color.green, 1f);
-
-        switch (mouseEvent)
-        {
-            case Define.MouseEvent.Down:
-                break;
-            case Define.MouseEvent.Press:
-                break;
-            case Define.MouseEvent.Up:
-                break;
-            case Define.MouseEvent.Click:
-                if (isHit)
-                {
-                    Debug.Log($"이동! {hitInfo.point}");
-                    _destPos = hitInfo.point;
-                    State = Define.State.Walking;
-                }
-                break;
-        }
+        if (mouseEvent == Define.MouseEvent.RightClick)
+            MovePoint();
     }
     #endregion
+
+    void MovePoint()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+        if (Physics.Raycast(ray, out hitInfo, 100f, LayerMask.GetMask("Ground")))
+        {
+            Debug.Log($"이동! {hitInfo.point}");
+            _destPos = hitInfo.point;
+            State = Define.State.Walking;
+        }
+
+        Debug.DrawRay(Camera.main.transform.position, Input.mousePosition - Camera.main.transform.position * 100f, Color.green, 1f);
+    }
 }

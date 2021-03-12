@@ -16,7 +16,7 @@ public class InputManager
         //     return;
 
         if (MouseAction != null)
-            OnMouse();
+            OnMouseEvent();
     }
 
     public void Clear()
@@ -24,27 +24,34 @@ public class InputManager
         MouseAction = null;
     }
 
-
     #region Event
-    void OnMouse()
+    void OnMouseEvent()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            MouseAction.Invoke(Define.MouseEvent.Down);
-
-            // 시간 측정
-            _pressedTime = Time.time;
+            // LMB
+            _pressedTime = Time.time;   // 시간 측정
         }
         else if (Input.GetMouseButton(0))
         {
-            MouseAction.Invoke(Define.MouseEvent.Press);
+            MouseAction.Invoke(Define.MouseEvent.LeftPress);
         }
         else if (Input.GetMouseButtonUp(0))
         {
             if (Time.time - _pressedTime < Define.MousePressedTime)
-                MouseAction.Invoke(Define.MouseEvent.Click);
-            else
-                MouseAction.Invoke(Define.MouseEvent.Up);
+                MouseAction.Invoke(Define.MouseEvent.LeftClick);
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            // RMB
+            MouseAction.Invoke(Define.MouseEvent.RightClick);
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        {
+            // Scroll Wheel
+            MouseAction.Invoke(Define.MouseEvent.ScrollWheel);
         }
     }
     #endregion
