@@ -18,6 +18,7 @@ public class StartScene : BaseScene
     {
         yield return new WaitForSeconds(2.0f);
         // 1초 후
-        Manager.Scene.LoadScene(Define.Scene.World);
+        if (MobileOrPc.IsMobile())
+            Manager.Scene.LoadScene(Define.Scene.World);
     }
 }
