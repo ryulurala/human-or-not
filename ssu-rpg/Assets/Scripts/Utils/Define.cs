@@ -15,6 +15,16 @@ public class Define
     }
     #endregion
 
+    #region TouchEvent
+    public const float touchPressedTime = 0.5f;
+    public enum TouchEvent
+    {
+        TabWithOne,
+        PressWithOne,
+        PressWithTwo,
+    }
+    #endregion
+
     #region State
     public enum State
     {

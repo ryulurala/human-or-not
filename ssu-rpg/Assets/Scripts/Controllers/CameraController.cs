@@ -26,6 +26,24 @@ public class CameraController : MonoBehaviour
         transform.LookAt(_target.transform);
     }
 
+    #region Mobile
+    void OnTouchEvent(Define.TouchEvent touchEvent)
+    {
+        switch (touchEvent)
+        {
+            case Define.TouchEvent.PressWithOne:
+                Rotate();
+                break;
+            case Define.TouchEvent.TabWithOne:
+                // 다른 Player 옵션
+                break;
+            case Define.TouchEvent.PressWithTwo:
+                break;
+        }
+    }
+    #endregion
+
+    #region PC
     void OnMouseEvent(Define.MouseEvent mouseEvent)
     {
         switch (mouseEvent)
@@ -60,4 +78,5 @@ public class CameraController : MonoBehaviour
     {
 
     }
+    #endregion
 }

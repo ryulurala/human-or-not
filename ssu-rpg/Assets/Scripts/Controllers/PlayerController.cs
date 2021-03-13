@@ -40,6 +40,9 @@ public class PlayerController : BaseController
         // Listener
         Manager.Input.MouseAction -= OnMouseEvent;  // Pooling으로 인해 두 번 등록 방지
         Manager.Input.MouseAction += OnMouseEvent;
+
+        Manager.Input.TouchAction -= OnTouchEvent;  // Pooling으로 인해 두 번 등록 방지
+        Manager.Input.TouchAction += OnTouchEvent;
     }
 
     protected override void OnUpdate()
@@ -81,7 +84,18 @@ public class PlayerController : BaseController
     void UpdateRun() { }
     #endregion
 
-    #region OnEvent
+    #region Mobile
+    void OnTouchEvent(Define.TouchEvent touchEvent)
+    {
+        if (_state == Define.State.Die)
+            return;
+
+        if (touchEvent == Define.TouchEvent.TabWithOne)
+            MovePoint();
+    }
+    #endregion
+
+    #region PC
     void OnMouseEvent(Define.MouseEvent mouseEvent)
     {
         if (_state == Define.State.Die)
