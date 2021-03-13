@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Util
 {
-    [DllImport("__Internal")] private static extern bool isMobile();
 
 #if !UNITY_EDITOR && UNITY_WEBGL
+    [DllImport("__Internal")] private static extern bool isMobile();
     public static bool IsMobile { get; } = isMobile();
 #else
     public static bool IsMobile { get; } = false;
