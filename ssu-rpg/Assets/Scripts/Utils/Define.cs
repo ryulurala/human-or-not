@@ -8,6 +8,7 @@ public class Define
     public const float MousePressedTime = 0.5f;
     public enum MouseEvent
     {
+        LeftStart,
         LeftPress,
         LeftClick,
         RightClick,
@@ -19,6 +20,7 @@ public class Define
     public const float touchPressedTime = 0.5f;
     public enum TouchEvent
     {
+        TabWithOneStart,
         TabWithOne,
         PressWithOne,
         PressWithTwo,

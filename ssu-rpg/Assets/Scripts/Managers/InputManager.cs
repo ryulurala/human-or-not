@@ -71,6 +71,7 @@ public class InputManager
     {
         if (Input.GetMouseButtonDown(0))
         {
+            MouseAction.Invoke(Define.MouseEvent.LeftStart);
             // LMB
             _pressedTime = Time.time;   // 시간 측정
         }
