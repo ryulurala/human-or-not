@@ -43,6 +43,7 @@ public class InputManager
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
             {
+                TouchAction.Invoke(Define.TouchEvent.TabWithOneStart);
                 _pressedTime = Time.time;   // 시간 측정
             }
             else if (touch.phase == TouchPhase.Moved)
@@ -51,7 +52,7 @@ public class InputManager
             }
             else if (touch.phase == TouchPhase.Ended)
             {
-                if (Time.time - _pressedTime < Define.touchPressedTime)
+                if (Time.time - _pressedTime < Define.TouchPressedTime)
                     TouchAction.Invoke(Define.TouchEvent.TabWithOne);
             }
         }
@@ -72,7 +73,6 @@ public class InputManager
         if (Input.GetMouseButtonDown(0))
         {
             MouseAction.Invoke(Define.MouseEvent.LeftStart);
-            // LMB
             _pressedTime = Time.time;   // 시간 측정
         }
         else if (Input.GetMouseButton(0))

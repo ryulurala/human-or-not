@@ -91,7 +91,7 @@ public class PlayerController : BaseController
             return;
 
         if (touchEvent == Define.TouchEvent.TabWithOne)
-            MovePoint();
+            MovePoint(Input.GetTouch(0).position);
     }
     #endregion
 
@@ -102,13 +102,13 @@ public class PlayerController : BaseController
             return;
 
         if (mouseEvent == Define.MouseEvent.RightClick)
-            MovePoint();
+            MovePoint(Input.mousePosition);
     }
     #endregion
 
-    void MovePoint()
+    void MovePoint(Vector2 point)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(point);
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, 100f, LayerMask.GetMask("Ground")))
         {
