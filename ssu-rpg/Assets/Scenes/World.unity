@@ -451,10 +451,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _delta: {x: 0, y: 5, z: -10}
   _ratio: 1
+  _rotateSpeed: 1
   _target: {fileID: 0}
   _pivot: {fileID: 0}
-  _zoomSpeed: 0.5
-  _rotateSpeed: 2
 --- !u!1 &1284606797
 GameObject:
   m_ObjectHideFlags: 0

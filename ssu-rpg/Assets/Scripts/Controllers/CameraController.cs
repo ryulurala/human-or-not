@@ -66,7 +66,7 @@ public class CameraController : MonoBehaviour
         float prevTouchDelta = (touchZeroPrev - touchOnePrev).magnitude;
         float touchDelta = (touchZero.position - touchOne.position).magnitude;
 
-        return prevTouchDelta - touchDelta;
+        return touchDelta - prevTouchDelta;
     }
     #endregion
 

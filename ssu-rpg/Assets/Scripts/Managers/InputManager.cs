@@ -33,6 +33,7 @@ public class InputManager
     public void Clear()
     {
         MouseAction = null;
+        TouchAction = null;
     }
 
     #region Mobile
