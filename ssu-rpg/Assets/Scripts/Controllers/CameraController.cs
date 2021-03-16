@@ -5,18 +5,22 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] Vector3 _delta = new Vector3(0, 5f, -10f);  // 거리 차
+    [SerializeField] Vector3 _delta = new Vector3(0f, 5f, -10f);
     [SerializeField] float _ratio = 1f;
     [SerializeField] GameObject _target = null;
-    // [SerializeField] float _zoomSpeed = 0.5f;
-    // [SerializeField] float _rotateSpeed = 2f;
+    [SerializeField] Transform _pivot = null;
+    [SerializeField] float _zoomSpeed = 0.5f;
+    [SerializeField] float _rotateSpeed = 2f;
     Vector3 _startPos;
-    Vector3 _pressedPos;
+    float _xAngleStart;
+    float _yAngleStart;
 
     public GameObject Target { get { return _target; } set { _target = value; } }
 
     void Start()
     {
+        _pivot = transform.parent;
+
         Manager.Input.MouseAction += OnMouseEvent;
         Manager.Input.TouchAction += OnTouchEvent;
     }
@@ -26,8 +30,9 @@ public class CameraController : MonoBehaviour
         if (!_target.IsValid())
             return;
 
-        transform.position = _target.transform.position + _delta * _ratio;
-        transform.LookAt(_target.transform.position);
+        _pivot.position = _target.transform.position;
+        transform.localPosition = _delta * _ratio;
+        transform.LookAt(_pivot.transform.position);
     }
 
     #region Mobile
@@ -70,11 +75,19 @@ public class CameraController : MonoBehaviour
     void RotateStart()
     {
         _startPos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+
+        _xAngleStart = _pivot.eulerAngles.x >= 340 ? _pivot.eulerAngles.x - 360 : _pivot.eulerAngles.x;
+        _yAngleStart = _pivot.eulerAngles.y;
     }
 
     void Rotate()
     {
-        _pressedPos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        Vector3 distPos = Camera.main.ScreenToViewportPoint(Input.mousePosition) - _startPos;
+
+        float xAngle = Mathf.Clamp(_xAngleStart - distPos.y * 90 * _rotateSpeed, -20, 50);
+        float yAngle = _yAngleStart + (distPos).x * 180 * _rotateSpeed;
+
+        _pivot.rotation = Quaternion.Euler(xAngle, yAngle, 0f);
     }
 
     void Zoom()
@@ -89,7 +102,7 @@ public class CameraController : MonoBehaviour
             // 확대
             _ratio += Input.mouseScrollDelta.y;
         }
-        _ratio = Mathf.Clamp(_ratio, 1f, 5f);
+        _ratio = Mathf.Clamp(_ratio, 0.5f, 5f);
     }
     #endregion
 }
