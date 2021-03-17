@@ -6,11 +6,11 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] Vector3 _delta = new Vector3(0f, 5f, -10f);
-    [SerializeField] float _ratio = 1f;
-    [SerializeField] float _rotateSpeed = 1f;
     [SerializeField] GameObject _target = null;
-    [SerializeField] Transform _pivot = null;
-    Vector3 _prevMousePos;
+    [SerializeField] float _ratio = 1f;
+    Transform _pivot = null;
+    float _rotateSpeed = 1f;
+    Vector3 _prevPos;
     float _pivotAngleX = 0f;
     float _pivotAngleY = 0f;
 
@@ -35,6 +35,8 @@ public class CameraController : MonoBehaviour
     }
 
     #region Mobile
+    float _prevDelta;
+
     void OnTouchEvent(Define.TouchEvent touchEvent)
     {
         switch (touchEvent)
@@ -45,28 +47,14 @@ public class CameraController : MonoBehaviour
             case Define.TouchEvent.PressWithOne:
                 Rotate(Input.GetTouch(0).position);
                 break;
-            case Define.TouchEvent.TabWithOne:
-                // 다른 Player 옵션
+            case Define.TouchEvent.TabWithTwoStart:
+                _prevDelta = (Input.GetTouch(0).position - Input.GetTouch(1).position).magnitude;
                 break;
             case Define.TouchEvent.PressWithTwo:
-                float delta = GetDelta() * Define.TouchZoomSpeed;
-                Zoom(delta);
+                float delta = _prevDelta - (Input.GetTouch(0).position - Input.GetTouch(1).position).magnitude;
+                Zoom(delta * Define.TouchZoomSpeed);
                 break;
         }
-    }
-
-    float GetDelta()
-    {
-        Touch touchZero = Input.GetTouch(0);
-        Touch touchOne = Input.GetTouch(1);
-
-        Vector2 touchZeroPrev = touchZero.position - touchZero.deltaPosition;
-        Vector2 touchOnePrev = touchOne.position - touchOne.deltaPosition;
-
-        float prevTouchDelta = (touchZeroPrev - touchOnePrev).magnitude;
-        float touchDelta = (touchZero.position - touchOne.position).magnitude;
-
-        return touchDelta - prevTouchDelta;
     }
     #endregion
 
@@ -81,9 +69,6 @@ public class CameraController : MonoBehaviour
             case Define.MouseEvent.LeftPress:
                 Rotate(Input.mousePosition);
                 break;
-            case Define.MouseEvent.LeftClick:
-                // 다른 Player 옵션
-                break;
             case Define.MouseEvent.ScrollWheel:
                 Zoom(Input.mouseScrollDelta.y * Define.MouseZoomSpeed);
                 break;
@@ -91,17 +76,17 @@ public class CameraController : MonoBehaviour
     }
     #endregion
 
-    void StartRotate(Vector2 point)
+    void StartRotate(Vector3 point)
     {
-        _prevMousePos = Camera.main.ScreenToViewportPoint(point);
+        _prevPos = Camera.main.ScreenToViewportPoint(point);
 
         _pivotAngleX = _pivot.eulerAngles.x >= 340 ? _pivot.eulerAngles.x - 360 : _pivot.eulerAngles.x;
         _pivotAngleY = _pivot.eulerAngles.y;
     }
 
-    void Rotate(Vector2 point)
+    void Rotate(Vector3 point)
     {
-        Vector2 distPos = Camera.main.ScreenToViewportPoint(point) - _prevMousePos;
+        Vector3 distPos = Camera.main.ScreenToViewportPoint(point) - _prevPos;
 
         float xAngle = Mathf.Clamp(_pivotAngleX - distPos.y * 90 * _rotateSpeed, -20, 50);
         float yAngle = _pivotAngleY + distPos.x * 180 * _rotateSpeed;

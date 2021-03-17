@@ -19,13 +19,14 @@ public class Define
 
     #region TouchEvent
     public const float TouchPressedTime = 0.5f;
-    public const float TouchMaxDeltaPos = 10f;
-    public const float TouchZoomSpeed = 0.01f;
+    public const float TouchMaxDeltaPos = 100f;
+    public const float TouchZoomSpeed = 0.0001f;
     public enum TouchEvent
     {
         TabWithOneStart,
-        TabWithOne,
         PressWithOne,
+        TabWithOne,
+        TabWithTwoStart,
         PressWithTwo,
     }
     #endregion
@@ -58,4 +59,11 @@ public class Define
     }
     #endregion
 
+    #region UIEvent
+    public enum UIEvent
+    {
+        Click,
+        Drag,
+    }
+    #endregion
 }

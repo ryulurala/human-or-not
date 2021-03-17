@@ -17,7 +17,7 @@ public class InputManager
         // if (EventSystem.current.IsPointerOverGameObject())
         //     return;
 
-        if (!Util.IsMobile)
+        if (Util.IsMobile)
         {
             // Mobile일 때
             if (TouchAction != null)
@@ -56,14 +56,20 @@ public class InputManager
             }
             else if (touch.phase == TouchPhase.Ended)
             {
-                if (Time.time - _pressedTime < Define.TouchPressedTime && (touch.position - _startPos).magnitude < Define.TouchMaxDeltaPos)
+                if (Time.time - _pressedTime < Define.TouchPressedTime && (touch.position - _startPos).sqrMagnitude < Define.TouchMaxDeltaPos)
                     TouchAction.Invoke(Define.TouchEvent.TabWithOne);
             }
         }
         else if (Input.touchCount == 2)
         {
-            Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Moved)
+            Touch touch0 = Input.GetTouch(0);
+            Touch touch1 = Input.GetTouch(1);
+
+            if (touch0.phase == TouchPhase.Began || touch1.phase == TouchPhase.Began)
+            {
+                TouchAction.Invoke(Define.TouchEvent.TabWithTwoStart);
+            }
+            else if (touch0.phase == TouchPhase.Moved || touch1.phase == TouchPhase.Moved)
             {
                 TouchAction.Invoke(Define.TouchEvent.PressWithTwo);
             }
