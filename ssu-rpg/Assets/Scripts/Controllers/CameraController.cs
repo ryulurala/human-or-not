@@ -104,7 +104,7 @@ public class CameraController : MonoBehaviour
         Vector2 distPos = Camera.main.ScreenToViewportPoint(point) - _prevMousePos;
 
         float xAngle = Mathf.Clamp(_pivotAngleX - distPos.y * 90 * _rotateSpeed, -20, 50);
-        float yAngle = _pivotAngleY + (distPos).x * 180 * _rotateSpeed;
+        float yAngle = _pivotAngleY + distPos.x * 180 * _rotateSpeed;
 
         _pivot.rotation = Quaternion.Euler(xAngle, yAngle, 0f);
     }

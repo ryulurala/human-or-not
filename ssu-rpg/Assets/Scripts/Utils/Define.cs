@@ -5,7 +5,7 @@ using UnityEngine;
 public class Define
 {
     #region MouserEvent
-    public const float MousePressedTime = 0.25f;
+    public const float MousePressedTime = 0.5f;
     public const float MouseZoomSpeed = 0.1f;
     public enum MouseEvent
     {
@@ -18,7 +18,8 @@ public class Define
     #endregion
 
     #region TouchEvent
-    public const float TouchPressedTime = 0.25f;
+    public const float TouchPressedTime = 0.5f;
+    public const float TouchMaxDeltaPos = 10f;
     public const float TouchZoomSpeed = 0.01f;
     public enum TouchEvent
     {

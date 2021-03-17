@@ -9,6 +9,7 @@ public class InputManager
     public Action<Define.MouseEvent> MouseAction = null;
     public Action<Define.TouchEvent> TouchAction = null;
     float _pressedTime = 0f;
+    Vector2 _startPos;
 
     public void OnUpdate()
     {
@@ -16,7 +17,7 @@ public class InputManager
         // if (EventSystem.current.IsPointerOverGameObject())
         //     return;
 
-        if (Util.IsMobile)
+        if (!Util.IsMobile)
         {
             // Mobile일 때
             if (TouchAction != null)
@@ -42,10 +43,12 @@ public class InputManager
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
+
             if (touch.phase == TouchPhase.Began)
             {
                 TouchAction.Invoke(Define.TouchEvent.TabWithOneStart);
                 _pressedTime = Time.time;   // 시간 측정
+                _startPos = touch.position;
             }
             else if (touch.phase == TouchPhase.Moved)
             {
@@ -53,7 +56,7 @@ public class InputManager
             }
             else if (touch.phase == TouchPhase.Ended)
             {
-                if (Time.time - _pressedTime < Define.TouchPressedTime)
+                if (Time.time - _pressedTime < Define.TouchPressedTime && (touch.position - _startPos).magnitude < Define.TouchMaxDeltaPos)
                     TouchAction.Invoke(Define.TouchEvent.TabWithOne);
             }
         }
