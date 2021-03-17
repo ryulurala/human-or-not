@@ -6,7 +6,7 @@ public class Define
 {
     #region MouserEvent
     public const float MousePressedTime = 0.5f;
-    public const float MouseZoomSpeed = 0.1f;
+    public const float MouseZoomSpeed = 0.01f;
     public enum MouseEvent
     {
         LeftStart,
@@ -20,14 +20,11 @@ public class Define
     #region TouchEvent
     public const float TouchPressedTime = 0.5f;
     public const float TouchMaxDeltaPos = 100f;
-    public const float TouchZoomSpeed = 0.0001f;
     public enum TouchEvent
     {
         TabWithOneStart,
         PressWithOne,
         TabWithOne,
-        TabWithTwoStart,
-        PressWithTwo,
     }
     #endregion
 

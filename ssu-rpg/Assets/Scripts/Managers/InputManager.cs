@@ -60,20 +60,6 @@ public class InputManager
                     TouchAction.Invoke(Define.TouchEvent.TabWithOne);
             }
         }
-        else if (Input.touchCount == 2)
-        {
-            Touch touch0 = Input.GetTouch(0);
-            Touch touch1 = Input.GetTouch(1);
-
-            if (touch0.phase == TouchPhase.Began || touch1.phase == TouchPhase.Began)
-            {
-                TouchAction.Invoke(Define.TouchEvent.TabWithTwoStart);
-            }
-            else if (touch0.phase == TouchPhase.Moved || touch1.phase == TouchPhase.Moved)
-            {
-                TouchAction.Invoke(Define.TouchEvent.PressWithTwo);
-            }
-        }
     }
     #endregion
 

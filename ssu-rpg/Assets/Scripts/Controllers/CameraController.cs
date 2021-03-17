@@ -47,13 +47,6 @@ public class CameraController : MonoBehaviour
             case Define.TouchEvent.PressWithOne:
                 Rotate(Input.GetTouch(0).position);
                 break;
-            case Define.TouchEvent.TabWithTwoStart:
-                _prevDelta = (Input.GetTouch(0).position - Input.GetTouch(1).position).magnitude;
-                break;
-            case Define.TouchEvent.PressWithTwo:
-                float delta = _prevDelta - (Input.GetTouch(0).position - Input.GetTouch(1).position).magnitude;
-                Zoom(delta * Define.TouchZoomSpeed);
-                break;
         }
     }
     #endregion
@@ -97,7 +90,7 @@ public class CameraController : MonoBehaviour
     void Zoom(float delta)
     {
         _ratio += delta;
-        _ratio = Mathf.Clamp(_ratio, 0.5f, 5f);
+        _ratio = Mathf.Clamp(_ratio, 0.5f, 3f);
     }
 
 }
