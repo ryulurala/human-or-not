@@ -1446,7 +1446,7 @@ GameObject:
   - component: {fileID: 775477554}
   m_Layer: 0
   m_Name: Purple
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3050,7 +3050,7 @@ GameObject:
   - component: {fileID: 1543412632}
   m_Layer: 0
   m_Name: Gray
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3956,7 +3956,7 @@ GameObject:
   - component: {fileID: 2050927826}
   m_Layer: 0
   m_Name: Orange
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4104,7 +4104,7 @@ GameObject:
   - component: {fileID: 2133870802}
   m_Layer: 0
   m_Name: Yellow
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4557,7 +4557,7 @@ GameObject:
   - component: {fileID: 3857022203211069124}
   m_Layer: 0
   m_Name: Green
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
