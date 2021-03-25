@@ -35,6 +35,7 @@ public class Define
         Idle,
         Walking,
         Running,
+        Attack,
     }
     #endregion
 
@@ -43,7 +44,7 @@ public class Define
     {
         Unknown,
         Player,
-        Monster,
+        NonPlayer,
     }
     #endregion
 

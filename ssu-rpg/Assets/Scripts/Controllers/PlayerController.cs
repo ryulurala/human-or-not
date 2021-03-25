@@ -18,14 +18,20 @@ public class PlayerController : BaseController
             Animator anim = GetComponent<Animator>();
             switch (_state)
             {
+                case Define.State.Die:
+                    anim.CrossFade("Die", 0.1f);
+                    break;
                 case Define.State.Idle:
-                    // anim.CrossFade("Idle", 0.1f);
+                    anim.CrossFade("Idle", 0.1f);
                     break;
                 case Define.State.Walking:
-                    // anim.CrossFade("Walk", 0.1f);
+                    anim.CrossFade("Walk", 0.1f);
                     break;
                 case Define.State.Running:
-                    // anim.CrossFade("Run", 0.1f);
+                    anim.CrossFade("Run", 0.1f);
+                    break;
+                case Define.State.Attack:
+                    anim.CrossFade("Attack", 0.1f);
                     break;
             }
         }
@@ -34,7 +40,7 @@ public class PlayerController : BaseController
     protected override void OnStart()
     {
         // Settings
-        _state = Define.State.Idle;
+        State = Define.State.Idle;
         WorldObjectType = Define.WorldObject.Player;
 
         // Listener
@@ -61,6 +67,9 @@ public class PlayerController : BaseController
             case Define.State.Running:
                 UpdateRun();
                 break;
+            case Define.State.Attack:
+                UpdateAttack();
+                break;
         }
     }
 
@@ -82,6 +91,8 @@ public class PlayerController : BaseController
         }
     }
     void UpdateRun() { }
+    void UpdateAttack() { }
+
     #endregion
 
     #region Mobile

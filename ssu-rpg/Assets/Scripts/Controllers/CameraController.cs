@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] Vector3 _delta = new Vector3(0f, 5f, -10f);
+    [SerializeField] Vector3 _delta = new Vector3(0f, 15f, -10f);
     [SerializeField] GameObject _target = null;
     [SerializeField] float _ratio = 1f;
     Transform _pivot = null;
@@ -73,7 +73,7 @@ public class CameraController : MonoBehaviour
     {
         _prevPos = Camera.main.ScreenToViewportPoint(point);
 
-        _pivotAngleX = _pivot.eulerAngles.x >= 340 ? _pivot.eulerAngles.x - 360 : _pivot.eulerAngles.x;
+        _pivotAngleX = _pivot.eulerAngles.x >= 320 ? _pivot.eulerAngles.x - 360 : _pivot.eulerAngles.x;
         _pivotAngleY = _pivot.eulerAngles.y;
     }
 
@@ -81,7 +81,7 @@ public class CameraController : MonoBehaviour
     {
         Vector3 distPos = Camera.main.ScreenToViewportPoint(point) - _prevPos;
 
-        float xAngle = Mathf.Clamp(_pivotAngleX - distPos.y * 90 * _rotateSpeed, -20, 50);
+        float xAngle = Mathf.Clamp(_pivotAngleX - distPos.y * 90 * _rotateSpeed, -40, 50);
         float yAngle = _pivotAngleY + distPos.x * 180 * _rotateSpeed;
 
         _pivot.rotation = Quaternion.Euler(xAngle, yAngle, 0f);
