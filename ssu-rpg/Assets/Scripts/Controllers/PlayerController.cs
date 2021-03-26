@@ -62,10 +62,10 @@ public class PlayerController : BaseController
                 UpdateIdle();
                 break;
             case Define.State.Walking:
-                UpdateWalk();
+                UpdateWalking();
                 break;
             case Define.State.Running:
-                UpdateRun();
+                UpdateRunning();
                 break;
             case Define.State.Attack:
                 UpdateAttack();
@@ -76,7 +76,7 @@ public class PlayerController : BaseController
     #region UpdateState
     void UpdateDie() { }
     void UpdateIdle() { }
-    void UpdateWalk()
+    void UpdateWalking()
     {
         Vector3 dir = _destPos - transform.position;
         if (dir.magnitude < 0.1f)
@@ -90,7 +90,7 @@ public class PlayerController : BaseController
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);
         }
     }
-    void UpdateRun() { }
+    void UpdateRunning() { }
     void UpdateAttack() { }
 
     #endregion
@@ -123,11 +123,9 @@ public class PlayerController : BaseController
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, 100f, LayerMask.GetMask("Ground")))
         {
-            Debug.Log($"이동! {hitInfo.point}");
             _destPos = hitInfo.point;
             State = Define.State.Walking;
+            Debug.DrawRay(_destPos, Vector3.up, Color.red, 1.0f);
         }
-
-        Debug.DrawRay(Camera.main.transform.position, Input.mousePosition - Camera.main.transform.position * 100f, Color.green, 1f);
     }
 }

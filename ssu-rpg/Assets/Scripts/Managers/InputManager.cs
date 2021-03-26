@@ -8,8 +8,23 @@ public class InputManager
 {
     public Action<Define.MouseEvent> MouseAction = null;
     public Action<Define.TouchEvent> TouchAction = null;
+    Action _inputAction = null;
     float _pressedTime = 0f;
     Vector2 _startPos;
+
+    public void OnAwake()
+    {
+        if (Util.IsMobile)
+        {
+            _inputAction -= OnTouchEvent;
+            _inputAction += OnTouchEvent;
+        }
+        else
+        {
+            _inputAction -= OnMouseEvent;
+            _inputAction += OnMouseEvent;
+        }
+    }
 
     public void OnUpdate()
     {
@@ -17,18 +32,7 @@ public class InputManager
         // if (EventSystem.current.IsPointerOverGameObject())
         //     return;
 
-        if (Util.IsMobile)
-        {
-            // Mobile일 때
-            if (TouchAction != null)
-                OnTouchEvent();
-        }
-        else
-        {
-            // PC일 때
-            if (MouseAction != null)
-                OnMouseEvent();
-        }
+        _inputAction.Invoke();
     }
 
     public void Clear()

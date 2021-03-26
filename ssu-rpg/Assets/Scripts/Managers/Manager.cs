@@ -19,6 +19,11 @@ public class Manager : MonoBehaviour
     public static UIManager UI { get { return Instance._ui; } }
     #endregion
 
+    void Awake()
+    {
+        _input.OnAwake();
+    }
+
     void Update()
     {
         _input.OnUpdate();
