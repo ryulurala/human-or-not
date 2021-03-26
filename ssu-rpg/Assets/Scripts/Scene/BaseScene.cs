@@ -11,6 +11,9 @@ public abstract class BaseScene : MonoBehaviour
         OnAwake();
     }
 
-    protected abstract void OnAwake();
+    protected virtual void OnAwake()
+    {
+        Manager.UI.CreateEventSystem();
+    }
     public abstract void Clear();
 }

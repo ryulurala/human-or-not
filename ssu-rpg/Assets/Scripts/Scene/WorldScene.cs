@@ -7,6 +7,8 @@ public class WorldScene : BaseScene
 
     protected override void OnAwake()
     {
+        base.OnAwake();
+
         Camera.main.GetComponent<CameraController>().Target = GameObject.FindGameObjectWithTag("Player");
     }
 

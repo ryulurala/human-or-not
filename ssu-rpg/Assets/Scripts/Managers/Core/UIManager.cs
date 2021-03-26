@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UIManager
 {
@@ -84,5 +84,12 @@ public class UIManager
     {
         CloseAllPopupUI();
         _sceneUI = null;
+    }
+
+    public void CreateEventSystem()
+    {
+        Object obj = GameObject.FindObjectOfType(typeof(EventSystem));
+        if (obj == null)
+            Manager.Resource.Instaniate("UI/EventSystem").name = "@EventSystem";
     }
 }

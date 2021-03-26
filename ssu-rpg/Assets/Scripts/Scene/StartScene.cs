@@ -6,6 +6,8 @@ public class StartScene : BaseScene
 {
     protected override void OnAwake()
     {
+        base.OnAwake();
+
         StartCoroutine(threeSeconds());
     }
 

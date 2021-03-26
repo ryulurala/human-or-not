@@ -18,21 +18,24 @@ public class InputManager
         {
             _inputAction -= OnTouchEvent;
             _inputAction += OnTouchEvent;
+            MouseAction = null;
         }
         else
         {
             _inputAction -= OnMouseEvent;
             _inputAction += OnMouseEvent;
+            TouchAction = null;
         }
     }
 
     public void OnUpdate()
     {
         // UI Click 상태
-        // if (EventSystem.current.IsPointerOverGameObject())
-        //     return;
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
 
-        _inputAction.Invoke();
+        if (_inputAction != null)
+            _inputAction.Invoke();
     }
 
     public void Clear()

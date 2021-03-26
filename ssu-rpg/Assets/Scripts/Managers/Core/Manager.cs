@@ -40,6 +40,8 @@ public class Manager : MonoBehaviour
         // Scene이 이동해도 삭제 [X]
         DontDestroyOnLoad(go);
         _instance = go.GetOrAddCompontent<Manager>();
+
+        _instance._pool.Init();
     }
 
     public static void Clear()
