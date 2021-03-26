@@ -6,8 +6,6 @@ using UnityEngine.EventSystems;
 
 public class InputManager
 {
-    public Action<Define.MouseEvent> MouseAction = null;
-    public Action<Define.TouchEvent> TouchAction = null;
     Action _inputAction = null;
     float _pressedTime = 0f;
     Vector2 _startPos;
@@ -16,14 +14,19 @@ public class InputManager
     {
         if (Util.IsMobile)
         {
+            // Mobile
             _inputAction -= OnTouchEvent;
             _inputAction += OnTouchEvent;
             MouseAction = null;
         }
         else
         {
+            // PC
             _inputAction -= OnMouseEvent;
             _inputAction += OnMouseEvent;
+
+            _inputAction -= OnKeyEvent;
+            _inputAction += OnKeyEvent;
             TouchAction = null;
         }
     }
@@ -45,6 +48,8 @@ public class InputManager
     }
 
     #region Mobile
+    public Action<Define.TouchEvent> TouchAction = null;
+
     void OnTouchEvent()
     {
         if (Input.touchCount == 1)
@@ -61,37 +66,29 @@ public class InputManager
             {
                 TouchAction.Invoke(Define.TouchEvent.PressWithOne);
             }
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                if (Time.time - _pressedTime < Define.TouchPressedTime && (touch.position - _startPos).sqrMagnitude < Define.TouchMaxDeltaPos)
-                    TouchAction.Invoke(Define.TouchEvent.TabWithOne);
-            }
         }
     }
     #endregion
 
     #region PC
+    public Action<Define.MouseEvent> MouseAction = null;
+    public Action<Define.KeyEvent, Vector3> KeyAction = null;
+
     void OnMouseEvent()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            MouseAction.Invoke(Define.MouseEvent.LeftStart);
-            _pressedTime = Time.time;   // 시간 측정
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            MouseAction.Invoke(Define.MouseEvent.LeftPress);
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            if (Time.time - _pressedTime < Define.MousePressedTime)
-                MouseAction.Invoke(Define.MouseEvent.LeftClick);
-        }
-
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(0))
         {
             // RMB
-            MouseAction.Invoke(Define.MouseEvent.RightClick);
+            MouseAction.Invoke(Define.MouseEvent.LeftClick);
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            MouseAction.Invoke(Define.MouseEvent.RightStart);
+        }
+        else if (Input.GetMouseButton(1))
+        {
+            MouseAction.Invoke(Define.MouseEvent.RightPress);
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
@@ -99,6 +96,32 @@ public class InputManager
             // Scroll Wheel
             MouseAction.Invoke(Define.MouseEvent.ScrollWheel);
         }
+    }
+
+    void OnKeyEvent()
+    {
+        // 방향 벡터 축적
+        Vector3 dir = Vector3.zero;
+        if (Input.GetKey(KeyCode.W))
+            dir += new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z).normalized;
+        if (Input.GetKey(KeyCode.S))
+            dir += new Vector3(-Camera.main.transform.forward.x, 0, -Camera.main.transform.forward.z).normalized;
+        if (Input.GetKey(KeyCode.A))
+            dir += new Vector3(-Camera.main.transform.right.x, 0, -Camera.main.transform.right.z).normalized;
+        if (Input.GetKey(KeyCode.D))
+            dir += new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z).normalized;
+
+        // 결정
+        if (dir != Vector3.zero)
+        {
+            if (Input.GetKey(KeyCode.LeftShift))
+                KeyAction.Invoke(Define.KeyEvent.ShiftWASD, dir);
+            else
+                KeyAction.Invoke(Define.KeyEvent.WASD, dir);
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+            KeyAction.Invoke(Define.KeyEvent.SpaceBar, dir);
+
     }
     #endregion
 }

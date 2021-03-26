@@ -56,10 +56,10 @@ public class CameraController : MonoBehaviour
     {
         switch (mouseEvent)
         {
-            case Define.MouseEvent.LeftStart:
+            case Define.MouseEvent.RightStart:
                 StartRotate(Input.mousePosition);
                 break;
-            case Define.MouseEvent.LeftPress:
+            case Define.MouseEvent.RightPress:
                 Rotate(Input.mousePosition);
                 break;
             case Define.MouseEvent.ScrollWheel:

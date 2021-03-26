@@ -7,6 +7,7 @@ public class PlayerController : BaseController
 {
     Vector3 _destPos;
     float _walkSpeed = 5f;
+    float _runSpeed = 10f;
     float _angularSpeed = 10f;
 
     public Define.State State
@@ -19,19 +20,19 @@ public class PlayerController : BaseController
             switch (_state)
             {
                 case Define.State.Die:
-                    anim.CrossFade("Die", 0.1f);
+                    anim.CrossFade("Die", 0.25f);
                     break;
                 case Define.State.Idle:
-                    anim.CrossFade("Idle", 0.1f);
+                    anim.CrossFade("Idle", 0f);
                     break;
                 case Define.State.Walking:
-                    anim.CrossFade("Walk", 0.1f);
+                    anim.CrossFade("Walk", 0f);
                     break;
                 case Define.State.Running:
-                    anim.CrossFade("Run", 0.1f);
+                    anim.CrossFade("Run", 0f);
                     break;
                 case Define.State.Attack:
-                    anim.CrossFade("Attack", 0.1f);
+                    // anim.CrossFade("Attack", 0.1f);
                     break;
             }
         }
@@ -49,6 +50,9 @@ public class PlayerController : BaseController
 
         Manager.Input.TouchAction -= OnTouchEvent;  // Pooling으로 인해 두 번 등록 방지
         Manager.Input.TouchAction += OnTouchEvent;
+
+        Manager.Input.KeyAction -= OnKeyEvent;
+        Manager.Input.KeyAction += OnKeyEvent;
     }
 
     protected override void OnUpdate()
@@ -78,20 +82,14 @@ public class PlayerController : BaseController
     void UpdateIdle() { }
     void UpdateWalking()
     {
-        Vector3 dir = _destPos - transform.position;
-        if (dir.magnitude < 0.1f)
-        {
+        if (!Input.anyKey)
             State = Define.State.Idle;
-        }
-        else
-        {
-            float moveDist = Mathf.Clamp(_walkSpeed * Time.deltaTime, 0, dir.magnitude);
-            transform.position += dir.normalized * moveDist;
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);
-        }
     }
     void UpdateRunning() { }
-    void UpdateAttack() { }
+    void UpdateAttack()
+    {
+
+    }
 
     #endregion
 
@@ -112,8 +110,31 @@ public class PlayerController : BaseController
         if (_state == Define.State.Die)
             return;
 
-        if (mouseEvent == Define.MouseEvent.RightClick)
-            MovePoint(Input.mousePosition);
+        // if (mouseEvent == Define.MouseEvent.LeftClick)
+        // State = Define.State.Attack;
+    }
+
+    void OnKeyEvent(Define.KeyEvent keyEvent, Vector3 dir)
+    {
+        if (_state == Define.State.Die)
+            return;
+
+        if (keyEvent == Define.KeyEvent.WASD)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);
+            GetComponent<CharacterController>().Move(dir * _walkSpeed * Time.deltaTime);
+            State = Define.State.Walking;
+        }
+        else if (keyEvent == Define.KeyEvent.ShiftWASD)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);
+            GetComponent<CharacterController>().Move(dir * _runSpeed * Time.deltaTime);
+            State = Define.State.Running;
+        }
+        else if (keyEvent == Define.KeyEvent.SpaceBar)
+        {
+            Debug.Log("Jump!");
+        }
     }
     #endregion
 
@@ -128,4 +149,5 @@ public class PlayerController : BaseController
             Debug.DrawRay(_destPos, Vector3.up, Color.red, 1.0f);
         }
     }
+
 }

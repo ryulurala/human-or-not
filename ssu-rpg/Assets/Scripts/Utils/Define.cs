@@ -4,22 +4,27 @@ using UnityEngine;
 
 public class Define
 {
-    #region MouserEvent
-    public const float MousePressedTime = 0.5f;
+    #region MouseEvent
     public const float MouseZoomSpeed = 0.01f;
     public enum MouseEvent
     {
-        LeftStart,
-        LeftPress,
         LeftClick,
-        RightClick,
+        RightStart,
+        RightPress,
         ScrollWheel,
     }
     #endregion
 
+    #region KeyEvent
+    public enum KeyEvent
+    {
+        WASD,
+        ShiftWASD,
+        SpaceBar,
+    }
+    #endregion
+
     #region TouchEvent
-    public const float TouchPressedTime = 0.5f;
-    public const float TouchMaxDeltaPos = 100f;
     public enum TouchEvent
     {
         TabWithOneStart,
