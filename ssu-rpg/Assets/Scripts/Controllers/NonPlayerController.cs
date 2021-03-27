@@ -108,7 +108,7 @@ public class NonPlayerController : BaseController
 
     void UpdateMoving()
     {
-        NavMeshAgent nma = gameObject.GetOrAddCompontent<NavMeshAgent>();
+        NavMeshAgent nma = gameObject.GetOrAddComponent<NavMeshAgent>();
 
         Vector3 dir = _destPos - transform.position;
         if (dir.magnitude < 0.1f)

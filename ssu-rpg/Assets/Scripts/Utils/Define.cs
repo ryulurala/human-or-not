@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Define
 {
-    #region MouseEvent
+    #region PC
     public const float MouseZoomSpeed = 0.01f;
     public enum MouseEvent
     {
@@ -13,9 +13,7 @@ public class Define
         RightPress,
         ScrollWheel,
     }
-    #endregion
 
-    #region KeyEvent
     public enum KeyEvent
     {
         WASD,
@@ -24,12 +22,30 @@ public class Define
     }
     #endregion
 
-    #region TouchEvent
+    #region Mobile
     public enum TouchEvent
     {
         TabWithOneStart,
         PressWithOne,
         TabWithOne,
+    }
+
+    public enum PadEvent
+    {
+        Dragging,
+        RunButton,
+        AttackButton,
+        JumpButton,
+    }
+    #endregion
+
+    #region UIEvent
+    public enum UIEvent
+    {
+        Click,
+        DragStart,
+        Dragging,
+        DragEnd,
     }
     #endregion
 
@@ -59,14 +75,6 @@ public class Define
         UnKnown,
         Start,
         World,
-    }
-    #endregion
-
-    #region UIEvent
-    public enum UIEvent
-    {
-        Click,
-        Drag,
     }
     #endregion
 }

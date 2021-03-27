@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
-    Vector3 _destPos;
-    float _walkSpeed = 5f;
-    float _runSpeed = 10f;
-    float _angularSpeed = 10f;
+    [SerializeField] float _walkSpeed = 5f;
+    [SerializeField] float _runSpeed = 10f;
+    [SerializeField] float _angularSpeed = 30f;
 
     public Define.State State
     {
@@ -48,8 +47,8 @@ public class PlayerController : BaseController
         Manager.Input.MouseAction -= OnMouseEvent;  // Pooling으로 인해 두 번 등록 방지
         Manager.Input.MouseAction += OnMouseEvent;
 
-        Manager.Input.TouchAction -= OnTouchEvent;  // Pooling으로 인해 두 번 등록 방지
-        Manager.Input.TouchAction += OnTouchEvent;
+        Manager.Input.PadAction -= OnPadEvent;      // Pooling으로 인해 두 번 등록 방지
+        Manager.Input.PadAction += OnPadEvent;
 
         Manager.Input.KeyAction -= OnKeyEvent;
         Manager.Input.KeyAction += OnKeyEvent;
@@ -85,7 +84,11 @@ public class PlayerController : BaseController
         if (!Input.anyKey)
             State = Define.State.Idle;
     }
-    void UpdateRunning() { }
+    void UpdateRunning()
+    {
+        if (!Input.anyKey)
+            State = Define.State.Idle;
+    }
     void UpdateAttack()
     {
 
@@ -94,13 +97,26 @@ public class PlayerController : BaseController
     #endregion
 
     #region Mobile
-    void OnTouchEvent(Define.TouchEvent touchEvent)
+    void OnPadEvent(Define.PadEvent padEvent, Vector3 dir)
     {
         if (_state == Define.State.Die)
             return;
 
-        if (touchEvent == Define.TouchEvent.TabWithOne)
-            MovePoint(Input.GetTouch(0).position);
+        switch (padEvent)
+        {
+            case Define.PadEvent.Dragging:
+                Move(dir, _walkSpeed, Define.State.Walking);
+                break;
+            case Define.PadEvent.AttackButton:
+                Debug.Log("Attack!");
+                break;
+            case Define.PadEvent.RunButton:
+                Move(dir, _runSpeed, Define.State.Running);
+                break;
+            case Define.PadEvent.JumpButton:
+                Debug.Log("Jump!");
+                break;
+        }
     }
     #endregion
 
@@ -110,8 +126,8 @@ public class PlayerController : BaseController
         if (_state == Define.State.Die)
             return;
 
-        // if (mouseEvent == Define.MouseEvent.LeftClick)
-        // State = Define.State.Attack;
+        if (mouseEvent == Define.MouseEvent.LeftClick)
+            Debug.Log("Attack!");
     }
 
     void OnKeyEvent(Define.KeyEvent keyEvent, Vector3 dir)
@@ -119,35 +135,27 @@ public class PlayerController : BaseController
         if (_state == Define.State.Die)
             return;
 
-        if (keyEvent == Define.KeyEvent.WASD)
+        switch (keyEvent)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);
-            GetComponent<CharacterController>().Move(dir * _walkSpeed * Time.deltaTime);
-            State = Define.State.Walking;
-        }
-        else if (keyEvent == Define.KeyEvent.ShiftWASD)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);
-            GetComponent<CharacterController>().Move(dir * _runSpeed * Time.deltaTime);
-            State = Define.State.Running;
-        }
-        else if (keyEvent == Define.KeyEvent.SpaceBar)
-        {
-            Debug.Log("Jump!");
+            case Define.KeyEvent.WASD:
+                Move(dir, _walkSpeed, Define.State.Walking);
+                break;
+            case Define.KeyEvent.ShiftWASD:
+                Move(dir, _runSpeed, Define.State.Running);
+                break;
+            case Define.KeyEvent.SpaceBar:
+                Debug.Log("Jump!");
+                break;
         }
     }
     #endregion
 
-    void MovePoint(Vector2 point)
+    void Move(Vector3 dir, float speed, Define.State state)
     {
-        Ray ray = Camera.main.ScreenPointToRay(point);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, 100f, LayerMask.GetMask("Ground")))
-        {
-            _destPos = hitInfo.point;
-            State = Define.State.Walking;
-            Debug.DrawRay(_destPos, Vector3.up, Color.red, 1.0f);
-        }
-    }
+        // 방향
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);
 
+        GetComponent<CharacterController>().SimpleMove(dir * speed);
+        State = state;
+    }
 }

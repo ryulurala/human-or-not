@@ -17,7 +17,12 @@ public class InputManager
             // Mobile
             _inputAction -= OnTouchEvent;
             _inputAction += OnTouchEvent;
+
+            _inputAction -= OnPadEvent;
+            _inputAction += OnPadEvent;
+
             MouseAction = null;
+            KeyAction = null;
         }
         else
         {
@@ -27,15 +32,17 @@ public class InputManager
 
             _inputAction -= OnKeyEvent;
             _inputAction += OnKeyEvent;
+
             TouchAction = null;
+            PadAction = null;
         }
     }
 
     public void OnUpdate()
     {
         // UI Click 상태
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
+        // if (EventSystem.current.IsPointerOverGameObject())
+        //     return;
 
         if (_inputAction != null)
             _inputAction.Invoke();
@@ -49,6 +56,7 @@ public class InputManager
 
     #region Mobile
     public Action<Define.TouchEvent> TouchAction = null;
+    public Action<Define.PadEvent, Vector3> PadAction = null;
 
     void OnTouchEvent()
     {
@@ -68,6 +76,40 @@ public class InputManager
             }
         }
     }
+
+    void OnPadEvent()
+    {
+        if (GamePad.Pad == null)
+            return;
+
+        Vector3 dir = Vector3.zero + new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
+        Debug.Log($"Direction: {GamePad.Pad.Direction}");
+        Debug.Log($"dir: {dir}");
+        // + -> +
+        // - -> -
+        // Debug.Log($"Direction: {GamePad.Pad.Direction}");
+        // Debug.Log($"dir: {dir}");
+
+        // if (dir.x > 0 && dir.z > 0)
+        //     dir += new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z).normalized;
+        // else if (dir.x < 0 && dir.z < 0)
+        //     dir += new Vector3(-Camera.main.transform.forward.x, 0, -Camera.main.transform.forward.z).normalized;
+        // else if (dir.x > 0 && dir.z < 0)
+        //     dir += new Vector3(Camera.main.transform.forward.x, 0, -Camera.main.transform.forward.z).normalized;
+        // else if (dir.x < 0 && dir.z > 0)
+        //     dir += new Vector3(-Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z).normalized;
+
+
+        if (GamePad.Pad.GetPad(GamePad.PadCode.Joystick))
+            PadAction.Invoke(Define.PadEvent.Dragging, dir);
+        if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonA))
+            PadAction.Invoke(Define.PadEvent.AttackButton, dir);
+        if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonR))
+            PadAction.Invoke(Define.PadEvent.RunButton, dir);
+        if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonJ))
+            PadAction.Invoke(Define.PadEvent.JumpButton, dir);
+    }
+
     #endregion
 
     #region PC
@@ -76,26 +118,16 @@ public class InputManager
 
     void OnMouseEvent()
     {
-        if (Input.GetMouseButtonUp(0))
-        {
-            // RMB
+        if (Input.GetMouseButtonDown(0))
             MouseAction.Invoke(Define.MouseEvent.LeftClick);
-        }
 
         if (Input.GetMouseButtonDown(1))
-        {
             MouseAction.Invoke(Define.MouseEvent.RightStart);
-        }
         else if (Input.GetMouseButton(1))
-        {
             MouseAction.Invoke(Define.MouseEvent.RightPress);
-        }
 
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
-        {
-            // Scroll Wheel
             MouseAction.Invoke(Define.MouseEvent.ScrollWheel);
-        }
     }
 
     void OnKeyEvent()
@@ -119,7 +151,7 @@ public class InputManager
             else
                 KeyAction.Invoke(Define.KeyEvent.WASD, dir);
         }
-        else if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
             KeyAction.Invoke(Define.KeyEvent.SpaceBar, dir);
 
     }

@@ -52,15 +52,21 @@ public abstract class BaseUI : MonoBehaviour
 
     protected void BindEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
     {
-        UIEventHandler eventHandler = Util.GetOrAddComponent<UIEventHandler>(go);
+        UIEventHandler eventHandler = go.GetOrAddComponent<UIEventHandler>();
 
         switch (type)
         {
             case Define.UIEvent.Click:
                 eventHandler.OnClickHandler += action;
                 break;
-            case Define.UIEvent.Drag:
+            case Define.UIEvent.DragStart:
+                eventHandler.OnBeginDragHandler += action;
+                break;
+            case Define.UIEvent.Dragging:
                 eventHandler.OnDragHandler += action;
+                break;
+            case Define.UIEvent.DragEnd:
+                eventHandler.OnEndDragHandler += action;
                 break;
         }
     }
