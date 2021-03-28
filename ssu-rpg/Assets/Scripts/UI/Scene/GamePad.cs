@@ -83,9 +83,9 @@ public class GamePad : SceneUI
     void Dragging(PointerEventData eventData)
     {
         // Debug.Log($"Drag 중!: {_joystick}");
-        Vector2 dir = Vector2.ClampMagnitude(eventData.position - _backgroundRect.anchoredPosition, _backgroundRadius);
-        _handleRect.localPosition = dir;
+        Vector2 dir = Vector2.ClampMagnitude(eventData.position - (Vector2)_backgroundRect.position, _backgroundRadius);
 
+        _handleRect.localPosition = dir;
         Direction = dir.normalized * Vector2.Distance(_backgroundRect.position, _handleRect.position) / _backgroundRadius;
         // Direction = dir.normalized;
     }

@@ -83,8 +83,8 @@ public class InputManager
             return;
 
         Vector3 dir = Vector3.zero + new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
-        Debug.Log($"Direction: {GamePad.Pad.Direction}");
-        Debug.Log($"dir: {dir}");
+        // Debug.Log($"Direction: {GamePad.Pad.Direction}");
+        // Debug.Log($"dir: {dir}");
         // + -> +
         // - -> -
         // Debug.Log($"Direction: {GamePad.Pad.Direction}");
