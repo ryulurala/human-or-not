@@ -8,17 +8,17 @@ public class CameraController : MonoBehaviour
     [SerializeField] Vector3 _delta = new Vector3(0f, 15f, -10f);
     [SerializeField] GameObject _target = null;
     [SerializeField] float _ratio = 1f;
-    Transform _pivot = null;
     float _rotateSpeed = 1f;
     Vector3 _prevPos;
     float _pivotAngleX = 0f;
     float _pivotAngleY = 0f;
 
+    public static Transform Pivot { get; private set; } = null;
     public GameObject Target { get { return _target; } set { _target = value; } }
 
     void Start()
     {
-        _pivot = transform.parent;
+        Pivot = transform.parent;
 
         Manager.Input.MouseAction += OnMouseEvent;
         Manager.Input.TouchAction += OnTouchEvent;
@@ -29,9 +29,9 @@ public class CameraController : MonoBehaviour
         if (!_target.IsValid())
             return;
 
-        _pivot.position = _target.transform.position;
+        Pivot.position = _target.transform.position;
         transform.localPosition = _delta * _ratio;
-        transform.LookAt(_pivot.transform.position);
+        transform.LookAt(Pivot.transform.position);
     }
 
     #region Mobile
@@ -73,8 +73,8 @@ public class CameraController : MonoBehaviour
     {
         _prevPos = Camera.main.ScreenToViewportPoint(point);
 
-        _pivotAngleX = _pivot.eulerAngles.x >= 310 ? _pivot.eulerAngles.x - 360 : _pivot.eulerAngles.x;
-        _pivotAngleY = _pivot.eulerAngles.y;
+        _pivotAngleX = Pivot.eulerAngles.x >= 310 ? Pivot.eulerAngles.x - 360 : Pivot.eulerAngles.x;
+        _pivotAngleY = Pivot.eulerAngles.y;
     }
 
     void Rotate(Vector3 point)
@@ -84,7 +84,7 @@ public class CameraController : MonoBehaviour
         float xAngle = Mathf.Clamp((_pivotAngleX - distPos.y * 90) * _rotateSpeed, -50, 30);
         float yAngle = (_pivotAngleY + distPos.x * 180) * _rotateSpeed;
 
-        _pivot.rotation = Quaternion.Euler(xAngle, yAngle, 0f);
+        Pivot.rotation = Quaternion.Euler(xAngle, yAngle, 0f);
     }
 
     void Zoom(float delta)

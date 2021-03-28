@@ -82,7 +82,11 @@ public class InputManager
         if (GamePad.Pad == null)
             return;
 
-        Vector3 dir = Vector3.zero + new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
+        Vector3 dir = new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
+        Debug.Log($"Pivot euler angle y: {CameraController.Pivot.eulerAngles}");
+
+        // dir *= Quaternion.Euler(0, Camera.main.transform.parent.rotation.eulerAngles.y, 0);
+
         // Debug.Log($"Direction: {GamePad.Pad.Direction}");
         // Debug.Log($"dir: {dir}");
         // + -> +

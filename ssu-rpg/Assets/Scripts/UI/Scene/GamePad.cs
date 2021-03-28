@@ -87,7 +87,6 @@ public class GamePad : SceneUI
 
         _handleRect.localPosition = dir;
         Direction = dir.normalized * Vector2.Distance(_backgroundRect.position, _handleRect.position) / _backgroundRadius;
-        // Direction = dir.normalized;
     }
 
     void EndDrag(PointerEventData eventData)
