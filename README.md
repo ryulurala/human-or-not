@@ -1,6 +1,6 @@
-# ssu-open-world
+# it-is-me
 
-RPG: Running arround campus in open world
+???
 
 | Number |              File               |    Date    |          Summary          |
 | :----: | :-----------------------------: | :--------: | :-----------------------: |
