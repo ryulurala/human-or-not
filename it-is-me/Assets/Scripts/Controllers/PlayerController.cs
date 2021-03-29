@@ -109,11 +109,11 @@ public class PlayerController : BaseController
             case Define.PadEvent.Dragging:
                 Move(_walkSpeed, Define.State.Walking);
                 break;
-            case Define.PadEvent.AttackButton:
-                Debug.Log("Attack!");
-                break;
             case Define.PadEvent.RunButton:
                 Move(_runSpeed, Define.State.Running);
+                break;
+            case Define.PadEvent.AttackButton:
+                Debug.Log("Attack!");
                 break;
             case Define.PadEvent.JumpButton:
                 Debug.Log("Jump!");

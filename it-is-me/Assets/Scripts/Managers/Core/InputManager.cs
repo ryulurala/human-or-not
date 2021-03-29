@@ -16,8 +16,11 @@ public class InputManager
             _inputAction -= OnTouchEvent;
             _inputAction += OnTouchEvent;
 
-            _inputAction -= OnPadEvent;
-            _inputAction += OnPadEvent;
+            if (GamePad.Pad != null)
+            {
+                _inputAction -= OnPadEvent;
+                _inputAction += OnPadEvent;
+            }
 
             MouseAction = null;
             KeyAction = null;
@@ -38,23 +41,27 @@ public class InputManager
 
     public void OnUpdate()
     {
-        // UI Click 상태
-        // if (EventSystem.current.IsPointerOverGameObject())
-        //     return;
-
-        if (_inputAction != null)
-            _inputAction.Invoke();
+        _inputAction.Invoke();
     }
 
     public void Clear()
     {
-        MouseAction = null;
-        TouchAction = null;
+        if (Util.IsMobile)
+        {
+            // Mobile
+            TouchAction = null;
+            PadAction = null;
+        }
+        else
+        {
+            // PC
+            MouseAction = null;
+            KeyAction = null;
+        }
     }
 
     #region Mobile
     float _pressedTime = 0f;
-    Vector2 _startTouchPos;
     public Action<Define.TouchEvent> TouchAction = null;
     public Action<Define.PadEvent, Vector3> PadAction = null;
 
@@ -71,7 +78,6 @@ public class InputManager
             {
                 TouchAction.Invoke(Define.TouchEvent.TabWithOneStart);
                 _pressedTime = Time.time;   // 시간 측정
-                _startTouchPos = touch.position;
             }
             else if (touch.phase == TouchPhase.Moved)
             {
@@ -85,37 +91,21 @@ public class InputManager
         if (PadAction == null)
             return;
 
-        if (GamePad.Pad == null)
-            return;
-
+        // 조이스틱 방향
         Vector3 dir = new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
-        Debug.Log($"Pivot euler angle y: {CameraController.Pivot.eulerAngles}");
+        // 카메라가 보는 방향으로 회전
+        dir = Quaternion.Euler(0, Camera.main.transform.parent.rotation.eulerAngles.y, 0) * dir;
 
-        // dir *= Quaternion.Euler(0, Camera.main.transform.parent.rotation.eulerAngles.y, 0);
+        // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
+        dir = dir.normalized;
 
-        // Debug.Log($"Direction: {GamePad.Pad.Direction}");
-        // Debug.Log($"dir: {dir}");
-        // + -> +
-        // - -> -
-        // Debug.Log($"Direction: {GamePad.Pad.Direction}");
-        // Debug.Log($"dir: {dir}");
-
-        // if (dir.x > 0 && dir.z > 0)
-        //     dir += new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z).normalized;
-        // else if (dir.x < 0 && dir.z < 0)
-        //     dir += new Vector3(-Camera.main.transform.forward.x, 0, -Camera.main.transform.forward.z).normalized;
-        // else if (dir.x > 0 && dir.z < 0)
-        //     dir += new Vector3(Camera.main.transform.forward.x, 0, -Camera.main.transform.forward.z).normalized;
-        // else if (dir.x < 0 && dir.z > 0)
-        //     dir += new Vector3(-Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z).normalized;
-
-
-        if (GamePad.Pad.GetPad(GamePad.PadCode.Joystick))
-            PadAction.Invoke(Define.PadEvent.Dragging, dir);
-        if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonA))
-            PadAction.Invoke(Define.PadEvent.AttackButton, dir);
         if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonR))
             PadAction.Invoke(Define.PadEvent.RunButton, dir);
+        else
+            PadAction.Invoke(Define.PadEvent.Dragging, dir);
+
+        if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonA))
+            PadAction.Invoke(Define.PadEvent.AttackButton, dir);
         if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonJ))
             PadAction.Invoke(Define.PadEvent.JumpButton, dir);
     }
@@ -148,18 +138,21 @@ public class InputManager
         if (KeyAction == null)
             return;
 
-        // 방향 벡터 축적
+
+        // 방향 벡터 축적, 카메라가 보는 방향이 forward
         Vector3 dir = Vector3.zero;
         if (Input.GetKey(KeyCode.W))
-            dir += new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z).normalized;
+            dir += new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
         if (Input.GetKey(KeyCode.S))
-            dir += new Vector3(-Camera.main.transform.forward.x, 0, -Camera.main.transform.forward.z).normalized;
+            dir += new Vector3(-Camera.main.transform.forward.x, 0, -Camera.main.transform.forward.z);
         if (Input.GetKey(KeyCode.A))
-            dir += new Vector3(-Camera.main.transform.right.x, 0, -Camera.main.transform.right.z).normalized;
+            dir += new Vector3(-Camera.main.transform.right.x, 0, -Camera.main.transform.right.z);
         if (Input.GetKey(KeyCode.D))
-            dir += new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z).normalized;
+            dir += new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
 
-        // 걷기, 뛰기 둘 중 하나 실행
+
+        // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
+        dir = dir.normalized;
         if (Input.GetKey(KeyCode.LeftShift))
             KeyAction.Invoke(Define.KeyEvent.ShiftWASD, dir);
         else

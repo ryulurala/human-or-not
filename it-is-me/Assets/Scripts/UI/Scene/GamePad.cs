@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,27 +14,43 @@ public class GamePad : SceneUI
 
     #region InputPad
     static GamePad _pad = null;
-    public static GamePad Pad { get { return _pad; } set { _pad = value; } }
+    public static GamePad Pad
+    {
+        get
+        {
+            if (_pad == null)
+            {
+                GameObject go = GameObject.Find("@GamePad");
+                if (go == null)
+                {
+                    go = Manager.Resource.Instaniate($"UI/Scene/{typeof(GamePad)}");
+                    go.name = "@GamePad";
+                }
 
-    bool _joystick = false;
+                _pad = go.GetComponent<GamePad>();
+                DontDestroyOnLoad(_pad);
+
+                _pad.gameObject.SetActive(false);
+            }
+            return _pad;
+        }
+    }
+
     bool _buttonA = false;
     bool _buttonJ = false;
     bool _buttonR = false;
 
     public enum PadCode
     {
-        Joystick,
+        ButtonR,
         ButtonA,
         ButtonJ,
-        ButtonR,
     }
 
     public bool GetPad(PadCode padCode)
     {
         switch (padCode)
         {
-            case PadCode.Joystick:
-                return GamePad.Pad._joystick;
             case PadCode.ButtonA:
                 return GamePad.Pad._buttonA;
             case PadCode.ButtonJ:
@@ -75,24 +92,19 @@ public class GamePad : SceneUI
 
     void StartDrag(PointerEventData eventData)
     {
-        // Debug.Log("Drag 시작!");
         Dragging(eventData);
-        _joystick = true;
     }
 
     void Dragging(PointerEventData eventData)
     {
-        // Debug.Log($"Drag 중!: {_joystick}");
         Vector2 dir = Vector2.ClampMagnitude(eventData.position - (Vector2)_backgroundRect.position, _backgroundRadius);
 
         _handleRect.localPosition = dir;
-        Direction = dir.normalized * Vector2.Distance(_backgroundRect.position, _handleRect.position) / _backgroundRadius;
+        Direction = dir.normalized;
     }
 
     void EndDrag(PointerEventData eventData)
     {
-        // Debug.Log("Drag 끝!");
         Direction = _handleRect.localPosition = Vector3.zero;
-        _joystick = false;
     }
 }

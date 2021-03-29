@@ -12,7 +12,7 @@ public class WorldScene : BaseScene
         Camera.main.GetComponent<CameraController>().Target = GameObject.FindGameObjectWithTag("Player");
 
         if (Util.IsMobile)
-            GamePad.Pad = Manager.UI.ShowSceneUI<GamePad>();
+            GamePad.Pad.gameObject.SetActive(true);
     }
 
     public override void Clear()
