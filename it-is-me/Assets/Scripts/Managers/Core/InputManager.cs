@@ -7,8 +7,6 @@ using UnityEngine.EventSystems;
 public class InputManager
 {
     Action _inputAction = null;
-    float _pressedTime = 0f;
-    Vector2 _startPos;
 
     public void OnAwake()
     {
@@ -55,11 +53,16 @@ public class InputManager
     }
 
     #region Mobile
+    float _pressedTime = 0f;
+    Vector2 _startTouchPos;
     public Action<Define.TouchEvent> TouchAction = null;
     public Action<Define.PadEvent, Vector3> PadAction = null;
 
     void OnTouchEvent()
     {
+        if (TouchAction == null)
+            return;
+
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
@@ -68,7 +71,7 @@ public class InputManager
             {
                 TouchAction.Invoke(Define.TouchEvent.TabWithOneStart);
                 _pressedTime = Time.time;   // 시간 측정
-                _startPos = touch.position;
+                _startTouchPos = touch.position;
             }
             else if (touch.phase == TouchPhase.Moved)
             {
@@ -79,6 +82,9 @@ public class InputManager
 
     void OnPadEvent()
     {
+        if (PadAction == null)
+            return;
+
         if (GamePad.Pad == null)
             return;
 
@@ -122,6 +128,9 @@ public class InputManager
 
     void OnMouseEvent()
     {
+        if (MouseAction == null)
+            return;
+
         if (Input.GetMouseButtonDown(0))
             MouseAction.Invoke(Define.MouseEvent.LeftClick);
 
@@ -136,6 +145,9 @@ public class InputManager
 
     void OnKeyEvent()
     {
+        if (KeyAction == null)
+            return;
+
         // 방향 벡터 축적
         Vector3 dir = Vector3.zero;
         if (Input.GetKey(KeyCode.W))
@@ -147,14 +159,12 @@ public class InputManager
         if (Input.GetKey(KeyCode.D))
             dir += new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z).normalized;
 
-        // 결정
-        if (dir != Vector3.zero)
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
-                KeyAction.Invoke(Define.KeyEvent.ShiftWASD, dir);
-            else
-                KeyAction.Invoke(Define.KeyEvent.WASD, dir);
-        }
+        // 걷기, 뛰기 둘 중 하나 실행
+        if (Input.GetKey(KeyCode.LeftShift))
+            KeyAction.Invoke(Define.KeyEvent.ShiftWASD, dir);
+        else
+            KeyAction.Invoke(Define.KeyEvent.WASD, dir);
+
         if (Input.GetKeyDown(KeyCode.Space))
             KeyAction.Invoke(Define.KeyEvent.SpaceBar, dir);
 
