@@ -18,7 +18,7 @@ public class StartScene : BaseScene
 
     IEnumerator threeSeconds()
     {
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(3.0f);
         // 1초 후
         Manager.Scene.LoadScene(Define.Scene.World);
     }

@@ -150,7 +150,7 @@ public class PlayerController : BaseController
     }
     #endregion
 
-    void Move(Vector3 dir, float speed, Define.State state)
+    void Move(float speed, Define.State state)
     {
         // 방향
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);

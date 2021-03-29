@@ -233,7 +233,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Wait for 5 seconds...
+  m_Text: Wait for 3 seconds...
 --- !u!222 &594224292
 CanvasRenderer:
   m_ObjectHideFlags: 0
