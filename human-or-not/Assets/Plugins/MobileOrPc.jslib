@@ -1,7 +1,7 @@
 var MobileOrPc = {
     isMobile: function()
     {
-        return UnityLoader.SystemInfo.mobile;
+        return /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
     }
 };
 
