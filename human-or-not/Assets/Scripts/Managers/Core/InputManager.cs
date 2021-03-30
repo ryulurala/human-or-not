@@ -13,9 +13,6 @@ public class InputManager
         if (Util.IsMobile)
         {
             // Mobile
-            _inputAction -= OnTouchEvent;
-            _inputAction += OnTouchEvent;
-
             if (GamePad.Pad != null)
             {
                 _inputAction -= OnPadEvent;
@@ -34,7 +31,6 @@ public class InputManager
             _inputAction -= OnKeyEvent;
             _inputAction += OnKeyEvent;
 
-            TouchAction = null;
             PadAction = null;
         }
     }
@@ -49,7 +45,6 @@ public class InputManager
         if (Util.IsMobile)
         {
             // Mobile
-            TouchAction = null;
             PadAction = null;
         }
         else
@@ -61,28 +56,7 @@ public class InputManager
     }
 
     #region Mobile
-    public Action<Define.TouchEvent> TouchAction = null;
     public Action<Define.PadEvent, Vector3> PadAction = null;
-
-    void OnTouchEvent()
-    {
-        if (EventSystem.current.IsPointerOverGameObject() || TouchAction == null)
-            return;
-
-        if (Input.touchCount == 1)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            if (touch.phase == TouchPhase.Began)
-            {
-                TouchAction.Invoke(Define.TouchEvent.TabWithOneStart);
-            }
-            else if (touch.phase == TouchPhase.Moved)
-            {
-                TouchAction.Invoke(Define.TouchEvent.PressWithOne);
-            }
-        }
-    }
 
     void OnPadEvent()
     {
@@ -95,16 +69,19 @@ public class InputManager
         dir = Quaternion.Euler(0, Camera.main.transform.parent.rotation.eulerAngles.y, 0) * dir;
         dir = dir.normalized;
 
-
         // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
         if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonR))
             PadAction.Invoke(Define.PadEvent.RunButton, dir);
         else
             PadAction.Invoke(Define.PadEvent.Dragging, dir);
 
-        if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonA))
+        // Debug.Log($"panel touch position: {GamePad.Pad.Point}");
+
+        if (GamePad.Pad.GetPad(GamePad.PadCode.BackGroundTab))
+            PadAction.Invoke(Define.PadEvent.Rotating, GamePad.Pad.Point);
+        else if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonA))
             PadAction.Invoke(Define.PadEvent.AttackButton, dir);
-        if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonJ))
+        else if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonJ))
             PadAction.Invoke(Define.PadEvent.JumpButton, dir);
     }
 

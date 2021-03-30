@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -20,8 +21,11 @@ public class CameraController : MonoBehaviour
     {
         Pivot = transform.parent;
 
+        Manager.Input.MouseAction -= OnMouseEvent;
         Manager.Input.MouseAction += OnMouseEvent;
-        Manager.Input.TouchAction += OnTouchEvent;
+
+        Manager.Input.PadAction -= OnPadEvent;
+        Manager.Input.PadAction += OnPadEvent;
     }
 
     void LateUpdate()
@@ -37,15 +41,15 @@ public class CameraController : MonoBehaviour
     #region Mobile
     float _prevDelta;
 
-    void OnTouchEvent(Define.TouchEvent touchEvent)
+    void OnPadEvent(Define.PadEvent padEvent, Vector3 point)
     {
-        switch (touchEvent)
+        switch (padEvent)
         {
-            case Define.TouchEvent.TabWithOneStart:
-                StartRotate(Input.GetTouch(0).position);
+            case Define.PadEvent.RotateStart:
+                StartRotate(point);
                 break;
-            case Define.TouchEvent.PressWithOne:
-                Rotate(Input.GetTouch(0).position);
+            case Define.PadEvent.Rotating:
+                Rotate(point);
                 break;
         }
     }
@@ -79,10 +83,10 @@ public class CameraController : MonoBehaviour
 
     void Rotate(Vector3 point)
     {
-        Vector3 distPos = Camera.main.ScreenToViewportPoint(point) - _prevPos;
+        Vector3 currPos = Camera.main.ScreenToViewportPoint(point) - _prevPos;
 
-        float xAngle = Mathf.Clamp((_pivotAngleX - distPos.y * 90) * _rotateSpeed, -50, 30);
-        float yAngle = (_pivotAngleY + distPos.x * 180) * _rotateSpeed;
+        float xAngle = Mathf.Clamp((_pivotAngleX - currPos.y * 90) * _rotateSpeed, -50, 30);
+        float yAngle = (_pivotAngleY + currPos.x * 180) * _rotateSpeed;
 
         Pivot.rotation = Quaternion.Euler(xAngle, yAngle, 0f);
     }

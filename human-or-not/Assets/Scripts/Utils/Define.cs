@@ -23,12 +23,6 @@ public class Define
     #endregion
 
     #region Mobile
-    public enum TouchEvent
-    {
-        TabWithOneStart,
-        PressWithOne,
-        TabWithOne,
-    }
 
     public enum PadEvent
     {
@@ -36,6 +30,8 @@ public class Define
         RunButton,
         AttackButton,
         JumpButton,
+        RotateStart,
+        Rotating,
     }
     #endregion
 

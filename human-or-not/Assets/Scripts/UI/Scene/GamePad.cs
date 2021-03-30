@@ -10,7 +10,8 @@ public class GamePad : SceneUI
     RectTransform _handleRect;
     float _backgroundRadius;
 
-    public Vector2 Direction { get; private set; } = Vector3.zero;
+    public Vector2 Direction { get; private set; } = Vector2.zero;
+    public Vector2 Point { get; private set; } = Vector2.zero;
 
     #region InputPad
     static GamePad _pad = null;
@@ -36,6 +37,7 @@ public class GamePad : SceneUI
         }
     }
 
+    bool _backgroundTab = false;
     bool _buttonA = false;
     bool _buttonJ = false;
     bool _buttonR = false;
@@ -45,12 +47,15 @@ public class GamePad : SceneUI
         ButtonR,
         ButtonA,
         ButtonJ,
+        BackGroundTab,
     }
 
     public bool GetPad(PadCode padCode)
     {
         switch (padCode)
         {
+            case PadCode.BackGroundTab:
+                return _backgroundTab;
             case PadCode.ButtonA:
                 return GamePad.Pad._buttonA;
             case PadCode.ButtonJ:
@@ -65,8 +70,10 @@ public class GamePad : SceneUI
 
     enum GameObjects
     {
+        Joystick,
         Background,
         Handle,
+        RotatePanel,
     }
 
     protected override void OnStart()
@@ -78,16 +85,48 @@ public class GamePad : SceneUI
         Bind<GameObject>(typeof(GameObjects));
 
         // Component get
+        GameObject joystick = GetObject((int)GameObjects.Joystick);
         GameObject background = GetObject((int)GameObjects.Background);
         GameObject handle = GetObject((int)GameObjects.Handle);
+        GameObject rotatePanel = GetObject((int)GameObjects.RotatePanel);
 
         _backgroundRect = background.GetComponent<RectTransform>();
         _handleRect = handle.GetComponent<RectTransform>();
         _backgroundRadius = _backgroundRect.rect.width * 0.5f;
 
+        BindEvent(joystick, Blocking, Define.UIEvent.Click);
+
         BindEvent(handle, StartDrag, Define.UIEvent.DragStart);
         BindEvent(handle, Dragging, Define.UIEvent.Dragging);
         BindEvent(handle, EndDrag, Define.UIEvent.DragEnd);
+
+        BindEvent(rotatePanel, RotateStart, Define.UIEvent.DragStart);
+        BindEvent(rotatePanel, Rotate, Define.UIEvent.Dragging);
+        BindEvent(rotatePanel, RotateEnd, Define.UIEvent.DragEnd);
+    }
+
+    void RotateStart(PointerEventData eventData)
+    {
+        // 첫 시작 Invoke
+        Manager.Input.PadAction.Invoke(Define.PadEvent.RotateStart, eventData.position);
+        Point = eventData.position;
+
+        _backgroundTab = true;
+    }
+
+    void Rotate(PointerEventData eventData)
+    {
+        Point = eventData.position;
+    }
+
+    void RotateEnd(PointerEventData eventData)
+    {
+        _backgroundTab = false;
+    }
+
+    void Blocking(PointerEventData eventData)
+    {
+        Debug.Log($"Blocking!");
     }
 
     void StartDrag(PointerEventData eventData)
