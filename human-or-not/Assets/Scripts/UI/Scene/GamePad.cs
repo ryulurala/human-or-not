@@ -116,6 +116,10 @@ public class GamePad : SceneUI
 
     void Rotate(PointerEventData eventData)
     {
+        // 짧은 순간에 거리 제곱 차가 클 경우 무시
+        if ((Point - eventData.position).sqrMagnitude > 2500f)
+            return;
+
         Point = eventData.position;
     }
 
