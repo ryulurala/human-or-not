@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour
     {
         switch (padEvent)
         {
-            case Define.PadEvent.RotateStart:
+            case Define.PadEvent.StartRotate:
                 StartRotate(point);
                 break;
             case Define.PadEvent.Rotating:

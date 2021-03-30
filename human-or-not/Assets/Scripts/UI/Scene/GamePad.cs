@@ -100,21 +100,21 @@ public class GamePad : SceneUI
         BindEvent(handle, Dragging, Define.UIEvent.Dragging);
         BindEvent(handle, EndDrag, Define.UIEvent.DragEnd);
 
-        BindEvent(rotatePanel, RotateStart, Define.UIEvent.DragStart);
-        BindEvent(rotatePanel, Rotate, Define.UIEvent.Dragging);
+        BindEvent(rotatePanel, BeginRotate, Define.UIEvent.DragStart);
+        BindEvent(rotatePanel, OnRotate, Define.UIEvent.Dragging);
         BindEvent(rotatePanel, RotateEnd, Define.UIEvent.DragEnd);
     }
 
-    void RotateStart(PointerEventData eventData)
+    void BeginRotate(PointerEventData eventData)
     {
         // 첫 시작 Invoke
-        Manager.Input.PadAction.Invoke(Define.PadEvent.RotateStart, eventData.position);
+        Manager.Input.PadAction.Invoke(Define.PadEvent.StartRotate, eventData.position);
         Point = eventData.position;
 
         _backgroundTab = true;
     }
 
-    void Rotate(PointerEventData eventData)
+    void OnRotate(PointerEventData eventData)
     {
         // 짧은 순간에 거리 제곱 차가 클 경우 무시
         if ((Point - eventData.position).sqrMagnitude > 2500f)

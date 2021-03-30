@@ -30,7 +30,7 @@ public class Define
         RunButton,
         AttackButton,
         JumpButton,
-        RotateStart,
+        StartRotate,
         Rotating,
     }
     #endregion
