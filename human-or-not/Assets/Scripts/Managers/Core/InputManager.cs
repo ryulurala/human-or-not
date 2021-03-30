@@ -61,13 +61,12 @@ public class InputManager
     }
 
     #region Mobile
-    float _pressedTime = 0f;
     public Action<Define.TouchEvent> TouchAction = null;
     public Action<Define.PadEvent, Vector3> PadAction = null;
 
     void OnTouchEvent()
     {
-        if (TouchAction == null)
+        if (EventSystem.current.IsPointerOverGameObject() || TouchAction == null)
             return;
 
         if (Input.touchCount == 1)
@@ -77,7 +76,6 @@ public class InputManager
             if (touch.phase == TouchPhase.Began)
             {
                 TouchAction.Invoke(Define.TouchEvent.TabWithOneStart);
-                _pressedTime = Time.time;   // 시간 측정
             }
             else if (touch.phase == TouchPhase.Moved)
             {
@@ -95,10 +93,10 @@ public class InputManager
         Vector3 dir = new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
         // 카메라가 보는 방향으로 회전
         dir = Quaternion.Euler(0, Camera.main.transform.parent.rotation.eulerAngles.y, 0) * dir;
-
-        // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
         dir = dir.normalized;
 
+
+        // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
         if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonR))
             PadAction.Invoke(Define.PadEvent.RunButton, dir);
         else
@@ -118,7 +116,7 @@ public class InputManager
 
     void OnMouseEvent()
     {
-        if (MouseAction == null)
+        if (EventSystem.current.IsPointerOverGameObject() || MouseAction == null)
             return;
 
         if (Input.GetMouseButtonDown(0))
@@ -135,7 +133,7 @@ public class InputManager
 
     void OnKeyEvent()
     {
-        if (KeyAction == null)
+        if (EventSystem.current.IsPointerOverGameObject() || KeyAction == null)
             return;
 
 
@@ -149,10 +147,9 @@ public class InputManager
             dir += new Vector3(-Camera.main.transform.right.x, 0, -Camera.main.transform.right.z);
         if (Input.GetKey(KeyCode.D))
             dir += new Vector3(Camera.main.transform.right.x, 0, Camera.main.transform.right.z);
-
+        dir = dir.normalized;
 
         // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
-        dir = dir.normalized;
         if (Input.GetKey(KeyCode.LeftShift))
             KeyAction.Invoke(Define.KeyEvent.ShiftWASD, dir);
         else
