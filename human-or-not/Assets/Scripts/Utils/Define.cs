@@ -39,9 +39,9 @@ public class Define
     public enum UIEvent
     {
         Click,
-        DragStart,
+        StartDrag,
         Dragging,
-        DragEnd,
+        EndDrag,
     }
     #endregion
 

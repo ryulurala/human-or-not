@@ -90,7 +90,11 @@ public class UIManager
     {
         Object obj = GameObject.FindObjectOfType(typeof(EventSystem));
         if (obj == null)
-            obj = Manager.Resource.Instaniate("UI/EventSystem");
+        {
+            obj = new GameObject();
+            ((GameObject)obj).AddComponent<EventSystem>();
+            ((GameObject)obj).AddComponent<StandaloneInputModule>();
+        }
         obj.name = "@EventSystem";
     }
 }

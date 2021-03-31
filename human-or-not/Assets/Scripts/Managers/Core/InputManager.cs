@@ -77,7 +77,7 @@ public class InputManager
             PadAction.Invoke(Define.PadEvent.AttackButton, dir);
         else if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonJ))
             PadAction.Invoke(Define.PadEvent.JumpButton, dir);
-        else if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonR))
+        else if (GamePad.Pad.GetPad(GamePad.PadCode.RunningSensor))
             PadAction.Invoke(Define.PadEvent.RunButton, dir);
         else
             PadAction.Invoke(Define.PadEvent.Dragging, dir);

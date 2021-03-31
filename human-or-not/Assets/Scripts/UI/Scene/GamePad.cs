@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class GamePad : SceneUI
 {
     RectTransform _backgroundRect;
     RectTransform _handleRect;
+    Image _handleImage;
     float _backgroundRadius;
+    float _walkLimits;
 
     public Vector2 Direction { get; private set; } = Vector2.zero;
     public Vector2 Point { get; private set; } = Vector2.zero;
@@ -38,13 +41,13 @@ public class GamePad : SceneUI
     }
 
     bool _backgroundTab = false;
+    bool _runningSensor = false;
     bool _buttonA = false;
     bool _buttonJ = false;
-    bool _buttonR = false;
 
     public enum PadCode
     {
-        ButtonR,
+        RunningSensor,
         ButtonA,
         ButtonJ,
         BackGroundTab,
@@ -56,12 +59,12 @@ public class GamePad : SceneUI
         {
             case PadCode.BackGroundTab:
                 return _backgroundTab;
+            case PadCode.RunningSensor:
+                return GamePad.Pad._runningSensor;
             case PadCode.ButtonA:
                 return GamePad.Pad._buttonA;
             case PadCode.ButtonJ:
                 return GamePad.Pad._buttonJ;
-            case PadCode.ButtonR:
-                return GamePad.Pad._buttonR;
             default:
                 return false;
         }
@@ -70,10 +73,13 @@ public class GamePad : SceneUI
 
     enum GameObjects
     {
+        Panel,
         Joystick,
         Background,
         Handle,
-        RotatePanel,
+        Buttons,
+        Attack,
+        Jump,
     }
 
     protected override void OnStart()
@@ -84,24 +90,35 @@ public class GamePad : SceneUI
         // Binding
         Bind<GameObject>(typeof(GameObjects));
 
-        // Component get
+        // Get GameObject
+        GameObject panel = GetObject((int)GameObjects.Panel);
+
         GameObject joystick = GetObject((int)GameObjects.Joystick);
         GameObject background = GetObject((int)GameObjects.Background);
         GameObject handle = GetObject((int)GameObjects.Handle);
-        GameObject rotatePanel = GetObject((int)GameObjects.RotatePanel);
 
+        GameObject buttons = GetObject((int)GameObjects.Buttons);
+        GameObject attackButton = GetObject((int)GameObjects.Attack);
+        GameObject jumpButton = GetObject((int)GameObjects.Jump);
+
+        // Get Component & Init values
         _backgroundRect = background.GetComponent<RectTransform>();
+        _handleImage = handle.GetComponent<Image>();
         _handleRect = handle.GetComponent<RectTransform>();
         _backgroundRadius = _backgroundRect.rect.width * 0.5f;
+        _walkLimits = _backgroundRadius * 0.85f;
 
-        BindEvent(joystick, Blocking, Define.UIEvent.Click);
+        // Bind Event
+        BindEvent(panel, BeginRotate, Define.UIEvent.StartDrag);
+        BindEvent(panel, OnRotate, Define.UIEvent.Dragging);
+        BindEvent(panel, EndRotate, Define.UIEvent.EndDrag);
 
+        BindEvent(joystick, Blocking, Define.UIEvent.Click);    // Joystick과 가까운 부분은 Rotate 불가능
         BindEvent(handle, Dragging, Define.UIEvent.Dragging);
-        BindEvent(handle, EndDrag, Define.UIEvent.DragEnd);
+        BindEvent(handle, EndDrag, Define.UIEvent.EndDrag);
 
-        BindEvent(rotatePanel, BeginRotate, Define.UIEvent.DragStart);
-        BindEvent(rotatePanel, OnRotate, Define.UIEvent.Dragging);
-        BindEvent(rotatePanel, RotateEnd, Define.UIEvent.DragEnd);
+        BindEvent(attackButton, (PointerEventData eventData) => { Debug.Log("Attack button clicked!"); }, Define.UIEvent.Click);
+        BindEvent(jumpButton, (PointerEventData eventData) => { Debug.Log("Jump button clicked!"); }, Define.UIEvent.Click);
     }
 
     void BeginRotate(PointerEventData eventData)
@@ -122,7 +139,7 @@ public class GamePad : SceneUI
         Point = eventData.position;
     }
 
-    void RotateEnd(PointerEventData eventData)
+    void EndRotate(PointerEventData eventData)
     {
         _backgroundTab = false;
     }
@@ -135,6 +152,16 @@ public class GamePad : SceneUI
     void Dragging(PointerEventData eventData)
     {
         Vector2 dir = Vector2.ClampMagnitude(eventData.position - (Vector2)_backgroundRect.position, _backgroundRadius);
+        if (dir.magnitude >= _walkLimits)
+        {
+            _runningSensor = true;
+            _handleImage.color = Color.black;
+        }
+        else
+        {
+            _runningSensor = false;
+            _handleImage.color = Color.gray;
+        }
 
         _handleRect.localPosition = dir;
         Direction = dir.normalized;
@@ -143,5 +170,6 @@ public class GamePad : SceneUI
     void EndDrag(PointerEventData eventData)
     {
         Direction = _handleRect.localPosition = Vector3.zero;
+        _handleImage.color = Color.white;
     }
 }
