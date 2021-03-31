@@ -63,6 +63,9 @@ public class InputManager
         if (PadAction == null)
             return;
 
+        if (GamePad.Pad.GetPad(GamePad.PadCode.BackGroundTab))
+            PadAction.Invoke(Define.PadEvent.Rotating, GamePad.Pad.Point);
+
         // 조이스틱 방향
         Vector3 dir = new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
         // 카메라가 보는 방향으로 회전
@@ -70,19 +73,16 @@ public class InputManager
         dir = dir.normalized;
 
         // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
-        if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonR))
+        if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonA))
+            PadAction.Invoke(Define.PadEvent.AttackButton, dir);
+        else if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonJ))
+            PadAction.Invoke(Define.PadEvent.JumpButton, dir);
+        else if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonR))
             PadAction.Invoke(Define.PadEvent.RunButton, dir);
         else
             PadAction.Invoke(Define.PadEvent.Dragging, dir);
 
-        // Debug.Log($"panel touch position: {GamePad.Pad.Point}");
 
-        if (GamePad.Pad.GetPad(GamePad.PadCode.BackGroundTab))
-            PadAction.Invoke(Define.PadEvent.Rotating, GamePad.Pad.Point);
-        else if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonA))
-            PadAction.Invoke(Define.PadEvent.AttackButton, dir);
-        else if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonJ))
-            PadAction.Invoke(Define.PadEvent.JumpButton, dir);
     }
 
     #endregion
@@ -96,14 +96,17 @@ public class InputManager
         if (EventSystem.current.IsPointerOverGameObject() || MouseAction == null)
             return;
 
-        if (Input.GetMouseButtonDown(0))
-            MouseAction.Invoke(Define.MouseEvent.LeftClick);
-
+        // 회전
         if (Input.GetMouseButtonDown(1))
             MouseAction.Invoke(Define.MouseEvent.RightStart);
         else if (Input.GetMouseButton(1))
             MouseAction.Invoke(Define.MouseEvent.RightPress);
 
+        // 공격
+        if (Input.GetMouseButtonDown(0))
+            MouseAction.Invoke(Define.MouseEvent.LeftClick);
+
+        // 확대 / 축소
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
             MouseAction.Invoke(Define.MouseEvent.ScrollWheel);
     }

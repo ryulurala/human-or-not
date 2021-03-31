@@ -96,7 +96,6 @@ public class GamePad : SceneUI
 
         BindEvent(joystick, Blocking, Define.UIEvent.Click);
 
-        BindEvent(handle, StartDrag, Define.UIEvent.DragStart);
         BindEvent(handle, Dragging, Define.UIEvent.Dragging);
         BindEvent(handle, EndDrag, Define.UIEvent.DragEnd);
 
@@ -131,11 +130,6 @@ public class GamePad : SceneUI
     void Blocking(PointerEventData eventData)
     {
         Debug.Log($"Blocking!");
-    }
-
-    void StartDrag(PointerEventData eventData)
-    {
-        Dragging(eventData);
     }
 
     void Dragging(PointerEventData eventData)
