@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
-    [SerializeField] float _walkSpeed = 5f;
-    [SerializeField] float _runSpeed = 10f;
-    [SerializeField] float _angularSpeed = 30f;
     [SerializeField] Vector3 _velocity;
 
     public Define.State State
@@ -23,7 +20,7 @@ public class PlayerController : BaseController
                     anim.CrossFade("Die", 0.25f);
                     break;
                 case Define.State.Idle:
-                    anim.CrossFade("Idle", 0.25f);
+                    anim.CrossFade("Idle", 0.01f);
                     break;
                 case Define.State.Walking:
                     anim.CrossFade("Walk", 0.01f);
@@ -161,7 +158,7 @@ public class PlayerController : BaseController
         // 방향
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_velocity), _angularSpeed * Time.deltaTime);
 
-        GetComponent<CharacterController>().SimpleMove(_velocity * speed);
+        GetComponent<CharacterController>().Move(_velocity * speed * Time.deltaTime);
         State = state;
     }
 }
