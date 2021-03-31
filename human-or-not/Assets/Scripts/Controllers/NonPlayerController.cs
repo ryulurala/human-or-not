@@ -7,7 +7,7 @@ public class NonPlayerController : BaseController
 {
     [SerializeField] bool _hasTargetPoint = false;
     [SerializeField] Vector3 _destPos;
-    [SerializeField] float _maxRange = 50.0f;
+    [SerializeField] float _maxRange = 50f;
 
     public Define.State State
     {
@@ -120,9 +120,12 @@ public class NonPlayerController : BaseController
         else
         {
             nma.SetDestination(_destPos);
-            nma.speed = 10f;
+            if (State == Define.State.Walking)
+                nma.speed = _walkSpeed;
+            else
+                nma.speed = _runSpeed;
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10f * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);
         }
     }
 
