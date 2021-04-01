@@ -10,9 +10,12 @@ public class GamePad : SceneUI
     RectTransform _outerCircleRect;
     RectTransform _innerCircleRect;
     Image _innerCircleImage;
+    Slider _zoomSlider;
     float _outerCircleRadius;
     float _boundary;
 
+    public bool Zoomed { get; private set; }
+    public float ZoomValue { get { return _zoomSlider.value; } }
     public Vector2 Direction { get; private set; } = Vector2.zero;
     public Vector2 Point { get; private set; } = Vector2.zero;
 
@@ -63,6 +66,7 @@ public class GamePad : SceneUI
         InnerCircle,
         Attack,
         Jump,
+        Slider,
     }
 
     protected override void OnStart()
@@ -75,13 +79,12 @@ public class GamePad : SceneUI
 
         // Get GameObject
         GameObject panel = GetObject((int)GameObjects.Panel);
-
         GameObject joystick = GetObject((int)GameObjects.Joystick);
         GameObject outerCircle = GetObject((int)GameObjects.OuterCircle);
         GameObject innerCircle = GetObject((int)GameObjects.InnerCircle);
-
         GameObject attackButton = GetObject((int)GameObjects.Attack);
         GameObject jumpButton = GetObject((int)GameObjects.Jump);
+        GameObject slider = GetObject((int)GameObjects.Slider);
 
         // Get Component & Init values
         _outerCircleRect = outerCircle.GetComponent<RectTransform>();
@@ -89,23 +92,31 @@ public class GamePad : SceneUI
         _innerCircleRect = innerCircle.GetComponent<RectTransform>();
         _outerCircleRadius = _outerCircleRect.rect.width * 0.5f;
         _boundary = _outerCircleRadius * 0.85f;
+        _zoomSlider = slider.GetComponent<Slider>();
+
+        CameraController cameraController = Camera.main.GetComponent<CameraController>();
+        // 1 ~ 10 단계
+        _zoomSlider.maxValue = cameraController.MaxZoomRatio;
+        _zoomSlider.minValue = cameraController.MinZoomRatio;
+        _zoomSlider.value = (cameraController.MaxZoomRatio + cameraController.MinZoomRatio) / 2f;
 
         // Bind Event
         BindEvent(panel, BeginRotate, Define.UIEvent.StartDrag);
         BindEvent(panel, OnRotate, Define.UIEvent.Dragging);
         BindEvent(panel, EndRotate, Define.UIEvent.EndDrag);
-
-        BindEvent(joystick, Blocking, Define.UIEvent.Click);    // Joystick과 가까운 부분은 Rotate 불가능
+        BindEvent(joystick, (PointerEventData eventData) => { }, Define.UIEvent.Click);    // Joystick과 가까운 부분은 Rotate 불가능(= Blocking)
         BindEvent(innerCircle, Dragging, Define.UIEvent.Dragging);
         BindEvent(innerCircle, EndDrag, Define.UIEvent.EndDrag);
-
         BindEvent(attackButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.Attack; }, Define.UIEvent.PointerDown);
+        BindEvent(attackButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.None; }, Define.UIEvent.PointerUp);
         BindEvent(jumpButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.Jump; }, Define.UIEvent.PointerDown);
+        BindEvent(jumpButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.None; }, Define.UIEvent.PointerUp);
+        BindEvent(slider, (PointerEventData eventData) => { Zoomed = true; }, Define.UIEvent.PointerDown);
+        BindEvent(slider, (PointerEventData eventData) => { Zoomed = false; }, Define.UIEvent.PointerUp);
     }
 
     void BeginRotate(PointerEventData eventData)
     {
-        // 첫 시작 Invoke
         BackgroundTapped = BackgroundTap.Begin;
         Point = eventData.position;
     }
@@ -122,11 +133,6 @@ public class GamePad : SceneUI
     void EndRotate(PointerEventData eventData)
     {
         BackgroundTapped = BackgroundTap.None;
-    }
-
-    void Blocking(PointerEventData eventData)
-    {
-        Debug.Log($"Blocking!");
     }
 
     void Dragging(PointerEventData eventData)

@@ -6,16 +6,19 @@ using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] Vector3 _delta = new Vector3(0f, 15f, -10f);
     [SerializeField] GameObject _target = null;
-    [SerializeField] float _ratio = 1f;
-    float _rotateSpeed = 1f;
-    float _zoomSpeed = 0.1f;
+    readonly Vector3 _delta = new Vector3(0f, 7.5f, -5f);
+    Vector3 _playerBellyPos;
     Vector3 _prevPos;
-    float _pivotAngleX = 0f;
-    float _pivotAngleY = 0f;
+    float _pivotAngleX;
+    float _pivotAngleY;
+    float _zoomRatio;
+    const float _rotateSpeed = 1f;
+    const float _zoomSpeed = 0.1f;
 
-    public static Transform Pivot { get; private set; } = null;
+    public float MaxZoomRatio { get; } = 3.0f;
+    public float MinZoomRatio { get; } = 1.0f;
+    public Transform Pivot { get; private set; } = null;
     public GameObject Target { get { return _target; } set { _target = value; } }
 
     void Start()
@@ -27,6 +30,10 @@ public class CameraController : MonoBehaviour
 
         Manager.Input.PadAction -= OnPadEvent;
         Manager.Input.PadAction += OnPadEvent;
+
+        _zoomRatio = (MinZoomRatio + MaxZoomRatio) / 2;
+        // Scene이 Awake에서 Player 미리 설정
+        _playerBellyPos = new Vector3(0, 0, _target.GetComponent<CharacterController>().height / 2);
     }
 
     void LateUpdate()
@@ -35,8 +42,8 @@ public class CameraController : MonoBehaviour
             return;
 
         Pivot.position = _target.transform.position;
-        transform.localPosition = _delta * _ratio;
-        transform.LookAt(Pivot.transform.position);
+        transform.localPosition = _delta * _zoomRatio;
+        transform.LookAt(Pivot.transform.position + _playerBellyPos);
     }
 
     #region Mobile
@@ -44,11 +51,14 @@ public class CameraController : MonoBehaviour
     {
         switch (padEvent)
         {
-            case Define.PadEvent.StartRotate:
+            case Define.PadEvent.BeginRotate:
                 StartRotate(point);
                 break;
-            case Define.PadEvent.Rotating:
+            case Define.PadEvent.OnRotate:
                 Rotate(point);
+                break;
+            case Define.PadEvent.OnZoom:
+                Zoom(point.x);
                 break;
         }
     }
@@ -59,14 +69,15 @@ public class CameraController : MonoBehaviour
     {
         switch (mouseEvent)
         {
-            case Define.MouseEvent.RightStart:
+            case Define.MouseEvent.RightDown:
                 StartRotate(Input.mousePosition);
                 break;
-            case Define.MouseEvent.RightPress:
+            case Define.MouseEvent.RightPressed:
                 Rotate(Input.mousePosition);
                 break;
             case Define.MouseEvent.ScrollWheel:
-                Zoom(Input.mouseScrollDelta.y * _zoomSpeed);
+                float delta = Mathf.Clamp(_zoomRatio + Input.mouseScrollDelta.y * _zoomSpeed, 1f, 3f);
+                Zoom(delta);
                 break;
         }
     }
@@ -92,8 +103,6 @@ public class CameraController : MonoBehaviour
 
     void Zoom(float delta)
     {
-        _ratio += delta;
-        _ratio = Mathf.Clamp(_ratio, 0.5f, 3f);
+        _zoomRatio = delta;
     }
-
 }

@@ -8,8 +8,8 @@ public class Define
     public enum MouseEvent
     {
         LeftClick,
-        RightStart,
-        RightPress,
+        RightDown,
+        RightPressed,
         ScrollWheel,
     }
 
@@ -25,12 +25,13 @@ public class Define
 
     public enum PadEvent
     {
-        Dragging,
-        RunButton,
-        AttackButton,
-        JumpButton,
-        StartRotate,
-        Rotating,
+        OnWalk,
+        OnRun,
+        OnAttack,
+        OnJump,
+        BeginRotate,
+        OnRotate,
+        OnZoom
     }
     #endregion
 
@@ -39,6 +40,7 @@ public class Define
     {
         Click,
         PointerDown,
+        PointerUp,
         StartDrag,
         Dragging,
         EndDrag,

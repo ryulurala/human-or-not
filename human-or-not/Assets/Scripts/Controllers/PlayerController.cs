@@ -107,16 +107,16 @@ public class PlayerController : BaseController
         _velocity = dir;
         switch (padEvent)
         {
-            case Define.PadEvent.Dragging:
+            case Define.PadEvent.OnWalk:
                 Move(_walkSpeed, Define.State.Walking);
                 break;
-            case Define.PadEvent.RunButton:
+            case Define.PadEvent.OnRun:
                 Move(_runSpeed, Define.State.Running);
                 break;
-            case Define.PadEvent.AttackButton:
+            case Define.PadEvent.OnAttack:
                 Debug.Log("Attack!");
                 break;
-            case Define.PadEvent.JumpButton:
+            case Define.PadEvent.OnJump:
                 Debug.Log("Jump!");
                 break;
         }

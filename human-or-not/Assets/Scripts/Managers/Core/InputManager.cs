@@ -65,12 +65,18 @@ public class InputManager
 
         if (GamePad.Pad.BackgroundTapped == GamePad.BackgroundTap.Begin)
         {
-            PadAction.Invoke(Define.PadEvent.StartRotate, GamePad.Pad.Point);
+            PadAction.Invoke(Define.PadEvent.BeginRotate, GamePad.Pad.Point);
             GamePad.Pad.BackgroundTapped = GamePad.BackgroundTap.On;
         }
         else if (GamePad.Pad.BackgroundTapped == GamePad.BackgroundTap.On)
         {
-            PadAction.Invoke(Define.PadEvent.Rotating, GamePad.Pad.Point);
+            PadAction.Invoke(Define.PadEvent.OnRotate, GamePad.Pad.Point);
+        }
+
+        if (GamePad.Pad.Zoomed == true)
+        {
+            // x를 zoom value로
+            PadAction.Invoke(Define.PadEvent.OnZoom, Vector3.right * GamePad.Pad.ZoomValue);
         }
 
         // 조이스틱 방향
@@ -82,19 +88,17 @@ public class InputManager
         // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
         if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Attack)
         {
-            PadAction.Invoke(Define.PadEvent.AttackButton, dir);
-            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
+            PadAction.Invoke(Define.PadEvent.OnAttack, dir);
         }
         else if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Jump)
         {
-            PadAction.Invoke(Define.PadEvent.JumpButton, dir);
-            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
+            PadAction.Invoke(Define.PadEvent.OnJump, dir);
         }
 
         if (GamePad.Pad.RunningSensorDeteted == true)
-            PadAction.Invoke(Define.PadEvent.RunButton, dir);
+            PadAction.Invoke(Define.PadEvent.OnRun, dir);
         else
-            PadAction.Invoke(Define.PadEvent.Dragging, dir);
+            PadAction.Invoke(Define.PadEvent.OnWalk, dir);
 
 
     }
@@ -112,9 +116,9 @@ public class InputManager
 
         // 회전
         if (Input.GetMouseButtonDown(1))
-            MouseAction.Invoke(Define.MouseEvent.RightStart);
+            MouseAction.Invoke(Define.MouseEvent.RightDown);
         else if (Input.GetMouseButton(1))
-            MouseAction.Invoke(Define.MouseEvent.RightPress);
+            MouseAction.Invoke(Define.MouseEvent.RightPressed);
 
         // 공격
         if (Input.GetMouseButtonDown(0))
