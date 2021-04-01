@@ -63,8 +63,15 @@ public class InputManager
         if (PadAction == null)
             return;
 
-        if (GamePad.Pad.GetPad(GamePad.PadCode.BackGroundTab))
+        if (GamePad.Pad.BackgroundTapped == GamePad.BackgroundTap.Begin)
+        {
+            PadAction.Invoke(Define.PadEvent.StartRotate, GamePad.Pad.Point);
+            GamePad.Pad.BackgroundTapped = GamePad.BackgroundTap.On;
+        }
+        else if (GamePad.Pad.BackgroundTapped == GamePad.BackgroundTap.On)
+        {
             PadAction.Invoke(Define.PadEvent.Rotating, GamePad.Pad.Point);
+        }
 
         // 조이스틱 방향
         Vector3 dir = new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
@@ -73,11 +80,18 @@ public class InputManager
         dir = dir.normalized;
 
         // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
-        if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonA))
+        if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Attack)
+        {
             PadAction.Invoke(Define.PadEvent.AttackButton, dir);
-        else if (GamePad.Pad.GetPad(GamePad.PadCode.ButtonJ))
+            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
+        }
+        else if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Jump)
+        {
             PadAction.Invoke(Define.PadEvent.JumpButton, dir);
-        else if (GamePad.Pad.GetPad(GamePad.PadCode.RunningSensor))
+            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
+        }
+
+        if (GamePad.Pad.RunningSensorDeteted == true)
             PadAction.Invoke(Define.PadEvent.RunButton, dir);
         else
             PadAction.Invoke(Define.PadEvent.Dragging, dir);

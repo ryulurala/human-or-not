@@ -5,7 +5,6 @@ using UnityEngine;
 public class Define
 {
     #region PC
-    public const float MouseZoomSpeed = 0.01f;
     public enum MouseEvent
     {
         LeftClick,
@@ -39,6 +38,7 @@ public class Define
     public enum UIEvent
     {
         Click,
+        PointerDown,
         StartDrag,
         Dragging,
         EndDrag,

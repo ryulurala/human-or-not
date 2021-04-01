@@ -7,16 +7,31 @@ using UnityEngine.UI;
 
 public class GamePad : SceneUI
 {
-    RectTransform _backgroundRect;
-    RectTransform _handleRect;
-    Image _handleImage;
-    float _backgroundRadius;
-    float _walkLimits;
+    RectTransform _outerCircleRect;
+    RectTransform _innerCircleRect;
+    Image _innerCircleImage;
+    float _outerCircleRadius;
+    float _boundary;
 
     public Vector2 Direction { get; private set; } = Vector2.zero;
     public Vector2 Point { get; private set; } = Vector2.zero;
 
-    #region InputPad
+    public BackgroundTap BackgroundTapped { get; set; } = BackgroundTap.None;
+    public enum BackgroundTap
+    {
+        None,
+        Begin,
+        On,
+    }
+    public bool RunningSensorDeteted { get; private set; } = false;
+    public ButtonClick ButtonClicked { get; set; } = ButtonClick.None;
+    public enum ButtonClick
+    {
+        None,
+        Attack,
+        Jump,
+    }
+
     static GamePad _pad = null;
     public static GamePad Pad
     {
@@ -40,44 +55,12 @@ public class GamePad : SceneUI
         }
     }
 
-    bool _backgroundTab = false;
-    bool _runningSensor = false;
-    bool _buttonA = false;
-    bool _buttonJ = false;
-
-    public enum PadCode
-    {
-        RunningSensor,
-        ButtonA,
-        ButtonJ,
-        BackGroundTab,
-    }
-
-    public bool GetPad(PadCode padCode)
-    {
-        switch (padCode)
-        {
-            case PadCode.BackGroundTab:
-                return _backgroundTab;
-            case PadCode.RunningSensor:
-                return GamePad.Pad._runningSensor;
-            case PadCode.ButtonA:
-                return GamePad.Pad._buttonA;
-            case PadCode.ButtonJ:
-                return GamePad.Pad._buttonJ;
-            default:
-                return false;
-        }
-    }
-    #endregion
-
     enum GameObjects
     {
         Panel,
         Joystick,
-        Background,
-        Handle,
-        Buttons,
+        OuterCircle,
+        InnerCircle,
         Attack,
         Jump,
     }
@@ -94,19 +77,18 @@ public class GamePad : SceneUI
         GameObject panel = GetObject((int)GameObjects.Panel);
 
         GameObject joystick = GetObject((int)GameObjects.Joystick);
-        GameObject background = GetObject((int)GameObjects.Background);
-        GameObject handle = GetObject((int)GameObjects.Handle);
+        GameObject outerCircle = GetObject((int)GameObjects.OuterCircle);
+        GameObject innerCircle = GetObject((int)GameObjects.InnerCircle);
 
-        GameObject buttons = GetObject((int)GameObjects.Buttons);
         GameObject attackButton = GetObject((int)GameObjects.Attack);
         GameObject jumpButton = GetObject((int)GameObjects.Jump);
 
         // Get Component & Init values
-        _backgroundRect = background.GetComponent<RectTransform>();
-        _handleImage = handle.GetComponent<Image>();
-        _handleRect = handle.GetComponent<RectTransform>();
-        _backgroundRadius = _backgroundRect.rect.width * 0.5f;
-        _walkLimits = _backgroundRadius * 0.85f;
+        _outerCircleRect = outerCircle.GetComponent<RectTransform>();
+        _innerCircleImage = innerCircle.GetComponent<Image>();
+        _innerCircleRect = innerCircle.GetComponent<RectTransform>();
+        _outerCircleRadius = _outerCircleRect.rect.width * 0.5f;
+        _boundary = _outerCircleRadius * 0.85f;
 
         // Bind Event
         BindEvent(panel, BeginRotate, Define.UIEvent.StartDrag);
@@ -114,20 +96,18 @@ public class GamePad : SceneUI
         BindEvent(panel, EndRotate, Define.UIEvent.EndDrag);
 
         BindEvent(joystick, Blocking, Define.UIEvent.Click);    // Joystick과 가까운 부분은 Rotate 불가능
-        BindEvent(handle, Dragging, Define.UIEvent.Dragging);
-        BindEvent(handle, EndDrag, Define.UIEvent.EndDrag);
+        BindEvent(innerCircle, Dragging, Define.UIEvent.Dragging);
+        BindEvent(innerCircle, EndDrag, Define.UIEvent.EndDrag);
 
-        BindEvent(attackButton, (PointerEventData eventData) => { Debug.Log("Attack button clicked!"); }, Define.UIEvent.Click);
-        BindEvent(jumpButton, (PointerEventData eventData) => { Debug.Log("Jump button clicked!"); }, Define.UIEvent.Click);
+        BindEvent(attackButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.Attack; }, Define.UIEvent.PointerDown);
+        BindEvent(jumpButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.Jump; }, Define.UIEvent.PointerDown);
     }
 
     void BeginRotate(PointerEventData eventData)
     {
         // 첫 시작 Invoke
-        Manager.Input.PadAction.Invoke(Define.PadEvent.StartRotate, eventData.position);
+        BackgroundTapped = BackgroundTap.Begin;
         Point = eventData.position;
-
-        _backgroundTab = true;
     }
 
     void OnRotate(PointerEventData eventData)
@@ -141,7 +121,7 @@ public class GamePad : SceneUI
 
     void EndRotate(PointerEventData eventData)
     {
-        _backgroundTab = false;
+        BackgroundTapped = BackgroundTap.None;
     }
 
     void Blocking(PointerEventData eventData)
@@ -151,25 +131,25 @@ public class GamePad : SceneUI
 
     void Dragging(PointerEventData eventData)
     {
-        Vector2 dir = Vector2.ClampMagnitude(eventData.position - (Vector2)_backgroundRect.position, _backgroundRadius);
-        if (dir.magnitude >= _walkLimits)
+        Vector2 dir = Vector2.ClampMagnitude(eventData.position - (Vector2)_outerCircleRect.position, _outerCircleRadius);
+        if (dir.magnitude >= _boundary)
         {
-            _runningSensor = true;
-            _handleImage.color = Color.black;
+            RunningSensorDeteted = true;
+            _innerCircleImage.color = Color.black;
         }
         else
         {
-            _runningSensor = false;
-            _handleImage.color = Color.gray;
+            RunningSensorDeteted = false;
+            _innerCircleImage.color = Color.gray;
         }
 
-        _handleRect.localPosition = dir;
+        _innerCircleRect.localPosition = dir;
         Direction = dir.normalized;
     }
 
     void EndDrag(PointerEventData eventData)
     {
-        Direction = _handleRect.localPosition = Vector3.zero;
-        _handleImage.color = Color.white;
+        Direction = _innerCircleRect.localPosition = Vector3.zero;
+        _innerCircleImage.color = Color.white;
     }
 }

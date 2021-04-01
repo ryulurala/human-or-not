@@ -57,15 +57,23 @@ public abstract class BaseUI : MonoBehaviour
         switch (type)
         {
             case Define.UIEvent.Click:
+                eventHandler.OnClickHandler -= action;
                 eventHandler.OnClickHandler += action;
                 break;
+            case Define.UIEvent.PointerDown:
+                eventHandler.OnPointerDownHandler -= action;
+                eventHandler.OnPointerDownHandler += action;
+                break;
             case Define.UIEvent.StartDrag:
+                eventHandler.OnBeginDragHandler -= action;
                 eventHandler.OnBeginDragHandler += action;
                 break;
             case Define.UIEvent.Dragging:
+                eventHandler.OnDragHandler -= action;
                 eventHandler.OnDragHandler += action;
                 break;
             case Define.UIEvent.EndDrag:
+                eventHandler.OnEndDragHandler -= action;
                 eventHandler.OnEndDragHandler += action;
                 break;
         }

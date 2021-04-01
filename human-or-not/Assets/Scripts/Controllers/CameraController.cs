@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] GameObject _target = null;
     [SerializeField] float _ratio = 1f;
     float _rotateSpeed = 1f;
+    float _zoomSpeed = 0.1f;
     Vector3 _prevPos;
     float _pivotAngleX = 0f;
     float _pivotAngleY = 0f;
@@ -39,8 +40,6 @@ public class CameraController : MonoBehaviour
     }
 
     #region Mobile
-    float _prevDelta;
-
     void OnPadEvent(Define.PadEvent padEvent, Vector3 point)
     {
         switch (padEvent)
@@ -67,7 +66,7 @@ public class CameraController : MonoBehaviour
                 Rotate(Input.mousePosition);
                 break;
             case Define.MouseEvent.ScrollWheel:
-                Zoom(Input.mouseScrollDelta.y * Define.MouseZoomSpeed);
+                Zoom(Input.mouseScrollDelta.y * _zoomSpeed);
                 break;
         }
     }

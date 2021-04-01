@@ -12,21 +12,25 @@ public class PlayerController : BaseController
         get { return _state; }
         set
         {
+            // 무분별한 State 변경 방지
+            if (value == _state)
+                return;
+
             _state = value;
             Animator anim = GetComponent<Animator>();
             switch (_state)
             {
                 case Define.State.Die:
-                    anim.CrossFade("Die", 0.25f);
+                    // anim.CrossFade("Die", 0.1f);
                     break;
                 case Define.State.Idle:
-                    anim.CrossFade("Idle", 0.01f);
+                    anim.CrossFade("Idle", 0.05f);
                     break;
                 case Define.State.Walking:
                     anim.CrossFade("Walk", 0.01f);
                     break;
                 case Define.State.Running:
-                    anim.CrossFade("Run", 0.01f);
+                    anim.CrossFade("Run", 0.25f);
                     break;
                 case Define.State.Attack:
                     // anim.CrossFade("Attack", 0.1f);
