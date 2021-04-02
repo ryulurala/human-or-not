@@ -68,17 +68,9 @@ public abstract class BaseUI : MonoBehaviour
                 eventHandler.OnPointerUpHandler -= action;
                 eventHandler.OnPointerUpHandler += action;
                 break;
-            case Define.UIEvent.StartDrag:
-                eventHandler.OnBeginDragHandler -= action;
-                eventHandler.OnBeginDragHandler += action;
-                break;
-            case Define.UIEvent.Dragging:
+            case Define.UIEvent.OnDrag:
                 eventHandler.OnDragHandler -= action;
                 eventHandler.OnDragHandler += action;
-                break;
-            case Define.UIEvent.EndDrag:
-                eventHandler.OnEndDragHandler -= action;
-                eventHandler.OnEndDragHandler += action;
                 break;
         }
     }

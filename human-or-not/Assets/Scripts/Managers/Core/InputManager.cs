@@ -63,21 +63,13 @@ public class InputManager
         if (PadAction == null)
             return;
 
-        if (GamePad.Pad.BackgroundTapped == GamePad.BackgroundTap.Begin)
-        {
-            PadAction.Invoke(Define.PadEvent.BeginRotate, GamePad.Pad.Point);
-            GamePad.Pad.BackgroundTapped = GamePad.BackgroundTap.On;
-        }
-        else if (GamePad.Pad.BackgroundTapped == GamePad.BackgroundTap.On)
-        {
-            PadAction.Invoke(Define.PadEvent.OnRotate, GamePad.Pad.Point);
-        }
+        if (GamePad.Pad.RotatePanelTapped == GamePad.RotatePanelTap.Begin)
+            PadAction.Invoke(Define.PadEvent.BeginRotate, GamePad.Pad.TouchPoint);
+        else if (GamePad.Pad.RotatePanelTapped == GamePad.RotatePanelTap.On)
+            PadAction.Invoke(Define.PadEvent.OnRotate, GamePad.Pad.TouchPoint);
 
         if (GamePad.Pad.Zoomed == true)
-        {
-            // x를 zoom value로
-            PadAction.Invoke(Define.PadEvent.OnZoom, Vector3.right * GamePad.Pad.ZoomValue);
-        }
+            PadAction.Invoke(Define.PadEvent.OnZoom, Vector3.right * GamePad.Pad.ZoomValue);    // x를 zoom value로
 
         // 조이스틱 방향
         Vector3 dir = new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
@@ -85,22 +77,17 @@ public class InputManager
         dir = Quaternion.Euler(0, Camera.main.transform.parent.rotation.eulerAngles.y, 0) * dir;
         dir = dir.normalized;
 
-        // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
-        if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Attack)
-        {
-            PadAction.Invoke(Define.PadEvent.OnAttack, dir);
-        }
-        else if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Jump)
-        {
-            PadAction.Invoke(Define.PadEvent.OnJump, dir);
-        }
-
-        if (GamePad.Pad.RunningSensorDeteted == true)
-            PadAction.Invoke(Define.PadEvent.OnRun, dir);
-        else
+        if (GamePad.Pad.JoyStickDetected == GamePad.JoystickDetect.Center)
+            PadAction.Invoke(Define.PadEvent.OnIdle, dir);
+        else if (GamePad.Pad.JoyStickDetected == GamePad.JoystickDetect.CloseToCenter)
             PadAction.Invoke(Define.PadEvent.OnWalk, dir);
+        else if (GamePad.Pad.JoyStickDetected == GamePad.JoystickDetect.FarFromCenter)
+            PadAction.Invoke(Define.PadEvent.OnRun, dir);
 
-
+        if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Attack)
+            PadAction.Invoke(Define.PadEvent.OnAttack, dir);
+        else if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Jump)
+            PadAction.Invoke(Define.PadEvent.OnJump, dir);
     }
 
     #endregion
@@ -148,7 +135,9 @@ public class InputManager
         dir = dir.normalized;
 
         // 걷기, 뛰기 둘 중 하나 무조건 실행 -> 속도 벡터 전달
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (dir == Vector3.zero)
+            KeyAction.Invoke(Define.KeyEvent.None, dir);
+        else if (Input.GetKey(KeyCode.LeftShift))
             KeyAction.Invoke(Define.KeyEvent.ShiftWASD, dir);
         else
             KeyAction.Invoke(Define.KeyEvent.WASD, dir);

@@ -19,5 +19,4 @@ public class WorldScene : BaseScene
     {
         Debug.Log("WorldScene Clear");
     }
-
 }

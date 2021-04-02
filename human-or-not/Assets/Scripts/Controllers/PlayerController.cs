@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
-    [SerializeField] Vector3 _velocity;
-
     public Define.State State
     {
         get { return _state; }
@@ -27,10 +25,10 @@ public class PlayerController : BaseController
                     anim.CrossFade("Idle", 0.05f);
                     break;
                 case Define.State.Walking:
-                    anim.CrossFade("Walk", 0.01f);
+                    anim.CrossFade("Walk", 0.05f);
                     break;
                 case Define.State.Running:
-                    anim.CrossFade("Run", 0.25f);
+                    anim.CrossFade("Run", 0.05f);
                     break;
                 case Define.State.Attack:
                     // anim.CrossFade("Attack", 0.1f);
@@ -81,21 +79,9 @@ public class PlayerController : BaseController
     #region UpdateState
     void UpdateDie() { }
     void UpdateIdle() { }
-    void UpdateWalking()
-    {
-        if (_velocity == Vector3.zero)
-            State = Define.State.Idle;
-    }
-    void UpdateRunning()
-    {
-        if (_velocity == Vector3.zero)
-            State = Define.State.Idle;
-    }
-    void UpdateAttack()
-    {
-
-    }
-
+    void UpdateWalking() { }
+    void UpdateRunning() { }
+    void UpdateAttack() { }
     #endregion
 
     #region Mobile
@@ -104,14 +90,16 @@ public class PlayerController : BaseController
         if (_state == Define.State.Die)
             return;
 
-        _velocity = dir;
         switch (padEvent)
         {
+            case Define.PadEvent.OnIdle:
+                State = Define.State.Idle;
+                break;
             case Define.PadEvent.OnWalk:
-                Move(_walkSpeed, Define.State.Walking);
+                Move(_walkSpeed, Define.State.Walking, dir);
                 break;
             case Define.PadEvent.OnRun:
-                Move(_runSpeed, Define.State.Running);
+                Move(_runSpeed, Define.State.Running, dir);
                 break;
             case Define.PadEvent.OnAttack:
                 Debug.Log("Attack!");
@@ -138,14 +126,16 @@ public class PlayerController : BaseController
         if (_state == Define.State.Die)
             return;
 
-        _velocity = dir;
         switch (keyEvent)
         {
+            case Define.KeyEvent.None:
+                State = Define.State.Idle;
+                break;
             case Define.KeyEvent.WASD:
-                Move(_walkSpeed, Define.State.Walking);
+                Move(_walkSpeed, Define.State.Walking, dir);
                 break;
             case Define.KeyEvent.ShiftWASD:
-                Move(_runSpeed, Define.State.Running);
+                Move(_runSpeed, Define.State.Running, dir);
                 break;
             case Define.KeyEvent.SpaceBar:
                 Debug.Log("Jump!");
@@ -154,15 +144,15 @@ public class PlayerController : BaseController
     }
     #endregion
 
-    void Move(float speed, Define.State state)
+    void Move(float speed, Define.State state, Vector3 velocity)
     {
-        if (_velocity == Vector3.zero)
+        if (velocity == Vector3.zero)
             return;
 
         // 방향
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_velocity), _angularSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), _angularSpeed * Time.deltaTime);
 
-        GetComponent<CharacterController>().Move(_velocity * speed * Time.deltaTime);
+        GetComponent<CharacterController>().Move(velocity * speed * Time.deltaTime);
         State = state;
     }
 }

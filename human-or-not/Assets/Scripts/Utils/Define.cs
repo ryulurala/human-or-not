@@ -15,6 +15,7 @@ public class Define
 
     public enum KeyEvent
     {
+        None,
         WASD,
         ShiftWASD,
         SpaceBar,
@@ -25,6 +26,7 @@ public class Define
 
     public enum PadEvent
     {
+        OnIdle,
         OnWalk,
         OnRun,
         OnAttack,
@@ -41,9 +43,7 @@ public class Define
         Click,
         PointerDown,
         PointerUp,
-        StartDrag,
-        Dragging,
-        EndDrag,
+        OnDrag,
     }
     #endregion
 
