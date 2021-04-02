@@ -1,7 +1,7 @@
 var MobileOrPc = {
     isMobile: function()
     {
-        return (/iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
+        return ((!/Win16|Win32|Win64|Mac|MacIntel/.test(navigator.userAgent)) || /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1))
     }
 };
 
