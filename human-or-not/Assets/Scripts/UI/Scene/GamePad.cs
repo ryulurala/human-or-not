@@ -197,9 +197,9 @@ public class GamePad : SceneUI
         GameObject jumpButton = GetObject((int)GameObjects.Jump);
 
         BindEvent(attackButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.Attack; }, Define.UIEvent.PointerDown);
-        BindEvent(attackButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.None; }, Define.UIEvent.PointerUp);
+        // BindEvent(attackButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.None; }, Define.UIEvent.PointerUp);
 
         BindEvent(jumpButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.Jump; }, Define.UIEvent.PointerDown);
-        BindEvent(jumpButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.None; }, Define.UIEvent.PointerUp);
+        // BindEvent(jumpButton, (PointerEventData eventData) => { ButtonClicked = ButtonClick.None; }, Define.UIEvent.PointerUp);
     }
 }

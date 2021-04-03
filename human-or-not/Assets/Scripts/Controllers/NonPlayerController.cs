@@ -9,6 +9,35 @@ public class NonPlayerController : BaseController
     [SerializeField] Vector3 _destPos;
     [SerializeField] float _maxRange = 50f;
 
+    public Define.State State
+    {
+        get { return _state; }
+        set
+        {
+            // 무분별한 State 변경 방지
+            if (value == _state)
+                return;
+
+            _state = value;
+            Animator anim = GetComponent<Animator>();
+            switch (_state)
+            {
+                case Define.State.Die:
+                    anim.CrossFade("Die", 0.05f);
+                    break;
+                case Define.State.Idle:
+                    anim.CrossFade("Idle", 0.05f);
+                    break;
+                case Define.State.Walking:
+                    anim.CrossFade("Walk", 0.05f);
+                    break;
+                case Define.State.Running:
+                    anim.CrossFade("Run", 0.05f);
+                    break;
+            }
+        }
+    }
+
     protected override void OnStart()
     {
         State = Define.State.Idle;

@@ -51,10 +51,11 @@ public class Define
     public enum State
     {
         Die,
+        Attack,
+        Jump,
         Idle,
         Walking,
         Running,
-        Attack,
     }
     #endregion
 

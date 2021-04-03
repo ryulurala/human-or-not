@@ -33,7 +33,8 @@ public class CameraController : MonoBehaviour
 
         _zoomRatio = (MinZoomRatio + MaxZoomRatio) / 2;
         // Scene이 Awake에서 Player 미리 설정
-        _playerBellyPos = new Vector3(0, 0, _target.GetComponent<CharacterController>().height / 2);
+        if (_target.IsValid())
+            _playerBellyPos = new Vector3(0, 0, _target.GetComponent<CharacterController>().height / 2);
     }
 
     void LateUpdate()

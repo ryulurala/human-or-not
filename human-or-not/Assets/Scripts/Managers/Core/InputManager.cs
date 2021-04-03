@@ -85,9 +85,15 @@ public class InputManager
             PadAction.Invoke(Define.PadEvent.OnRun, dir);
 
         if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Attack)
+        {
             PadAction.Invoke(Define.PadEvent.OnAttack, dir);
+            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
+        }
         else if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Jump)
+        {
             PadAction.Invoke(Define.PadEvent.OnJump, dir);
+            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
+        }
     }
 
     #endregion
@@ -144,7 +150,6 @@ public class InputManager
 
         if (Input.GetKeyDown(KeyCode.Space))
             KeyAction.Invoke(Define.KeyEvent.SpaceBar, dir);
-
     }
     #endregion
 }

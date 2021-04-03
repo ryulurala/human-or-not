@@ -5,6 +5,49 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
+    bool _hasExitState;
+
+    public Define.State State
+    {
+        get { return _state; }
+        set
+        {
+            // 무분별한 State 변경 방지
+            if (value == _state)
+                return;
+
+            _state = value;
+            Animator anim = GetComponent<Animator>();
+            switch (_state)
+            {
+                case Define.State.Die:
+                    anim.CrossFade("Die", 0.05f);
+                    _hasExitState = true;
+                    break;
+                case Define.State.Idle:
+                    anim.CrossFade("Idle", 0.05f);
+                    _hasExitState = false;
+                    break;
+                case Define.State.Walking:
+                    anim.CrossFade("Walk", 0.05f);
+                    _hasExitState = false;
+                    break;
+                case Define.State.Running:
+                    anim.CrossFade("Run", 0.05f);
+                    _hasExitState = false;
+                    break;
+                case Define.State.Attack:
+                    anim.CrossFade("Attack", 0.05f);
+                    _hasExitState = true;
+                    break;
+                case Define.State.Jump:
+                    anim.CrossFade("Jump", 0.05f);
+                    _hasExitState = true;
+                    break;
+            }
+        }
+    }
+
     protected override void OnStart()
     {
         // Settings
@@ -41,6 +84,9 @@ public class PlayerController : BaseController
             case Define.State.Attack:
                 UpdateAttack();
                 break;
+            case Define.State.Jump:
+                UpdateJump();
+                break;
         }
     }
 
@@ -49,13 +95,23 @@ public class PlayerController : BaseController
     void UpdateIdle() { }
     void UpdateWalking() { }
     void UpdateRunning() { }
-    void UpdateAttack() { }
+    void UpdateAttack()
+    {
+        if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f)
+            State = Define.State.Idle;
+    }
+    void UpdateJump()
+    {
+        if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f)
+            State = Define.State.Idle;
+    }
     #endregion
 
     #region Mobile
     void OnPadEvent(Define.PadEvent padEvent, Vector3 dir)
     {
-        if (_state == Define.State.Die)
+        Debug.Log($"Current State: {_state}");
+        if (_hasExitState == true)
             return;
 
         switch (padEvent)
@@ -70,10 +126,10 @@ public class PlayerController : BaseController
                 Move(_runSpeed, Define.State.Running, dir);
                 break;
             case Define.PadEvent.OnAttack:
-                Debug.Log("Attack!");
+                State = Define.State.Attack;
                 break;
             case Define.PadEvent.OnJump:
-                Debug.Log("Jump!");
+                State = Define.State.Jump;
                 break;
         }
     }
@@ -82,16 +138,16 @@ public class PlayerController : BaseController
     #region PC
     void OnMouseEvent(Define.MouseEvent mouseEvent)
     {
-        if (_state == Define.State.Die)
+        if (_hasExitState == true)
             return;
 
         if (mouseEvent == Define.MouseEvent.LeftClick)
-            Debug.Log("Attack!");
+            State = Define.State.Attack;
     }
 
     void OnKeyEvent(Define.KeyEvent keyEvent, Vector3 dir)
     {
-        if (_state == Define.State.Die)
+        if (_hasExitState == true)
             return;
 
         switch (keyEvent)
@@ -106,7 +162,7 @@ public class PlayerController : BaseController
                 Move(_runSpeed, Define.State.Running, dir);
                 break;
             case Define.KeyEvent.SpaceBar:
-                Debug.Log("Jump!");
+                State = Define.State.Jump;
                 break;
         }
     }
