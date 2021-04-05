@@ -52,6 +52,7 @@ public class NonPlayerController : BaseController
         // Get Component
         _animator = GetComponent<Animator>();
         _navMeshAgent = gameObject.GetOrAddComponent<NavMeshAgent>();
+        _navMeshAgent.isStopped = false;
 
         State = Define.State.Idle;
         WorldObjectType = Define.WorldObject.NonPlayer;
@@ -116,7 +117,10 @@ public class NonPlayerController : BaseController
     void UpdateDied()
     {
         if (_navMeshAgent.isStopped == false)
+        {
             _navMeshAgent.isStopped = true;
+            this.enabled = false;
+        }
     }
     void UpdateIdle()
     {
