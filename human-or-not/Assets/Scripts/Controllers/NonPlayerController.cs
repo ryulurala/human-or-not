@@ -113,7 +113,11 @@ public class NonPlayerController : BaseController
     }
 
     #region UpdateState
-    void UpdateDied() { }
+    void UpdateDied()
+    {
+        if (_navMeshAgent.isStopped == false)
+            _navMeshAgent.isStopped = true;
+    }
     void UpdateIdle()
     {
         if (State == Define.State.Died)
@@ -131,9 +135,6 @@ public class NonPlayerController : BaseController
 
     void UpdateMoving()
     {
-        if (State == Define.State.Died)
-            return;
-
         Vector3 dir = _destPos - transform.position;
         if (dir.magnitude < 0.1f)
         {
