@@ -50,7 +50,7 @@ public class Define
     #region State
     public enum State
     {
-        Die,
+        Died,
         Attack,
         Jump,
         Idle,

@@ -649,6 +649,7 @@ GameObject:
   - component: {fileID: 934628351959125088}
   - component: {fileID: 934628351959125103}
   - component: {fileID: 934628351959125090}
+  - component: {fileID: -5105312605771013722}
   m_Layer: 0
   m_Name: Non-Player
   m_TagString: Untagged
@@ -717,13 +718,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36e5cdee0419a0f43a49d996b3c80d60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _state: 0
   _walkSpeed: 5
   _runSpeed: 10
   _angularSpeed: 30
+  _state: 0
   _hasTargetPoint: 0
   _destPos: {x: 0, y: 0, z: 0}
   _maxRange: 50
+--- !u!65 &-5105312605771013722
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934628351959125102}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.5, y: 1, z: 1.5}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &934628351963892851
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public class NonPlayerController : BaseController
     Animator _animator;
     NavMeshAgent _navMeshAgent;
 
-    public Define.State State
+    public override Define.State State
     {
         get { return _state; }
         set
@@ -24,7 +24,7 @@ public class NonPlayerController : BaseController
             _state = value;
             switch (_state)
             {
-                case Define.State.Die:
+                case Define.State.Died:
                     _animator.CrossFadeInFixedTime("Die", 0.05f);  // Trigger Animation
                     break;
                 case Define.State.Idle:
@@ -38,6 +38,13 @@ public class NonPlayerController : BaseController
                     break;
             }
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        // Die
+        if (other.tag == "Player" && other.GetComponent<BaseController>().State == Define.State.Attack)
+            State = Define.State.Died;
     }
 
     protected override void OnStart()
@@ -56,8 +63,8 @@ public class NonPlayerController : BaseController
     {
         switch (_state)
         {
-            case Define.State.Die:
-                UpdateDie();
+            case Define.State.Died:
+                UpdateDied();
                 break;
             case Define.State.Idle:
                 UpdateIdle();
@@ -70,11 +77,14 @@ public class NonPlayerController : BaseController
     }
     IEnumerator DefineTargetPoint()
     {
-        while (_state != Define.State.Die)
+        while (true)
         {
             float randSeconds = Random.Range(5f, 10f);
             yield return new WaitForSeconds(randSeconds);
             // 5 ~ 10초 뒤
+
+            if (State == Define.State.Died)
+                break;
 
             Vector3 point;
             if (RandomPoint(transform.position, _maxRange, out point))
@@ -103,9 +113,12 @@ public class NonPlayerController : BaseController
     }
 
     #region UpdateState
-    void UpdateDie() { }
+    void UpdateDied() { }
     void UpdateIdle()
     {
+        if (State == Define.State.Died)
+            return;
+
         if (_hasTargetPoint == true)
         {
             int randNum = Random.Range(1, 100);
@@ -118,6 +131,9 @@ public class NonPlayerController : BaseController
 
     void UpdateMoving()
     {
+        if (State == Define.State.Died)
+            return;
+
         Vector3 dir = _destPos - transform.position;
         if (dir.magnitude < 0.1f)
         {

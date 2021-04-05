@@ -10,7 +10,7 @@ public class PlayerController : BaseController
     bool _hasExitState;
     bool _hasEndedState { get { return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f; } }
 
-    public Define.State State
+    public override Define.State State
     {
         get { return _state; }
         set
@@ -22,7 +22,7 @@ public class PlayerController : BaseController
             _state = value;
             switch (_state)
             {
-                case Define.State.Die:
+                case Define.State.Died:
                     _animator.CrossFadeInFixedTime("Die", 0.05f);  // 바로 애니메이션 실행
                     _hasExitState = true;
                     break;
@@ -78,8 +78,8 @@ public class PlayerController : BaseController
     {
         switch (_state)
         {
-            case Define.State.Die:
-                UpdateDie();
+            case Define.State.Died:
+                UpdateDied();
                 break;
             case Define.State.Idle:
                 UpdateIdle();
@@ -99,8 +99,20 @@ public class PlayerController : BaseController
         }
     }
 
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.layer.Equals(LayerMask.NameToLayer("Ground")))
+            return;
+
+        if (hit.gameObject.GetComponent<BaseController>().State == Define.State.Attack)
+        {
+            if (State != Define.State.Jump)
+                State = Define.State.Died;
+        }
+    }
+
     #region UpdateState
-    void UpdateDie() { }
+    void UpdateDied() { }
     void UpdateIdle() { }
     void UpdateWalking() { }
     void UpdateRunning() { }
@@ -186,6 +198,7 @@ public class PlayerController : BaseController
         // 방향
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), _angularSpeed * Time.deltaTime);
 
+        // transform.Translate(velocity * speed * Time.deltaTime, Space.World);
         _characterController.Move(velocity * speed * Time.deltaTime);
         State = state;
     }

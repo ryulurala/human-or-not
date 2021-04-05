@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 129604376}
   - component: {fileID: 129604375}
   - component: {fileID: 129604374}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,6 +592,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4894566087994995056, guid: 8d080416094b51249ab86bd80306ebdf,
         type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4894566087994995056, guid: 8d080416094b51249ab86bd80306ebdf,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4894566087994995056, guid: 8d080416094b51249ab86bd80306ebdf,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 2.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4894566087994995056, guid: 8d080416094b51249ab86bd80306ebdf,
+        type: 3}
       propertyPath: m_StepOffset
       value: 0.6
       objectReference: {fileID: 0}
@@ -856,6 +871,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Green
+      objectReference: {fileID: 0}
+    - target: {fileID: 934628351959125102, guid: f2a5fdb21b041524d8372e231cf1cd87,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2a5fdb21b041524d8372e231cf1cd87, type: 3}
