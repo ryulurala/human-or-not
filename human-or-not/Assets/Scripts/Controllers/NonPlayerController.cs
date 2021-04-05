@@ -9,6 +9,9 @@ public class NonPlayerController : BaseController
     [SerializeField] Vector3 _destPos;
     [SerializeField] float _maxRange = 50f;
 
+    Animator _animator;
+    NavMeshAgent _navMeshAgent;
+
     public Define.State State
     {
         get { return _state; }
@@ -19,20 +22,19 @@ public class NonPlayerController : BaseController
                 return;
 
             _state = value;
-            Animator anim = GetComponent<Animator>();
             switch (_state)
             {
                 case Define.State.Die:
-                    anim.CrossFade("Die", 0.05f);
+                    _animator.CrossFadeInFixedTime("Die", 0.05f);  // Trigger Animation
                     break;
                 case Define.State.Idle:
-                    anim.CrossFade("Idle", 0.05f);
+                    _animator.CrossFade("Idle", 0.05f);
                     break;
                 case Define.State.Walking:
-                    anim.CrossFade("Walk", 0.05f);
+                    _animator.CrossFade("Walk", 0.05f);
                     break;
                 case Define.State.Running:
-                    anim.CrossFade("Run", 0.05f);
+                    _animator.CrossFade("Run", 0.05f);
                     break;
             }
         }
@@ -40,6 +42,10 @@ public class NonPlayerController : BaseController
 
     protected override void OnStart()
     {
+        // Get Component
+        _animator = GetComponent<Animator>();
+        _navMeshAgent = gameObject.GetOrAddComponent<NavMeshAgent>();
+
         State = Define.State.Idle;
         WorldObjectType = Define.WorldObject.NonPlayer;
 
@@ -112,22 +118,20 @@ public class NonPlayerController : BaseController
 
     void UpdateMoving()
     {
-        NavMeshAgent nma = gameObject.GetOrAddComponent<NavMeshAgent>();
-
         Vector3 dir = _destPos - transform.position;
         if (dir.magnitude < 0.1f)
         {
-            nma.ResetPath();
+            _navMeshAgent.ResetPath();
             _hasTargetPoint = false;
             State = Define.State.Idle;
         }
         else
         {
-            nma.SetDestination(_destPos);
+            _navMeshAgent.SetDestination(_destPos);
             if (State == Define.State.Walking)
-                nma.speed = _walkSpeed;
+                _navMeshAgent.speed = _walkSpeed;
             else
-                nma.speed = _runSpeed;
+                _navMeshAgent.speed = _runSpeed;
 
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), _angularSpeed * Time.deltaTime);
         }

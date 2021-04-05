@@ -23,11 +23,14 @@ public class PlayerController : BaseController
             switch (_state)
             {
                 case Define.State.Die:
-                    _animator.CrossFade("Die", 0f);  // 바로 애니메이션 실행
+                    _animator.CrossFadeInFixedTime("Die", 0.05f);  // 바로 애니메이션 실행
                     _hasExitState = true;
                     break;
                 case Define.State.Idle:
-                    _animator.CrossFade("Idle", 0.05f);
+                    if (_hasEndedState == true)
+                        _animator.CrossFadeInFixedTime("Idle", 0.05f);
+                    else
+                        _animator.CrossFade("Idle", 0.05f);
                     _hasExitState = false;
                     break;
                 case Define.State.Walking:
@@ -39,11 +42,11 @@ public class PlayerController : BaseController
                     _hasExitState = false;
                     break;
                 case Define.State.Attack:
-                    _animator.CrossFade("Attack", 0f);   // 바로 애니메이션 실행
+                    _animator.CrossFadeInFixedTime("Attack", 0.05f);
                     _hasExitState = true;
                     break;
                 case Define.State.Jump:
-                    _animator.CrossFade("Jump", 0f);     // 바로 애니메이션 실행
+                    _animator.CrossFadeInFixedTime("Jump", 0.05f);
                     _hasExitState = true;
                     break;
             }
@@ -121,6 +124,12 @@ public class PlayerController : BaseController
 
         switch (padEvent)
         {
+            case Define.PadEvent.OnAttack:
+                State = Define.State.Attack;
+                break;
+            case Define.PadEvent.OnJump:
+                State = Define.State.Jump;
+                break;
             case Define.PadEvent.OnIdle:
                 State = Define.State.Idle;
                 break;
@@ -129,12 +138,6 @@ public class PlayerController : BaseController
                 break;
             case Define.PadEvent.OnRun:
                 Move(_runSpeed, Define.State.Running, dir);
-                break;
-            case Define.PadEvent.OnAttack:
-                State = Define.State.Attack;
-                break;
-            case Define.PadEvent.OnJump:
-                State = Define.State.Jump;
                 break;
         }
     }

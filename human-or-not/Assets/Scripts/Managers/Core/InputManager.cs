@@ -71,6 +71,17 @@ public class InputManager
         if (GamePad.Pad.Zoomed == true)
             PadAction.Invoke(Define.PadEvent.OnZoom, Vector3.right * GamePad.Pad.ZoomValue);    // x를 zoom value로
 
+        if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Attack)
+        {
+            PadAction.Invoke(Define.PadEvent.OnAttack, Vector3.zero);
+            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
+        }
+        else if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Jump)
+        {
+            PadAction.Invoke(Define.PadEvent.OnJump, Vector3.zero);
+            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
+        }
+
         // 조이스틱 방향
         Vector3 dir = new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
         // 카메라가 보는 방향으로 회전
@@ -83,19 +94,7 @@ public class InputManager
             PadAction.Invoke(Define.PadEvent.OnWalk, dir);
         else if (GamePad.Pad.JoyStickDetected == GamePad.JoystickDetect.FarFromCenter)
             PadAction.Invoke(Define.PadEvent.OnRun, dir);
-
-        if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Attack)
-        {
-            PadAction.Invoke(Define.PadEvent.OnAttack, dir);
-            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
-        }
-        else if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Jump)
-        {
-            PadAction.Invoke(Define.PadEvent.OnJump, dir);
-            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
-        }
     }
-
     #endregion
 
     #region PC
