@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
+    Animator _animator;
+    CharacterController _characterController;
     bool _hasExitState;
+    bool _hasEndedState { get { return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f; } }
 
     public Define.State State
     {
@@ -17,31 +20,30 @@ public class PlayerController : BaseController
                 return;
 
             _state = value;
-            Animator anim = GetComponent<Animator>();
             switch (_state)
             {
                 case Define.State.Die:
-                    anim.CrossFade("Die", 0.05f);
+                    _animator.CrossFade("Die", 0f);  // 바로 애니메이션 실행
                     _hasExitState = true;
                     break;
                 case Define.State.Idle:
-                    anim.CrossFade("Idle", 0.05f);
+                    _animator.CrossFade("Idle", 0.05f);
                     _hasExitState = false;
                     break;
                 case Define.State.Walking:
-                    anim.CrossFade("Walk", 0.05f);
+                    _animator.CrossFade("Walk", 0.05f);
                     _hasExitState = false;
                     break;
                 case Define.State.Running:
-                    anim.CrossFade("Run", 0.05f);
+                    _animator.CrossFade("Run", 0.05f);
                     _hasExitState = false;
                     break;
                 case Define.State.Attack:
-                    anim.CrossFade("Attack", 0.05f);
+                    _animator.CrossFade("Attack", 0f);   // 바로 애니메이션 실행
                     _hasExitState = true;
                     break;
                 case Define.State.Jump:
-                    anim.CrossFade("Jump", 0.05f);
+                    _animator.CrossFade("Jump", 0f);     // 바로 애니메이션 실행
                     _hasExitState = true;
                     break;
             }
@@ -50,6 +52,10 @@ public class PlayerController : BaseController
 
     protected override void OnStart()
     {
+        // Get Component
+        _animator = GetComponent<Animator>();
+        _characterController = GetComponent<CharacterController>();
+
         // Settings
         State = Define.State.Idle;
         WorldObjectType = Define.WorldObject.Player;
@@ -97,12 +103,12 @@ public class PlayerController : BaseController
     void UpdateRunning() { }
     void UpdateAttack()
     {
-        if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f)
+        if (_hasEndedState == true)
             State = Define.State.Idle;
     }
     void UpdateJump()
     {
-        if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f)
+        if (_hasEndedState == true)
             State = Define.State.Idle;
     }
     #endregion
@@ -110,7 +116,6 @@ public class PlayerController : BaseController
     #region Mobile
     void OnPadEvent(Define.PadEvent padEvent, Vector3 dir)
     {
-        Debug.Log($"Current State: {_state}");
         if (_hasExitState == true)
             return;
 
@@ -143,10 +148,12 @@ public class PlayerController : BaseController
 
         if (mouseEvent == Define.MouseEvent.LeftClick)
             State = Define.State.Attack;
+
     }
 
     void OnKeyEvent(Define.KeyEvent keyEvent, Vector3 dir)
     {
+
         if (_hasExitState == true)
             return;
 
@@ -176,7 +183,7 @@ public class PlayerController : BaseController
         // 방향
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), _angularSpeed * Time.deltaTime);
 
-        GetComponent<CharacterController>().Move(velocity * speed * Time.deltaTime);
+        _characterController.Move(velocity * speed * Time.deltaTime);
         State = state;
     }
 }

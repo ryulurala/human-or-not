@@ -63,7 +63,7 @@ public class UIManager
 
         if (popup != null && _popupStack.Peek() != popup)
         {
-            Debug.Log("Close Popup Failed!");
+            // Debug.Log("Close Popup Failed!");
             return;
         }
 

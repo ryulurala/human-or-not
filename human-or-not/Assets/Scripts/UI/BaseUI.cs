@@ -32,7 +32,9 @@ public abstract class BaseUI : MonoBehaviour
                 objects[i] = Util.FindChild<T>(gameObject, names[i], true);
 
             if (objects[i] == null)
-                Debug.Log($"Failed to bind: {names[i]}");
+            {
+                // Debug.Log($"Failed to bind: {names[i]}");
+            }
         }
     }
 

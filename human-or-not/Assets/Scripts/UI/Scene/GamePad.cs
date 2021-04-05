@@ -13,10 +13,10 @@ public class GamePad : SceneUI
         get
         {
             Slider slider = GetObject((int)GameObjects.Slider).GetComponent<Slider>();
-            if (slider != null)
-                return slider.value;
-            else
+            if (slider == null)
                 return 2f;
+
+            return slider.value;
         }
     }
     public Vector2 Direction { get; private set; } = Vector2.zero;

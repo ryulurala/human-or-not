@@ -107,15 +107,15 @@ public class InputManager
         if (EventSystem.current.IsPointerOverGameObject() || MouseAction == null)
             return;
 
+        // 공격
+        if (Input.GetMouseButtonDown(0))
+            MouseAction.Invoke(Define.MouseEvent.LeftClick);
+
         // 회전
         if (Input.GetMouseButtonDown(1))
             MouseAction.Invoke(Define.MouseEvent.RightDown);
         else if (Input.GetMouseButton(1))
             MouseAction.Invoke(Define.MouseEvent.RightPressed);
-
-        // 공격
-        if (Input.GetMouseButtonDown(0))
-            MouseAction.Invoke(Define.MouseEvent.LeftClick);
 
         // 확대 / 축소
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
@@ -126,7 +126,6 @@ public class InputManager
     {
         if (EventSystem.current.IsPointerOverGameObject() || KeyAction == null)
             return;
-
 
         // 방향 벡터 축적, 카메라가 보는 방향이 forward
         Vector3 dir = Vector3.zero;

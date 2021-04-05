@@ -17,6 +17,6 @@ public class WorldScene : BaseScene
 
     public override void Clear()
     {
-        Debug.Log("WorldScene Clear");
+        // Debug.Log("WorldScene Clear");
     }
 }

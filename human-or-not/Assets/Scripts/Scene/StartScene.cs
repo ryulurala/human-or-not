@@ -14,7 +14,7 @@ public class StartScene : BaseScene
 
     public override void Clear()
     {
-        Debug.Log("StartScene Clear");
+        // Debug.Log("StartScene Clear");
     }
 
     IEnumerator threeSeconds()
