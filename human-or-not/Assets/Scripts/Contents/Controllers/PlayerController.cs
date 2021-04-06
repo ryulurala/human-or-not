@@ -104,7 +104,7 @@ public class PlayerController : BaseController
         if (hit.gameObject.layer.Equals(LayerMask.NameToLayer("Ground")))
             return;
 
-        if (hit.gameObject.GetComponent<BaseController>().State == Define.State.Attack)
+        if (Manager.Game.GetWorldObjectType(hit.gameObject) == Define.WorldObject.Player && Manager.Player.GetPlayerState(hit.gameObject) == Define.State.Attack)
         {
             if (State != Define.State.Jump)
                 State = Define.State.Died;

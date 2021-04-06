@@ -43,7 +43,7 @@ public class NonPlayerController : BaseController
     void OnTriggerEnter(Collider other)
     {
         // Die
-        if (other.tag == "Player" && other.GetComponent<BaseController>().State == Define.State.Attack)
+        if (Manager.Game.GetWorldObjectType(other.gameObject) == Define.WorldObject.Player && Manager.Player.GetPlayerState(other.gameObject) == Define.State.Attack)
             State = Define.State.Died;
     }
 
