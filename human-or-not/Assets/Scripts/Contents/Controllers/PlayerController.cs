@@ -63,6 +63,9 @@ public class PlayerController : BaseController
         State = Define.State.Idle;
         WorldObjectType = Define.WorldObject.Player;
 
+        // if (GetComponent<MyPlayer>() == null)
+        //     return;
+
         // Listener
         Manager.Input.MouseAction -= OnMouseEvent;  // Pooling으로 인해 두 번 등록 방지
         Manager.Input.MouseAction += OnMouseEvent;

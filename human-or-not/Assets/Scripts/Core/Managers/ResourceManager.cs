@@ -29,6 +29,10 @@ public class ResourceManager
             return null;
         }
 
+        // Pooling 인지
+        if (original.GetComponent<Poolable>() != null)
+            return Manager.Pool.Pop(original, parent).gameObject;
+
         GameObject go = Object.Instantiate(original, parent);
         go.name = original.name;    // (Clone) 없애기
 
@@ -39,6 +43,14 @@ public class ResourceManager
     {
         if (go == null)
             return;
+
+        // Pooling 인지
+        Poolable poolable = go.GetComponent<Poolable>();
+        if (poolable != null)
+        {
+            Manager.Pool.Push(poolable);
+            return;
+        }
 
         Object.Destroy(go);
     }

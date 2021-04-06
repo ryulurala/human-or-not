@@ -28,6 +28,6 @@ public class StartScene : BaseScene
             waitText.text = $"Wait for {seconds} seconds...";
         }
         // 3초 후
-        Manager.Scene.LoadScene(Define.Scene.World);
+        Manager.Scene.LoadScene(Define.Scene.Game);
     }
 }

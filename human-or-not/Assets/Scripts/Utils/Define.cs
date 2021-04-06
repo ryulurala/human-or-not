@@ -74,7 +74,7 @@ public class Define
     {
         UnKnown,
         Start,
-        World,
+        Game,
     }
     #endregion
 }
