@@ -17,11 +17,11 @@ public class GameManager
         {
             // Non-Player Spawn
             GameObject nonPlayer = Manager.Game.Spawn(Define.WorldObject.NonPlayer, "Character/Dongdong/Non-Player", go.transform);
-            LocateNonPlayer(nonPlayer);
+            LocateNonPlayer(nonPlayer, 50.0f);
         }
     }
 
-    public void LocateNonPlayer(GameObject go, Vector3 spawnPos = default(Vector3), float spawnRadius = 15.0f)
+    void LocateNonPlayer(GameObject go, float spawnRadius = 15.0f, Vector3 spawnPos = default(Vector3))
     {
         NavMeshAgent nma = go.GetOrAddComponent<NavMeshAgent>();
 
