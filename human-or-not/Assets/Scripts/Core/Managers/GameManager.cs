@@ -83,4 +83,10 @@ public class GameManager
 
         return bc.WorldObjectType;
     }
+
+    public void Init()
+    {
+        Manager.UI.Init();
+        Manager.Input.Init();
+    }
 }

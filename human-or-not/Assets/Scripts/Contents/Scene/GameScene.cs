@@ -9,8 +9,7 @@ public class GameScene : BaseScene
     {
         base.OnAwake();
 
-        if (Util.IsMobile)
-            GamePad.Pad.gameObject.SetActive(true);
+        Manager.Game.Init();
 
         Camera.main.GetComponent<CameraController>().Target = Manager.Game.Spawn(Define.WorldObject.Player, "Character/Dongdong/Player");
 
@@ -19,6 +18,6 @@ public class GameScene : BaseScene
 
     public override void Clear()
     {
-        // Debug.Log("WorldScene Clear");
+        Debug.Log("GameScene Clear");
     }
 }

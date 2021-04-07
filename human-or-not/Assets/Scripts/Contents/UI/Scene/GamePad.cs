@@ -44,29 +44,6 @@ public class GamePad : SceneUI
         Jump,
     }
 
-    static GamePad _pad = null;
-    public static GamePad Pad
-    {
-        get
-        {
-            if (_pad == null)
-            {
-                GameObject go = GameObject.Find("@GamePad");
-                if (go == null)
-                {
-                    go = Manager.Resource.Instaniate($"UI/Scene/{typeof(GamePad)}");
-                    go.name = "@GamePad";
-                }
-
-                _pad = go.GetComponent<GamePad>();
-                DontDestroyOnLoad(_pad);
-
-                _pad.gameObject.SetActive(false);
-            }
-            return _pad;
-        }
-    }
-
     enum GameObjects
     {
         Panel,

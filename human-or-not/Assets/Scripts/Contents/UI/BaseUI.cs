@@ -33,7 +33,7 @@ public abstract class BaseUI : MonoBehaviour
 
             if (objects[i] == null)
             {
-                // Debug.Log($"Failed to bind: {names[i]}");
+                Debug.Log($"Failed to bind: {names[i]}");
             }
         }
     }

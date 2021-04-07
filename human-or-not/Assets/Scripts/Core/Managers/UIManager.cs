@@ -30,16 +30,9 @@ public class UIManager
         canvas.overrideSorting = true;
 
         if (isSorting)
-        {
-            // Popup UI
-            canvas.sortingOrder = _order;
-            _order++;
-        }
+            canvas.sortingOrder = _order++;     // Popup UI
         else
-        {
-            // Scene UI
-            canvas.sortingOrder = 0;
-        }
+            canvas.sortingOrder = 0;        // Scene UI
     }
 
     public T ShowSceneUI<T>(string name = null) where T : SceneUI
@@ -56,6 +49,21 @@ public class UIManager
         return sceneUI;
     }
 
+    public T ShowPopupUI<T>(string name = null) where T : PopupUI
+    {
+        // name이 없을 경우 T의 이름으로
+        if (string.IsNullOrEmpty(name))
+            name = typeof(T).Name;
+
+        GameObject go = Manager.Resource.Instaniate($"UI/Popup/{name}");
+        T popup = Util.GetOrAddComponent<T>(go);
+        _popupStack.Push(popup);
+
+        go.transform.SetParent(Root.transform);
+
+        return popup;
+    }
+
     public void ClosePopupUI(PopupUI popup = null)
     {
         if (_popupStack.Count == 0)
@@ -63,7 +71,7 @@ public class UIManager
 
         if (popup != null && _popupStack.Peek() != popup)
         {
-            // Debug.Log("Close Popup Failed!");
+            Debug.Log("Close Popup Failed!");
             return;
         }
 
@@ -78,6 +86,12 @@ public class UIManager
     {
         while (_popupStack.Count > 0)
             ClosePopupUI();
+    }
+
+    public void Init()
+    {
+        if (Util.IsMobile)
+            ShowSceneUI<GamePad>();
     }
 
     public void Clear()

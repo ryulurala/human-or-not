@@ -9,25 +9,11 @@ public class StartScene : BaseScene
     {
         base.OnAwake();
 
-        StartCoroutine(threeSeconds());
+        Manager.UI.ShowSceneUI<StartMenu>();
     }
 
     public override void Clear()
     {
-        // Debug.Log("StartScene Clear");
-    }
-
-    IEnumerator threeSeconds()
-    {
-        int seconds = 3;
-        while (seconds > 0)
-        {
-            yield return new WaitForSeconds(1.0f);
-            seconds--;
-            Text waitText = GameObject.FindObjectOfType(typeof(Text)) as Text;
-            waitText.text = $"Wait for {seconds} seconds...";
-        }
-        // 3초 후
-        Manager.Scene.LoadScene(Define.Scene.Game);
+        Debug.Log("StartScene Clear");
     }
 }

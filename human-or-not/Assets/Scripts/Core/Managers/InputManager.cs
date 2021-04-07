@@ -8,36 +8,41 @@ public class InputManager
 {
     Action _inputAction = null;
 
-    public void OnAwake()
+    public void OnUpdate()
+    {
+        if (_inputAction != null)
+            _inputAction.Invoke();
+    }
+
+    public void Init()
     {
         if (Util.IsMobile)
         {
             // Mobile
-            if (GamePad.Pad != null)
-            {
-                _inputAction -= OnPadEvent;
-                _inputAction += OnPadEvent;
-            }
-
             MouseAction = null;
             KeyAction = null;
+
+            GameObject go = GameObject.Find("GamePad");
+            if (go == null)
+                return;
+
+            Gamepad = go.GetComponent<GamePad>();
+
+            _inputAction -= OnPadEvent;
+            _inputAction += OnPadEvent;
+
         }
         else
         {
             // PC
+            PadAction = null;
+
             _inputAction -= OnMouseEvent;
             _inputAction += OnMouseEvent;
 
             _inputAction -= OnKeyEvent;
             _inputAction += OnKeyEvent;
-
-            PadAction = null;
         }
-    }
-
-    public void OnUpdate()
-    {
-        _inputAction.Invoke();
     }
 
     public void Clear()
@@ -57,42 +62,43 @@ public class InputManager
 
     #region Mobile
     public Action<Define.PadEvent, Vector3> PadAction = null;
+    public GamePad Gamepad = null;
 
     void OnPadEvent()
     {
-        if (PadAction == null)
+        if (Gamepad == null)
             return;
 
-        if (GamePad.Pad.RotatePanelTapped == GamePad.RotatePanelTap.Begin)
-            PadAction.Invoke(Define.PadEvent.BeginRotate, GamePad.Pad.TouchPoint);
-        else if (GamePad.Pad.RotatePanelTapped == GamePad.RotatePanelTap.On)
-            PadAction.Invoke(Define.PadEvent.OnRotate, GamePad.Pad.TouchPoint);
+        if (Gamepad.RotatePanelTapped == GamePad.RotatePanelTap.Begin)
+            PadAction.Invoke(Define.PadEvent.BeginRotate, Gamepad.TouchPoint);
+        else if (Gamepad.RotatePanelTapped == GamePad.RotatePanelTap.On)
+            PadAction.Invoke(Define.PadEvent.OnRotate, Gamepad.TouchPoint);
 
-        if (GamePad.Pad.Zoomed == true)
-            PadAction.Invoke(Define.PadEvent.OnZoom, Vector3.right * GamePad.Pad.ZoomValue);    // x를 zoom value로
+        if (Gamepad.Zoomed == true)
+            PadAction.Invoke(Define.PadEvent.OnZoom, Vector3.right * Gamepad.ZoomValue);    // x를 zoom value로
 
-        if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Attack)
+        if (Gamepad.ButtonClicked == GamePad.ButtonClick.Attack)
         {
             PadAction.Invoke(Define.PadEvent.OnAttack, Vector3.zero);
-            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
+            Gamepad.ButtonClicked = GamePad.ButtonClick.None;
         }
-        else if (GamePad.Pad.ButtonClicked == GamePad.ButtonClick.Jump)
+        else if (Gamepad.ButtonClicked == GamePad.ButtonClick.Jump)
         {
             PadAction.Invoke(Define.PadEvent.OnJump, Vector3.zero);
-            GamePad.Pad.ButtonClicked = GamePad.ButtonClick.None;
+            Gamepad.ButtonClicked = GamePad.ButtonClick.None;
         }
 
         // 조이스틱 방향
-        Vector3 dir = new Vector3(GamePad.Pad.Direction.x, 0, GamePad.Pad.Direction.y);
+        Vector3 dir = new Vector3(Gamepad.Direction.x, 0, Gamepad.Direction.y);
         // 카메라가 보는 방향으로 회전
         dir = Quaternion.Euler(0, Camera.main.transform.parent.rotation.eulerAngles.y, 0) * dir;
         dir = dir.normalized;
 
-        if (GamePad.Pad.JoyStickDetected == GamePad.JoystickDetect.Center)
+        if (Gamepad.JoyStickDetected == GamePad.JoystickDetect.Center)
             PadAction.Invoke(Define.PadEvent.OnIdle, dir);
-        else if (GamePad.Pad.JoyStickDetected == GamePad.JoystickDetect.CloseToCenter)
+        else if (Gamepad.JoyStickDetected == GamePad.JoystickDetect.CloseToCenter)
             PadAction.Invoke(Define.PadEvent.OnWalk, dir);
-        else if (GamePad.Pad.JoyStickDetected == GamePad.JoystickDetect.FarFromCenter)
+        else if (Gamepad.JoyStickDetected == GamePad.JoystickDetect.FarFromCenter)
             PadAction.Invoke(Define.PadEvent.OnRun, dir);
     }
     #endregion
