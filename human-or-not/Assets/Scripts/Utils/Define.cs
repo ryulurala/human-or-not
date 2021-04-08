@@ -65,7 +65,7 @@ public class Define
     {
         Unknown,
         Player,
-        NonPlayer,
+        Bot,
     }
     #endregion
 

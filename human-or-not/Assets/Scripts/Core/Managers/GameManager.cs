@@ -5,23 +5,23 @@ using UnityEngine.AI;
 
 public class GameManager
 {
-    Dictionary<ushort, GameObject> _nonPlayers = new Dictionary<ushort, GameObject>();
+    Dictionary<ushort, GameObject> _bots = new Dictionary<ushort, GameObject>();
 
-    public ushort NonPlayerCount { get; set; } = 0;
+    public ushort BotCount { get; set; } = 0;
     public ushort PlayerCount { get; set; }
 
-    public void SpawnNonPlayer(int count = 10)
+    public void SpawnBots(int count = 10)
     {
         GameObject go = new GameObject() { name = "SpawningPool" };
         for (int i = 0; i < count; i++)
         {
-            // Non-Player Spawn
-            GameObject nonPlayer = Manager.Game.Spawn(Define.WorldObject.NonPlayer, "Character/Dongdong/Non-Player", go.transform);
-            LocateNonPlayer(nonPlayer, 50.0f);
+            // Bot Spawn
+            GameObject bot = Manager.Game.Spawn(Define.WorldObject.Bot, "Character/Dongdong/Bot", go.transform);
+            LocateBots(bot, 50.0f);
         }
     }
 
-    void LocateNonPlayer(GameObject go, float spawnRadius = 15.0f, Vector3 spawnPos = default(Vector3))
+    void LocateBots(GameObject go, float spawnRadius = 15.0f, Vector3 spawnPos = default(Vector3))
     {
         NavMeshAgent nma = go.GetOrAddComponent<NavMeshAgent>();
 
@@ -51,8 +51,8 @@ public class GameManager
 
         switch (type)
         {
-            case Define.WorldObject.NonPlayer:
-                // _nonPlayers에 추가
+            case Define.WorldObject.Bot:
+                // _bots에 추가
                 break;
             case Define.WorldObject.Player:
                 // _players에 추가
@@ -68,7 +68,7 @@ public class GameManager
 
         switch (type)
         {
-            case Define.WorldObject.NonPlayer:
+            case Define.WorldObject.Bot:
                 break;
             case Define.WorldObject.Player:
                 break;
