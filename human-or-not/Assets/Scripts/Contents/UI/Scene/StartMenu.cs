@@ -28,8 +28,7 @@ public class StartMenu : SceneUI
 
         BindEvent(play, (PointerEventData eventData) =>
         {
-            Manager.UI.ShowPopupUI<PlayMenu>();
-            // Manager.Scene.LoadScene(Define.Scene.Game, async: true);
+            Manager.UI.ShowPopupUI<ConfigurePlay>();
         });
         BindEvent(credits, (PointerEventData eventData) =>
         {
