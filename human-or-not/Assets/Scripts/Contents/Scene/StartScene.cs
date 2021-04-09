@@ -9,7 +9,7 @@ public class StartScene : BaseScene
     {
         base.OnAwake();
 
-        Manager.UI.ShowSceneUI<StartMenu>();
+        Manager.UI.ShowSceneUI<MainMenu>();
     }
 
     public override void Clear()

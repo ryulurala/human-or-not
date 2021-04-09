@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Credit : PopupUI
+public class CreditsView : PopupUI
 {
     enum GameObjects
     {

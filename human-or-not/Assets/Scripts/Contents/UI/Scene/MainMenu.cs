@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class StartMenu : SceneUI
+public class MainMenu : SceneUI
 {
     enum GameObjects
     {
@@ -28,11 +28,11 @@ public class StartMenu : SceneUI
 
         BindEvent(play, (PointerEventData eventData) =>
         {
-            Manager.UI.ShowPopupUI<ConfigurePlay>();
+            Manager.UI.ShowPopupUI<PlaySettingsView>();
         });
         BindEvent(credits, (PointerEventData eventData) =>
         {
-            Manager.UI.ShowPopupUI<Credit>();
+            Manager.UI.ShowPopupUI<CreditsView>();
         });
     }
 }
