@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SingleModeTab : PopupUI
 {
-    List<string> _skinList = new List<string>();
+    List<string> _characterList = new List<string>();
     List<string> _mapList = new List<string>();
 
     enum Buttons
@@ -24,7 +23,7 @@ public class SingleModeTab : PopupUI
 
     enum Dropdowns
     {
-        Skin_Dropdown,
+        Character_Dropdown,
     }
 
     enum Texts
@@ -52,10 +51,10 @@ public class SingleModeTab : PopupUI
 
     void InitDropDown()
     {
-        Dropdown skinInput = Get<Dropdown>((int)Dropdowns.Skin_Dropdown);
-        skinInput.ClearOptions();
+        Dropdown characterDropdown = Get<Dropdown>((int)Dropdowns.Character_Dropdown);
+        characterDropdown.ClearOptions();
 
-        skinInput.AddOptions(_skinList);
+        characterDropdown.AddOptions(_characterList);
     }
 
     void InitMapSettings()
@@ -64,30 +63,43 @@ public class SingleModeTab : PopupUI
         Button rightBtn = GetButton((int)Buttons.Map_Right);
 
         Text mapText = GetText((int)Texts.Map_Text);
-        mapText.text = _mapList[0];
+        int idx = 0;
+        mapText.text = _mapList[idx];
+        leftBtn.gameObject.SetActive(false);
 
         BindEvent(leftBtn.gameObject, (PointerEventData) =>
         {
+            idx = idx < 1 ? idx : idx - 1;
+            mapText.text = _mapList[idx];
 
-            Debug.Log($"Map_LeftBtn Clicked !");
+            if (idx == 0)
+                leftBtn.gameObject.SetActive(false);
+            if (rightBtn.gameObject.activeSelf == false)
+                rightBtn.gameObject.SetActive(true);
         });
+
 
         BindEvent(rightBtn.gameObject, (PointerEventData) =>
         {
+            idx = idx < _mapList.Count - 1 ? idx + 1 : idx;
+            mapText.text = _mapList[idx];
 
-            Debug.Log($"Map_RightBtn Clicked !");
+            if (idx == _mapList.Count - 1)
+                rightBtn.gameObject.SetActive(false);
+            if (leftBtn.gameObject.activeSelf == false)
+                leftBtn.gameObject.SetActive(true);
         });
     }
 
     void InitList()
     {
-        _skinList.Add("Orange");
-        _skinList.Add("Yellow");
-        _skinList.Add("Green");
-        _skinList.Add("Blue");
-        _skinList.Add("Purple");
+        // 나중에 Serializable로 Json data 빌려오기
+        _characterList.Add("Dongdong");
+        _characterList.Add("???");
+        _characterList.Add("!!!");
 
-        _mapList.Add("Seoul-University");
-        _mapList.Add("Soongsil-University");
+        _mapList.Add("SSU");
+        _mapList.Add("HUFS");
+        _mapList.Add("KKU");
     }
 }

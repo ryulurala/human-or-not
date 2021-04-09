@@ -1180,7 +1180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3856571177127196079}
   m_Layer: 5
-  m_Name: Skin
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1256,7 +1256,7 @@ GameObject:
   - component: {fileID: 7525949205825010447}
   - component: {fileID: 8869477588961628225}
   m_Layer: 5
-  m_Name: Skin_Title
+  m_Name: Character_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1322,7 +1322,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Skin Color
+  m_Text: Character
 --- !u!1 &4984390264485274800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1454,7 +1454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7968983816825443994}
   m_Layer: 5
-  m_Name: Skin_BotCount
+  m_Name: Character_BotCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1970,7 +1970,7 @@ GameObject:
   - component: {fileID: 2141998154241143769}
   - component: {fileID: 8941043984515183319}
   m_Layer: 5
-  m_Name: Skin_Dropdown
+  m_Name: Character_Dropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2339,7 +2339,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -250, y: 0}
+  m_SizeDelta: {x: -200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6704163835102580799
 CanvasRenderer:
@@ -2480,7 +2480,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5447515563769956321}
   m_Layer: 5
-  m_Name: Skin_Selection
+  m_Name: Character_Selection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
