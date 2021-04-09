@@ -36,7 +36,6 @@ public class ConfigurePlay : PopupUI
         GameObject htpContents = GetObject((int)GameObjects.HTP_Contents);
         GameObject closeBtn = GetObject((int)GameObjects.Close);
 
-        onlineContents.SetActive(true);
         singleContents.SetActive(false);
         htpContents.SetActive(false);
 
@@ -49,21 +48,30 @@ public class ConfigurePlay : PopupUI
 
         BindEvent(onlineTabBtn, (PointerEventData) =>
         {
-            onlineContents.SetActive(true);
-            singleContents.SetActive(false);
-            htpContents.SetActive(false);
+            if (!onlineContents.activeSelf)
+                onlineContents.SetActive(true);
+            if (singleContents.activeSelf)
+                singleContents.SetActive(false);
+            if (htpContents.activeSelf)
+                htpContents.SetActive(false);
         });
         BindEvent(singleTabBtn, (PointerEventData) =>
         {
-            onlineContents.SetActive(false);
-            singleContents.SetActive(true);
-            htpContents.SetActive(false);
+            if (onlineContents.activeSelf)
+                onlineContents.SetActive(false);
+            if (!singleContents.activeSelf)
+                singleContents.SetActive(true);
+            if (htpContents.activeSelf)
+                htpContents.SetActive(false);
         });
         BindEvent(htpTabBtn, (PointerEventData) =>
         {
-            onlineContents.SetActive(false);
-            singleContents.SetActive(false);
-            htpContents.SetActive(true);
+            if (onlineContents.activeSelf)
+                onlineContents.SetActive(false);
+            if (singleContents.activeSelf)
+                singleContents.SetActive(false);
+            if (!htpContents.activeSelf)
+                htpContents.SetActive(true);
         });
 
         BindEvent(closeBtn, (PointerEventData) =>
