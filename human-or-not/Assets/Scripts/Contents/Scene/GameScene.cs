@@ -13,7 +13,7 @@ public class GameScene : BaseScene
 
         Camera.main.GetComponent<CameraController>().Target = Manager.Game.Spawn(Define.WorldObject.Player, "Character/Dongdong/Player");
 
-        Manager.Game.SpawnBots(10);
+        Manager.Game.SpawnBots();
     }
 
     public override void Clear()

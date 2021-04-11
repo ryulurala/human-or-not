@@ -29,6 +29,12 @@ public class SingleModeTab : PopupUI
     enum Texts
     {
         Map_Text,
+        BotCount_Text,
+    }
+
+    enum Sliders
+    {
+        BotCount_Slider,
     }
 
     protected override void OnStart()
@@ -39,17 +45,52 @@ public class SingleModeTab : PopupUI
         Bind<Dropdown>(typeof(Dropdowns));
         Bind<Image>(typeof(Images));
         Bind<Text>(typeof(Texts));
+        Bind<Slider>(typeof(Sliders));
 
-        InitList();
+        InitList();     // 나중에 Serializable
 
-        InitDropDown();
+        InitCharacterSettings();
+        InitBotCountSettings();
         InitMapSettings();
-
-        Button playBtn = GetButton((int)Buttons.Play);
-        BindEvent(playBtn.gameObject, (PointerEventData) => { Manager.Scene.LoadScene(Define.Scene.Game); });
+        InitPlaySettings();
     }
 
-    void InitDropDown()
+    void InitPlaySettings()
+    {
+        Button playBtn = GetButton((int)Buttons.Play);
+        Slider botCountSlider = GetSlider((int)Sliders.BotCount_Slider);
+
+        BindEvent(playBtn.gameObject, (PointerEventData) =>
+        {
+            Manager.Game.BotCount = (ushort)botCountSlider.value;
+
+            // Loading
+            Manager.Scene.LoadScene(Define.Scene.Game);
+        });
+    }
+
+    void InitBotCountSettings()
+    {
+        Slider botCountSlider = GetSlider((int)Sliders.BotCount_Slider);
+        Text botCountText = GetText((int)Texts.BotCount_Text);
+
+        // 0 ~ 100
+        botCountSlider.minValue = 0;
+        botCountSlider.maxValue = 100;
+        botCountSlider.wholeNumbers = true;     // int
+
+        BindEvent(botCountSlider.gameObject, (PointerEventData) =>
+        {
+            botCountText.text = botCountSlider.value.ToString();
+        }, Define.UIEvent.OnDrag);
+
+        BindEvent(botCountSlider.gameObject, (PointerEventData) =>
+        {
+            botCountText.text = botCountSlider.value.ToString();
+        });
+    }
+
+    void InitCharacterSettings()
     {
         Dropdown characterDropdown = Get<Dropdown>((int)Dropdowns.Character_Dropdown);
         characterDropdown.ClearOptions();
@@ -93,10 +134,8 @@ public class SingleModeTab : PopupUI
 
     void InitList()
     {
-        // 나중에 Serializable로 Json data 빌려오기
+        // 나중에 Serializable로 Json data로 Update
         _characterList.Add("Dongdong");
-        _characterList.Add("???");
-        _characterList.Add("!!!");
 
         _mapList.Add("SSU");
         _mapList.Add("HUFS");

@@ -10,10 +10,10 @@ public class GameManager
     public ushort BotCount { get; set; } = 0;
     public ushort PlayerCount { get; set; }
 
-    public void SpawnBots(int count = 10)
+    public void SpawnBots()
     {
         GameObject go = new GameObject() { name = "SpawningPool" };
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < BotCount; i++)
         {
             // Bot Spawn
             GameObject bot = Manager.Game.Spawn(Define.WorldObject.Bot, "Character/Dongdong/Bot", go.transform);
@@ -52,10 +52,10 @@ public class GameManager
         switch (type)
         {
             case Define.WorldObject.Bot:
-                // _bots에 추가
+                // TODO: _bots에 추가
                 break;
             case Define.WorldObject.Player:
-                // _players에 추가
+                // TODO: _players에 추가
                 break;
         }
 
