@@ -20,15 +20,15 @@ public class SceneManagerEx
         return System.Enum.GetName(typeof(Define.Scene), type);
     }
 
-    public void LoadScene(Define.Scene type, bool async = false)
+    public void LoadScene(Define.Scene type, bool sync = false)
     {
         Manager.Clear();
 
         string sceneName = GetSceneName(type);
-        if (async == false)
-            SceneManager.LoadScene(sceneName);
-        else
+        if (sync == false)
             Manager.OpenCoroutine(LoadSceneAsync(sceneName));
+        else
+            SceneManager.LoadScene(sceneName);
     }
 
     IEnumerator LoadSceneAsync(string sceneName)
@@ -43,5 +43,7 @@ public class SceneManagerEx
             yield return null;
             Debug.Log($"asyncLoad.progress: {asyncLoad.progress}");
         }
+
+        // TO-DO: Loding UI SetActive(false)
     }
 }

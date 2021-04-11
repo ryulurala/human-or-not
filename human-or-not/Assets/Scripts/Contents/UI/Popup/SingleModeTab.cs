@@ -65,7 +65,7 @@ public class SingleModeTab : PopupUI
             Manager.Game.BotCount = (ushort)botCountSlider.value;
 
             // Loading
-            Manager.Scene.LoadScene(Define.Scene.Game);
+            Manager.Scene.LoadScene(Define.Scene.SSU);
         });
     }
 

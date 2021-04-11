@@ -11,6 +11,9 @@ public class GameScene : BaseScene
 
         Manager.Game.Init();
 
+        if (GameObject.Find("CameraPivot") == null)
+            Manager.Resource.Instaniate("Camera/CameraPivot");
+
         Camera.main.GetComponent<CameraController>().Target = Manager.Game.Spawn(Define.WorldObject.Player, "Character/Dongdong/Player");
 
         Manager.Game.SpawnBots();

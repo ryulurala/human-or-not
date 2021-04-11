@@ -7,7 +7,7 @@ public class GameManager
 {
     Dictionary<ushort, GameObject> _bots = new Dictionary<ushort, GameObject>();
 
-    public ushort BotCount { get; set; } = 0;
+    public ushort BotCount { get; set; } = 5;
     public ushort PlayerCount { get; set; }
 
     public void SpawnBots()
