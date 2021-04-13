@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Define
 {
-    #region PC
     public enum MouseEvent
     {
         LeftClick,
@@ -20,9 +19,6 @@ public class Define
         ShiftWASD,
         SpaceBar,
     }
-    #endregion
-
-    #region Mobile
 
     public enum PadEvent
     {
@@ -35,9 +31,7 @@ public class Define
         OnRotate,
         OnZoom
     }
-    #endregion
 
-    #region UIEvent
     public enum UIEvent
     {
         Click,
@@ -45,9 +39,7 @@ public class Define
         PointerUp,
         OnDrag,
     }
-    #endregion
 
-    #region State
     public enum State
     {
         Unknown,
@@ -58,23 +50,30 @@ public class Define
         Walking,
         Running,
     }
-    #endregion
 
-    #region WorldObjectType
     public enum WorldObject
     {
         Unknown,
         Player,
         Bot,
     }
-    #endregion
 
-    #region  Scene
     public enum Scene
     {
         UnKnown,
         Start,
         SSU,
+        HUFS,
     }
-    #endregion
+
+    public enum Character
+    {
+        Dongdong,
+    }
+
+    public enum Map
+    {
+        SSU,
+        HUFS,
+    }
 }

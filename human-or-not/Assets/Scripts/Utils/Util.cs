@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -12,6 +13,21 @@ public class Util
 #else
     public static bool IsMobile { get; } = false;
 #endif
+
+    public static T GetEnumValue<T>(string str) where T : System.Enum
+    {
+        string[] enums = Enum.GetNames(typeof(T));
+
+        T result = (T)Enum.ToObject(typeof(T), 0);
+
+        for (int i = 0; i < enums.Length; i++)
+        {
+            if (str == enums[i])
+                result = (T)Enum.ToObject(typeof(T), i);
+        }
+
+        return result;
+    }
 
     public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
     {

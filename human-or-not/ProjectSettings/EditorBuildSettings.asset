@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SSU.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/HUFS.unity
+    guid: bd305ddfaff5d654eb4be88e6dca1eae
   m_configObjects: {}

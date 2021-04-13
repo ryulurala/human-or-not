@@ -14,12 +14,6 @@ public class SceneManagerEx
         CurrentScene.Clear();
     }
 
-    string GetSceneName(Define.Scene type)
-    {
-        // Reflaction
-        return System.Enum.GetName(typeof(Define.Scene), type);
-    }
-
     public void LoadScene(Define.Scene type, bool sync = false)
     {
         Manager.Clear();
@@ -29,6 +23,12 @@ public class SceneManagerEx
             Manager.OpenCoroutine(LoadSceneAsync(sceneName));
         else
             SceneManager.LoadScene(sceneName);
+    }
+
+    public string GetSceneName(Define.Scene type)
+    {
+        // Reflaction
+        return System.Enum.GetName(typeof(Define.Scene), type);
     }
 
     IEnumerator LoadSceneAsync(string sceneName)

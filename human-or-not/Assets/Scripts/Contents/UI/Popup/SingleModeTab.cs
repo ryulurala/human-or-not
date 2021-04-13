@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class SingleModeTab : PopupUI
 {
-    List<string> _characterList = new List<string>();
-    List<string> _mapList = new List<string>();
-
     enum Buttons
     {
         Map_Left,
@@ -47,8 +44,6 @@ public class SingleModeTab : PopupUI
         Bind<Text>(typeof(Texts));
         Bind<Slider>(typeof(Sliders));
 
-        InitList();     // 나중에 Serializable
-
         InitCharacterSettings();
         InitBotCountSettings();
         InitMapSettings();
@@ -59,13 +54,19 @@ public class SingleModeTab : PopupUI
     {
         Button playBtn = GetButton((int)Buttons.Play);
         Slider botCountSlider = GetSlider((int)Sliders.BotCount_Slider);
+        Text mapText = GetText((int)Texts.Map_Text);
 
         BindEvent(playBtn.gameObject, (PointerEventData) =>
         {
             Manager.Game.BotCount = (ushort)botCountSlider.value;
 
+            string text = mapText.text;
+            Debug.Log($"text: {text}");
+            Define.Scene type = Util.GetEnumValue<Define.Scene>(text);
+
             // Loading
-            Manager.Scene.LoadScene(Define.Scene.SSU);
+            if (type != default(Define.Scene))
+                Manager.Scene.LoadScene(type);
         });
     }
 
@@ -95,23 +96,26 @@ public class SingleModeTab : PopupUI
         Dropdown characterDropdown = Get<Dropdown>((int)Dropdowns.Character_Dropdown);
         characterDropdown.ClearOptions();
 
-        characterDropdown.AddOptions(_characterList);
+        string[] characters = Enum.GetNames(typeof(Define.Character));
+
+        characterDropdown.AddOptions(new List<string>(characters));
     }
 
     void InitMapSettings()
     {
         Button leftBtn = GetButton((int)Buttons.Map_Left);
         Button rightBtn = GetButton((int)Buttons.Map_Right);
-
         Text mapText = GetText((int)Texts.Map_Text);
+
+        string[] maps = Enum.GetNames(typeof(Define.Map));
         int idx = 0;
-        mapText.text = _mapList[idx];
+        mapText.text = maps[idx];
         leftBtn.gameObject.SetActive(false);
 
         BindEvent(leftBtn.gameObject, (PointerEventData) =>
         {
             idx = idx < 1 ? idx : idx - 1;
-            mapText.text = _mapList[idx];
+            mapText.text = maps[idx];
 
             if (idx == 0)
                 leftBtn.gameObject.SetActive(false);
@@ -122,23 +126,13 @@ public class SingleModeTab : PopupUI
 
         BindEvent(rightBtn.gameObject, (PointerEventData) =>
         {
-            idx = idx < _mapList.Count - 1 ? idx + 1 : idx;
-            mapText.text = _mapList[idx];
+            idx = idx < maps.Length - 1 ? idx + 1 : idx;
+            mapText.text = maps[idx];
 
-            if (idx == _mapList.Count - 1)
+            if (idx == maps.Length - 1)
                 rightBtn.gameObject.SetActive(false);
             if (leftBtn.gameObject.activeSelf == false)
                 leftBtn.gameObject.SetActive(true);
         });
-    }
-
-    void InitList()
-    {
-        // 나중에 Serializable로 Json data로 Update
-        _characterList.Add("Dongdong");
-
-        _mapList.Add("SSU");
-        // _mapList.Add("HUFS");
-        // _mapList.Add("KKU");
     }
 }

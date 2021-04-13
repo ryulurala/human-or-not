@@ -8,11 +8,13 @@ public class Manager : MonoBehaviour
     static Manager Instance { get { if (_instance == null) Init(); return _instance; } }
 
     #region Contents
+    DataManager _data = new DataManager();
     GameManager _game = new GameManager();
     NetworkManager _network = new NetworkManager();
     PoolManager _pool = new PoolManager();
     PlayerManager _player = new PlayerManager();
 
+    public static DataManager Data { get { return Instance._data; } }
     public static GameManager Game { get { return Instance._game; } }
     public static NetworkManager Network { get { return Instance._network; } }
     public static PlayerManager Player { get { return Instance._player; } }
