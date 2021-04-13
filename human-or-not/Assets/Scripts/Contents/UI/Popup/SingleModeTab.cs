@@ -138,7 +138,7 @@ public class SingleModeTab : PopupUI
         _characterList.Add("Dongdong");
 
         _mapList.Add("SSU");
-        _mapList.Add("HUFS");
-        _mapList.Add("KKU");
+        // _mapList.Add("HUFS");
+        // _mapList.Add("KKU");
     }
 }
