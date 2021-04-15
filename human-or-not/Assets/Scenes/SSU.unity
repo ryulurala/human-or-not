@@ -712,7 +712,7 @@ GameObject:
   m_Name: Economics_Business-Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!33 &462952900105117572
@@ -753,7 +753,7 @@ GameObject:
   m_Name: Reverend-Han-Kyungchik-Memorial-Hall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &489217676514985069
@@ -835,7 +835,7 @@ GameObject:
   m_Name: Information-Science-Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &543450651999168405
@@ -909,7 +909,7 @@ GameObject:
   m_Name: Vision-Hall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!33 &904226597117069607
@@ -1007,7 +1007,7 @@ GameObject:
   m_Name: Central-Library
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1306381281214064511
@@ -1191,7 +1191,7 @@ GameObject:
   m_Name: Hyungnam-Memorial-Engineering-Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!23 &2194390775040310049
@@ -1292,7 +1292,7 @@ GameObject:
   m_Name: Jo-Mansik-Memorial-Hall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &2441384482472628774
@@ -1311,7 +1311,7 @@ GameObject:
   m_Name: White-Horse-Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!23 &2457762709192109698
@@ -1461,7 +1461,7 @@ GameObject:
   m_Name: Faculty-Reseach-Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!33 &3132510733720799634
@@ -1510,7 +1510,7 @@ GameObject:
   m_Name: Education-Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!33 &3400885367069204437
@@ -1635,7 +1635,7 @@ GameObject:
   m_Name: Veritas-Hall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!23 &3994446967858854330
@@ -1745,7 +1745,7 @@ GameObject:
   m_Name: Wall-2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4284224666874691220
@@ -2062,7 +2062,7 @@ GameObject:
   m_Name: Computer-Science-Institute
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &5614560232234730734
@@ -2186,7 +2186,7 @@ GameObject:
   m_Name: Baird-Hall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6147720940479914639
@@ -2235,7 +2235,7 @@ GameObject:
   m_Name: Wall-4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6278175431471253060
@@ -2268,7 +2268,7 @@ GameObject:
   m_Name: Shinyang-Hall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!33 &6470328109718155915
@@ -2323,7 +2323,7 @@ GameObject:
   m_Name: Commnunity_Cultural-Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!23 &6661370173094935349
@@ -2383,7 +2383,7 @@ GameObject:
   m_Name: Wall-1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6922744975728260348
@@ -2482,7 +2482,7 @@ GameObject:
   m_Name: Entrepreneurship_Small-Business-Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &7888307478556849569
@@ -2501,7 +2501,7 @@ GameObject:
   m_Name: The-Korean-Christian-Museum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8084710835940239975
@@ -2534,7 +2534,7 @@ GameObject:
   m_Name: Wall-3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &8346344146248876849
@@ -2553,7 +2553,7 @@ GameObject:
   m_Name: Westminister-Hall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &8548923000117562497
@@ -2681,7 +2681,7 @@ GameObject:
   m_Name: Student-Union
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!23 &8977653958350127219
@@ -2741,7 +2741,7 @@ GameObject:
   m_Name: Ahn-Eaktai-Memorial-Hall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!23 &9214225574277143467
