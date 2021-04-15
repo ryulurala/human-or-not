@@ -13,6 +13,7 @@ public class GameScene : BaseScene
 
         GameObject player = Manager.Game.SpawnPlayer(Define.Character.Dongdong);
         GameObject spawningPool = Manager.Game.SpawnBots(Define.Character.Dongdong);
+        GameObject touchDowns = Manager.Game.SpawnTouchDown(count: 5);
 
         // Camera Settings
         if (GameObject.Find("CameraPivot") == null)

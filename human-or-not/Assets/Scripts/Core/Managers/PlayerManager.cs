@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerManager
 {
-    MyPlayer _myPlayer;
-    Dictionary<ushort, Player> _players = new Dictionary<ushort, Player>();
+    PlayerInfo _myPlayer;
+    Dictionary<ushort, PlayerInfo> _players = new Dictionary<ushort, PlayerInfo>();
 
     public Define.State GetPlayerState(GameObject go)
     {
