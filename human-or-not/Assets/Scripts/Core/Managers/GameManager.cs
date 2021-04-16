@@ -15,6 +15,7 @@ public class GameManager
     {
         Manager.UI.Init();
         Manager.Input.Init();
+        Manager.Pool.Init();
     }
 
     public GameObject SpawnTouchDown(int count = 5)
@@ -22,14 +23,11 @@ public class GameManager
         GameObject root = new GameObject() { name = "TouchDowns" };
         for (int i = 0; i < count; i++)
         {
-            GameObject touchDown = Spawn("Contents/TouchDown", Define.WorldObject.Unknown, root.transform);
-
-            // bot은 못 올라가도록
-            NavMeshObstacle navMeshObstacle = touchDown.GetOrAddComponent<NavMeshObstacle>();
-            navMeshObstacle.carving = true;
+            GameObject go = Spawn("Contents/TouchDown", Define.WorldObject.Unknown, root.transform);
+            TouchDown touchDown = go.GetOrAddComponent<TouchDown>();
 
             Vector3 resultPos;
-            if (Manager.Game.RandomPoint(Vector3.zero, 200.0f, out resultPos, routineCount: 500))
+            if (Manager.Game.RandomPoint(Vector3.zero, 200.0f, out resultPos, routineCount: 1000))
                 touchDown.transform.position = resultPos;
         }
 
@@ -57,7 +55,7 @@ public class GameManager
             GameObject bot = Spawn($"Character/{characterName}/Bot", Define.WorldObject.Bot, root.transform);
 
             Vector3 resultPos;
-            if (Manager.Game.RandomPoint(Vector3.zero, 100.0f, out resultPos, routineCount: 500))
+            if (Manager.Game.RandomPoint(Vector3.zero, 100.0f, out resultPos, routineCount: 1000))
                 bot.transform.position = resultPos;
         }
 

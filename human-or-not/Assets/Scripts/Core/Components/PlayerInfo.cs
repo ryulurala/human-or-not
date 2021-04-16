@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class PlayerInfo : ObjectInfo
 {
-
+    public ushort PlayerId { get { return _objectId; } set { _objectId = value; } }
 }

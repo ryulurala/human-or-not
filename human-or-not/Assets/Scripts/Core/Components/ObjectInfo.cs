@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class ObjectInfo : MonoBehaviour
 {
-    public ushort ObjectId { get; set; }
+    protected ushort _objectId;
+    public ushort ObjectId { get { return _objectId; } set { _objectId = value; } }
 }
