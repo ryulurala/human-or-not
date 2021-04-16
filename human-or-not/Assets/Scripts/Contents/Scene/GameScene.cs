@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameScene : BaseScene
 {
-
     protected override void OnAwake()
     {
         base.OnAwake();

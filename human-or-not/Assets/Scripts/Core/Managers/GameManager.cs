@@ -13,9 +13,10 @@ public class GameManager
 
     public void Init()
     {
-        Manager.UI.Init();
-        Manager.Input.Init();
         Manager.Pool.Init();
+        Manager.Input.Init();
+
+        Manager.UI.ShowSceneUI<GameSceneUI>();
     }
 
     public GameObject SpawnTouchDown(int count = 5)

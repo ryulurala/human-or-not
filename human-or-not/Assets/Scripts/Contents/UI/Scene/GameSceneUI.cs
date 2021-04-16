@@ -7,16 +7,13 @@ using UnityEngine.UI;
 
 public class GameSceneUI : SceneUI
 {
-    public GamePad Pad { get; private set; } = null;
-
     protected override void OnStart()
     {
         base.OnStart();
 
         if (Util.IsMobile)
-            Pad = new GamePad();
-        else
-            Pad = null;
+            Manager.Input.GamePad = Manager.UI.OverrideSceneUI<GamePad>();
+
     }
 
     #region GamePad

@@ -49,6 +49,18 @@ public class UIManager
         return sceneUI;
     }
 
+    public T OverrideSceneUI<T>(string name = null) where T : SceneUI
+    {
+        if (string.IsNullOrEmpty(name))
+            name = typeof(T).Name;
+
+        GameObject go = Manager.Resource.Instaniate($"UI/Scene/{name}");
+        T overrideSceneUI = Util.GetOrAddComponent<T>(go);
+        overrideSceneUI.transform.SetParent(_sceneUI.transform);
+
+        return overrideSceneUI;
+    }
+
     public T ShowPopupUI<T>(string name = null) where T : PopupUI
     {
         // name이 없을 경우 T의 이름으로
@@ -90,8 +102,6 @@ public class UIManager
 
     public void Init()
     {
-        if (Util.IsMobile)
-            ShowSceneUI<GamePad>();
     }
 
     public void Clear()

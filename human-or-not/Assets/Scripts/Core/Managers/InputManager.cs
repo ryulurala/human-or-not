@@ -22,15 +22,8 @@ public class InputManager
             MouseAction = null;
             KeyAction = null;
 
-            GameObject go = GameObject.Find("GamePad");
-            if (go == null)
-                return;
-
-            Gamepad = go.GetComponent<GamePad>();
-
             _inputAction -= OnPadEvent;
             _inputAction += OnPadEvent;
-
         }
         else
         {
@@ -62,43 +55,43 @@ public class InputManager
 
     #region Mobile
     public Action<Define.PadEvent, Vector3> PadAction = null;
-    public GamePad Gamepad = null;
+    public GameSceneUI.GamePad GamePad = null;
 
     void OnPadEvent()
     {
-        if (Gamepad == null)
+        if (GamePad == null)
             return;
 
-        if (Gamepad.RotatePanelTapped == GamePad.RotatePanelTap.Begin)
-            PadAction.Invoke(Define.PadEvent.BeginRotate, Gamepad.TouchPoint);
-        else if (Gamepad.RotatePanelTapped == GamePad.RotatePanelTap.On)
-            PadAction.Invoke(Define.PadEvent.OnRotate, Gamepad.TouchPoint);
+        if (GamePad.RotatePanelTapped == GameSceneUI.GamePad.RotatePanelTap.Begin)
+            PadAction.Invoke(Define.PadEvent.BeginRotate, GamePad.TouchPoint);
+        else if (GamePad.RotatePanelTapped == GameSceneUI.GamePad.RotatePanelTap.On)
+            PadAction.Invoke(Define.PadEvent.OnRotate, GamePad.TouchPoint);
 
-        if (Gamepad.Zoomed == true)
-            PadAction.Invoke(Define.PadEvent.OnZoom, Vector3.right * Gamepad.ZoomValue);    // x를 zoom value로
+        if (GamePad.Zoomed == true)
+            PadAction.Invoke(Define.PadEvent.OnZoom, Vector3.right * GamePad.ZoomValue);    // x를 zoom value로
 
-        if (Gamepad.ButtonClicked == GamePad.ButtonClick.Attack)
+        if (GamePad.ButtonClicked == GameSceneUI.GamePad.ButtonClick.Attack)
         {
             PadAction.Invoke(Define.PadEvent.OnAttack, Vector3.zero);
-            Gamepad.ButtonClicked = GamePad.ButtonClick.None;
+            GamePad.ButtonClicked = GameSceneUI.GamePad.ButtonClick.None;
         }
-        else if (Gamepad.ButtonClicked == GamePad.ButtonClick.Jump)
+        else if (GamePad.ButtonClicked == GameSceneUI.GamePad.ButtonClick.Jump)
         {
             PadAction.Invoke(Define.PadEvent.OnJump, Vector3.zero);
-            Gamepad.ButtonClicked = GamePad.ButtonClick.None;
+            GamePad.ButtonClicked = GameSceneUI.GamePad.ButtonClick.None;
         }
 
         // 조이스틱 방향
-        Vector3 dir = new Vector3(Gamepad.Direction.x, 0, Gamepad.Direction.y);
+        Vector3 dir = new Vector3(GamePad.Direction.x, 0, GamePad.Direction.y);
         // 카메라가 보는 방향으로 회전
         dir = Quaternion.Euler(0, Camera.main.transform.parent.rotation.eulerAngles.y, 0) * dir;
         dir = dir.normalized;
 
-        if (Gamepad.JoyStickDetected == GamePad.JoystickDetect.Center)
+        if (GamePad.JoyStickDetected == GameSceneUI.GamePad.JoystickDetect.Center)
             PadAction.Invoke(Define.PadEvent.OnIdle, dir);
-        else if (Gamepad.JoyStickDetected == GamePad.JoystickDetect.CloseToCenter)
+        else if (GamePad.JoyStickDetected == GameSceneUI.GamePad.JoystickDetect.CloseToCenter)
             PadAction.Invoke(Define.PadEvent.OnWalk, dir);
-        else if (Gamepad.JoyStickDetected == GamePad.JoystickDetect.FarFromCenter)
+        else if (GamePad.JoyStickDetected == GameSceneUI.GamePad.JoystickDetect.FarFromCenter)
             PadAction.Invoke(Define.PadEvent.OnRun, dir);
     }
     #endregion
