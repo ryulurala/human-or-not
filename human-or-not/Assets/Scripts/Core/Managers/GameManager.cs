@@ -40,9 +40,13 @@ public class GameManager
         string characterName = GetCharacterName(type);
 
         // Spawn player
-        GameObject go = Spawn($"Character/{characterName}/Player", Define.WorldObject.Player);
+        GameObject player = Spawn($"Character/{characterName}/Player", Define.WorldObject.Player);
 
-        return go;
+        Vector3 resultPos;
+        if (Manager.Game.RandomPoint(Vector3.zero, 100.0f, out resultPos, routineCount: 1000))
+            player.transform.position = resultPos;
+
+        return player;
     }
 
     public GameObject SpawnBots(Define.Character type = Define.Character.Dongdong)    // Default: Dongdong
