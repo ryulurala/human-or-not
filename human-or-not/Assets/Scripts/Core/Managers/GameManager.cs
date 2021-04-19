@@ -19,6 +19,12 @@ public class GameManager
         Manager.UI.ShowSceneUI<GameSceneUI>();
     }
 
+    public void EndGame()
+    {
+        Manager.Input.Clear();      // 못 움직이도록
+        Manager.UI.ShowPopupUI<OkPopup>();
+    }
+
     public GameObject SpawnTouchDown(int count = 5)
     {
         GameObject root = new GameObject() { name = "TouchDowns" };

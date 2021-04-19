@@ -77,7 +77,7 @@ public class SingleModeTab : PopupUI
 
         // 0 ~ 100
         botCountSlider.minValue = 0;
-        botCountSlider.maxValue = 100;
+        botCountSlider.maxValue = 99;
         botCountSlider.wholeNumbers = true;     // int
 
         BindEvent(botCountSlider.gameObject, (PointerEventData) =>

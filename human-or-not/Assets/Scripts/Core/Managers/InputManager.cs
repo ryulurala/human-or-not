@@ -122,7 +122,7 @@ public class InputManager
 
     void OnKeyEvent()
     {
-        if (EventSystem.current.IsPointerOverGameObject() || KeyAction == null)
+        if (KeyAction == null)
             return;
 
         // 방향 벡터 축적, 카메라가 보는 방향이 forward

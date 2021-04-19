@@ -71,9 +71,7 @@ public class GameSceneUI : SceneUI
             GetText((int)Texts.Time).text = SecondsToTimerStr(_remainSeconds);
         }
 
-        // TOTO: 종료
-        // Manager.Game.
-        Manager.UI.ShowPopupUI<PopupUI>("Popup");
+        Manager.Game.EndGame();
     }
 
     string SecondsToTimerStr(float seconds)

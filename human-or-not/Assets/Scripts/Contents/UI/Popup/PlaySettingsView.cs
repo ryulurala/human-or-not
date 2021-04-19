@@ -8,10 +8,10 @@ public class PlaySettingsView : PopupUI
 {
     enum GameObjects
     {
-        Multi_Mode_Tab,
-        Single_Mode_Tab,
-        How_To_Play_Tab,
-        Close_Tab,
+        Multi_Mode,
+        Single_Mode,
+        How_To_Play,
+        Close,
     }
 
     protected override void OnStart()
@@ -25,10 +25,10 @@ public class PlaySettingsView : PopupUI
 
     void InitButtons()
     {
-        GameObject multiModeTab = GetObject((int)GameObjects.Multi_Mode_Tab);
-        GameObject singleModeTab = GetObject((int)GameObjects.Single_Mode_Tab);
-        GameObject howToPlayTab = GetObject((int)GameObjects.How_To_Play_Tab);
-        GameObject closeTab = GetObject((int)GameObjects.Close_Tab);
+        GameObject multiModeTab = GetObject((int)GameObjects.Multi_Mode);
+        GameObject singleModeTab = GetObject((int)GameObjects.Single_Mode);
+        GameObject howToPlayTab = GetObject((int)GameObjects.How_To_Play);
+        GameObject closeTab = GetObject((int)GameObjects.Close);
 
         Manager.UI.ShowPopupUI<HowToPlayTab>();
 
