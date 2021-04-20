@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PlaySettingsView : PopupUI
 {
-    enum GameObjects
+    enum Buttons
     {
         Multi_Mode,
         Single_Mode,
@@ -14,43 +14,67 @@ public class PlaySettingsView : PopupUI
         Close,
     }
 
+    enum Tab
+    {
+        MultiMode,
+        SingleMode,
+        HowToPlay,
+    }
+
     protected override void OnStart()
     {
         base.OnStart();
 
-        Bind<GameObject>(typeof(GameObjects));
+        Bind<Button>(typeof(Buttons));
 
         InitButtons();
     }
 
+
     void InitButtons()
     {
-        GameObject multiModeTab = GetObject((int)GameObjects.Multi_Mode);
-        GameObject singleModeTab = GetObject((int)GameObjects.Single_Mode);
-        GameObject howToPlayTab = GetObject((int)GameObjects.How_To_Play);
-        GameObject closeTab = GetObject((int)GameObjects.Close);
+        Button multiModeTab = GetButton((int)Buttons.Multi_Mode);
+        Button singleModeTab = GetButton((int)Buttons.Single_Mode);
+        Button howToPlayTab = GetButton((int)Buttons.How_To_Play);
+        Button closeTab = GetButton((int)Buttons.Close);
 
         Manager.UI.ShowPopupUI<HowToPlayTab>();
+        Tab currentTab = Tab.HowToPlay;
 
-        BindEvent(multiModeTab, (PointerEventData) =>
+        BindEvent(multiModeTab.gameObject, (PointerEventData) =>
         {
-            Manager.UI.ClosePopupUI();
-            Manager.UI.ShowPopupUI<MultiModeTab>();
+            if (currentTab != Tab.MultiMode)
+            {
+                Manager.UI.ClosePopupUI();
+                Manager.UI.ShowPopupUI<MultiModeTab>();
+
+                currentTab = Tab.MultiMode;
+            }
         });
 
-        BindEvent(singleModeTab, (PointerEventData) =>
+        BindEvent(singleModeTab.gameObject, (PointerEventData) =>
         {
-            Manager.UI.ClosePopupUI();
-            Manager.UI.ShowPopupUI<SingleModeTab>();
+            if (currentTab != Tab.SingleMode)
+            {
+                Manager.UI.ClosePopupUI();
+                Manager.UI.ShowPopupUI<SingleModeTab>();
+
+                currentTab = Tab.SingleMode;
+            }
         });
 
-        BindEvent(howToPlayTab, (PointerEventData) =>
+        BindEvent(howToPlayTab.gameObject, (PointerEventData) =>
         {
-            Manager.UI.ClosePopupUI();
-            Manager.UI.ShowPopupUI<HowToPlayTab>();
+            if (currentTab != Tab.HowToPlay)
+            {
+                Manager.UI.ClosePopupUI();
+                Manager.UI.ShowPopupUI<HowToPlayTab>();
+
+                currentTab = Tab.HowToPlay;
+            }
         });
 
-        BindEvent(closeTab, (PointerEventData) =>
+        BindEvent(closeTab.gameObject, (PointerEventData) =>
         {
             Manager.UI.CloseAllPopupUI();
         });

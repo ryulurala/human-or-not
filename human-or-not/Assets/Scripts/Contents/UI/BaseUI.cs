@@ -53,6 +53,7 @@ public abstract class BaseUI : MonoBehaviour
     protected Image GetImage(int idx) { return Get<Image>(idx); }
     protected Dropdown GetDropdown(int idx) { return Get<Dropdown>(idx); }
     protected Slider GetSlider(int idx) { return Get<Slider>(idx); }
+    protected InputField GetInputField(int idx) { return Get<InputField>(idx); }
 
     protected void BindEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
     {
