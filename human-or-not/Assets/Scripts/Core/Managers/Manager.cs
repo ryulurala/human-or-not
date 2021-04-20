@@ -52,8 +52,8 @@ public class Manager : MonoBehaviour
 
     public static void Clear()
     {
-        Input.Clear();
         Scene.Clear();
+        Input.Clear();
         UI.Clear();
     }
 

@@ -22,6 +22,6 @@ public class GameScene : BaseScene
 
     public override void Clear()
     {
-        Debug.Log("GameScene Clear");
+        Debug.Log("GameScene Clear !");
     }
 }

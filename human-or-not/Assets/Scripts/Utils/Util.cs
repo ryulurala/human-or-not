@@ -12,6 +12,7 @@ public class Util
     public static bool IsMobile { get; } = isMobile();
 #else
     public static bool IsMobile { get; } = false;
+    // public static bool IsMobile { get; } = true;
 #endif
 
     public static T GetEnumValue<T>(string str) where T : System.Enum

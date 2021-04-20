@@ -40,6 +40,8 @@ public class InputManager
 
     public void Clear()
     {
+        _inputAction = null;
+
         if (Util.IsMobile)
         {
             // Mobile

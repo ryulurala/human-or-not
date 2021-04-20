@@ -57,6 +57,7 @@ public class UIManager
         GameObject go = Manager.Resource.Instaniate($"UI/Scene/{name}");
         T overrideSceneUI = Util.GetOrAddComponent<T>(go);
         overrideSceneUI.transform.SetParent(_sceneUI.transform);
+        overrideSceneUI.transform.SetAsFirstSibling();  // Hierarchy top
 
         return overrideSceneUI;
     }

@@ -87,7 +87,7 @@ public class GameSceneUI : SceneUI
         {
             get
             {
-                Slider slider = GetSlider((int)Sliders.Slider).GetComponent<Slider>();
+                Slider slider = GetSlider((int)Sliders.ZoomSlider).GetComponent<Slider>();
                 if (slider == null)
                 {
                     CameraController cameraController = Camera.main.GetComponent<CameraController>();
@@ -124,7 +124,7 @@ public class GameSceneUI : SceneUI
 
         enum Images
         {
-            Panel,
+            RotatePanel,
             Joystick,
             OuterCircle,
             InnerCircle,
@@ -133,7 +133,7 @@ public class GameSceneUI : SceneUI
 
         enum Sliders
         {
-            Slider,
+            ZoomSlider,
         }
 
         enum Buttons
@@ -208,7 +208,7 @@ public class GameSceneUI : SceneUI
 
         void InitRotatePanel()
         {
-            Image panel = GetImage((int)Images.Panel);
+            Image panel = GetImage((int)Images.RotatePanel);
 
             BindEvent(panel.gameObject, (PointerEventData eventData) =>
             {
@@ -235,17 +235,17 @@ public class GameSceneUI : SceneUI
         void InitZoomSlider()
         {
             Image zoom = GetImage((int)Images.Zoom);
-            Slider slider = GetSlider((int)Sliders.Slider);
+            Slider zoomSlider = GetSlider((int)Sliders.ZoomSlider);
 
             // 1 ~ 10 단계
             CameraController cameraController = Camera.main.GetComponent<CameraController>();
-            slider.minValue = cameraController.MinZoomRatio;
-            slider.maxValue = cameraController.MaxZoomRatio;
-            slider.value = (cameraController.MaxZoomRatio + cameraController.MinZoomRatio) / 2f;
+            zoomSlider.minValue = cameraController.MinZoomRatio;
+            zoomSlider.maxValue = cameraController.MaxZoomRatio;
+            zoomSlider.value = (cameraController.MaxZoomRatio + cameraController.MinZoomRatio) / 2f;
 
             BindEvent(zoom.gameObject, (PointerEventData) => { }); // blocking
-            BindEvent(slider.gameObject, (PointerEventData eventData) => { Zoomed = true; }, Define.UIEvent.PointerDown);
-            BindEvent(slider.gameObject, (PointerEventData eventData) => { Zoomed = false; }, Define.UIEvent.PointerUp);
+            BindEvent(zoomSlider.gameObject, (PointerEventData eventData) => { Zoomed = true; }, Define.UIEvent.PointerDown);
+            BindEvent(zoomSlider.gameObject, (PointerEventData eventData) => { Zoomed = false; }, Define.UIEvent.PointerUp);
         }
 
         void InitTriggerButtons()
