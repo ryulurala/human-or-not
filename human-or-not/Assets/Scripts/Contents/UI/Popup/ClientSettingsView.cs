@@ -1,14 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class OkPopup : PopupUI
+public class ClientSettingsView : PopupUI
 {
     enum Buttons
     {
-        OK,
+        Close,
     }
 
     protected override void OnStart()
@@ -22,13 +22,12 @@ public class OkPopup : PopupUI
 
     void InitButtons()
     {
-        Button okBtn = GetButton((int)Buttons.OK);
+        Button closeBtn = GetButton((int)Buttons.Close);
 
-        BindEvent(okBtn.gameObject, (PointerEventData) =>
+        BindEvent(closeBtn.gameObject, (PointerEventData) =>
         {
-            ClosePopupUI();
-
-            Manager.Scene.LoadScene(Define.Scene.Start);
+            Manager.UI.CloseAllPopupUI();
+            Manager.UI.ShowPopupUI<PlaySettingsView>();
         });
     }
 }

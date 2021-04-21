@@ -17,12 +17,13 @@ public class GameManager
         Manager.Input.Init();
 
         Manager.UI.ShowSceneUI<GameSceneUI>();
+
     }
 
     public void EndGame()
     {
         Manager.Input.Clear();      // 못 움직이도록
-        Manager.UI.ShowPopupUI<OkPopup>();
+        Manager.UI.ShowPopupUI<GameEndMessage>();
     }
 
     public GameObject SpawnTouchDown(int count = 5)
@@ -110,7 +111,6 @@ public class GameManager
                 break;
         }
     }
-
 
     public bool RandomPoint(Vector3 center, float range, out Vector3 result, int routineCount = 30)
     {

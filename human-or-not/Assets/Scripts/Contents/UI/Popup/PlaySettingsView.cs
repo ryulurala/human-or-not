@@ -38,8 +38,8 @@ public class PlaySettingsView : PopupUI
         Button howToPlayTab = GetButton((int)Buttons.How_To_Play);
         Button closeTab = GetButton((int)Buttons.Close);
 
-        Manager.UI.ShowPopupUI<HowToPlayTab>();
-        Tab currentTab = Tab.HowToPlay;
+        Manager.UI.ShowPopupUI<MultiModeTab>();
+        Tab currentTab = Tab.MultiMode;
 
         BindEvent(multiModeTab.gameObject, (PointerEventData) =>
         {
