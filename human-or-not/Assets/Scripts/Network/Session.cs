@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using UnityEngine;
 using WebSocketSharp;
 
 public abstract class Session
 {
     WebSocket _ws;
+    public bool IsConnected { get; private set; } = false;
 
     public abstract void OnConnected(Uri url);
     public abstract void OnRecv(string data);
@@ -16,6 +16,7 @@ public abstract class Session
 
     public void Open(WebSocket socket)
     {
+        IsConnected = true;
         OnConnected(socket.Url);
 
         _ws = socket;
@@ -23,11 +24,15 @@ public abstract class Session
         // Init
         _ws.OnError += (sender, eventArgs) => { Debug.Log($"{eventArgs.Message}"); Close(); };
         _ws.OnMessage += (sender, eventArgs) => { OnRecv(eventArgs.Data); };
-        _ws.OnClose += (sender, eventArgs) => { Close(); };
+        _ws.OnClose += (sender, eventArgs) => { Debug.Log($"OnClose()"); Close(); };
     }
 
-    void Close()
+    public void Close()
     {
+        if (_ws == null)
+            return;
+
+        IsConnected = false;
         OnDisconnected(_ws.Url);
 
         _ws.CloseAsync();

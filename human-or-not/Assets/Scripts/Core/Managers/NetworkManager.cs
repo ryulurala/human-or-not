@@ -1,39 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using UnityEngine;
 
 public class NetworkManager
 {
     ServerSession _session = new ServerSession();
 
-    public void Init()
+#if UNITY_EDITOR
+    const string _url = "ws://localhost:9536/";
+#else
+    const string _url = "ws://localhost:9536/";
+#endif
+
+    public void Open()
     {
-        // IP
-        string host = "localhost";
-        IPHostEntry ipHost = Dns.GetHostEntry(host);
-        IPAddress ipAddr = ipHost.AddressList[0];
-
-        // Port
-        IPEndPoint endPoint = new IPEndPoint(ipAddr, 9536);
-
-        Connector connector = new Connector();
-        connector.Connect(endPoint, _session);
-
-        Manager.OpenCoroutine(click());
+        new Connector().Connect(_url, _session);
     }
 
-    IEnumerator click()
+    public void Close()
     {
-        while (true)
-        {
-            yield return null;
-            if (Input.GetMouseButtonDown(0))
-            {
-                Debug.Log($"클릭!");
-                _session.Send();
-            }
-        }
+        // 연결돼있다면 연결 종료 보내기
+        if (_session.IsConnected)
+            _session.Close();
     }
 
     public void OnUpdate()

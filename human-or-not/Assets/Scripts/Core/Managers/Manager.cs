@@ -66,4 +66,10 @@ public class Manager : MonoBehaviour
     {
         _instance.StopCoroutine(coroutineFunc);
     }
+
+    void OnApplicationQuit()
+    {
+        Debug.Log("종료될 경우!");
+        Network.Close();
+    }
 }

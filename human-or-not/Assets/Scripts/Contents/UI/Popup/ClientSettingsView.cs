@@ -26,6 +26,7 @@ public class ClientSettingsView : PopupUI
 
         BindEvent(closeBtn.gameObject, (PointerEventData) =>
         {
+            Manager.Network.Close();
             Manager.UI.CloseAllPopupUI();
             Manager.UI.ShowPopupUI<PlaySettingsView>();
         });

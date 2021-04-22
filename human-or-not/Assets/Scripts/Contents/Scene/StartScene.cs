@@ -10,8 +10,6 @@ public class StartScene : BaseScene
         base.OnAwake();
 
         Manager.UI.ShowSceneUI<MainMenu>();
-
-        Manager.Network.Init();
     }
 
     public override void Clear()
