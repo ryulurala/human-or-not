@@ -1,0 +1,15 @@
+{
+  "name": "human-or-not_server",
+  "version": "1.0.0",
+  "description": "This is human-or-not game server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ryulurala",
+  "license": "MIT",
+  "dependencies": {
+    "shortid": "^2.2.16",
+    "socket.io": "^4.0.1"
+  }
+}
