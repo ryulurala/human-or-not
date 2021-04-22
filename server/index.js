@@ -18,12 +18,12 @@ wss.on("connection", (ws, req) => {
 
   ws.onmessage = (msg) => {
     // Client로부터 메시지 수신 시
-    switch (msg.event) {
-      case "hi":
-        console.log(msg.data);
-        break;
-    }
-    // console.log(`message received: ${msg.data}`);
+    // switch (msg.event) {
+    //   case "hi":
+    //     console.log(msg.data);
+    //     break;
+    // }
+    console.log(`message received: ${msg.data}`);
   };
 
   ws.onclose = () => {

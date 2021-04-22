@@ -9,34 +9,36 @@ public class Connector
 {
     WebSocket _socket;
     Session _session;
-    EndPoint _endPoint;
 
     public void Connect(IPEndPoint endPoint, Session session)
     {
-        _endPoint = endPoint;
         _session = session;
         _socket = new WebSocket($"ws://{endPoint.ToString()}");
+
+        _socket.OnOpen += (sender, e) => { _session.Open(_socket); };
+
+        _session.Send();
 
         Manager.OpenCoroutine(TryConnect());
     }
 
     IEnumerator TryConnect()
     {
+        _socket.ConnectAsync();
+
         int seconds = 0;
         while (seconds < 10)
         {
-            _socket.Connect();
+            if (_socket.ReadyState == WebSocketState.Open)
+                break;
+
+            Debug.Log($"Connecting... {_socket.ReadyState} {seconds}");
             yield return new WaitForSeconds(1.0f);
             seconds++;
 
-            if (_socket.ReadyState == WebSocketState.Open)
-            {
-                _session.Init(_socket);
-                _session.OnConnected(_endPoint);
-                break;
-            }
-
-            Debug.Log($"Connecting... {_socket.ReadyState} {seconds}");
+            // 닫혀있을 경우, 한 번 더 시도.
+            if (_socket.ReadyState == WebSocketState.Closed)
+                _socket.ConnectAsync();
         }
     }
 }

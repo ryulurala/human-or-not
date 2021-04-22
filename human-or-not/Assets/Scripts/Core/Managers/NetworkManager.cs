@@ -20,7 +20,20 @@ public class NetworkManager
         Connector connector = new Connector();
         connector.Connect(endPoint, _session);
 
-        // Manager.OpenCoroutine(OnUpdate());
+        Manager.OpenCoroutine(click());
+    }
+
+    IEnumerator click()
+    {
+        while (true)
+        {
+            yield return null;
+            if (Input.GetMouseButtonDown(0))
+            {
+                Debug.Log($"클릭!");
+                _session.Send();
+            }
+        }
     }
 
     public void OnUpdate()
