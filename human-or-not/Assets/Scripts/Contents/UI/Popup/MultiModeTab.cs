@@ -48,12 +48,11 @@ public class MultiModeTab : PopupUI
         BindEvent(createRoom.gameObject, (PointerEventData) =>
         {
             Debug.Log($"Creat Room Cliked !");
-
-            // 연결중 팝업 띄우고
-            Manager.UI.ShowPopupUI<LoadingMessage>();
-
-            // 연결됐을 경우
-            StartCoroutine(TryConnect(isHost: true));
+            Manager.Network.Open(() =>
+            {
+                Manager.UI.CloseAllPopupUI();
+                Manager.UI.ShowPopupUI<HostSettingsView>();
+            });
         });
     }
 
@@ -68,12 +67,11 @@ public class MultiModeTab : PopupUI
         BindEvent(accessBtn.gameObject, (PointerEventData) =>
         {
             Debug.Log($"Access Button Cliked ! {inputRoomKey.text}");
-
-            // 연결중 팝업 띄우고
-            Manager.UI.ShowPopupUI<LoadingMessage>();
-
-            // 연결됐을 경우
-            StartCoroutine(TryConnect(isHost: true));
+            Manager.Network.Open(() =>
+            {
+                Manager.UI.CloseAllPopupUI();
+                Manager.UI.ShowPopupUI<ClientSettingsView>();
+            });
         });
 
         // Input A_Z
@@ -131,12 +129,7 @@ public class MultiModeTab : PopupUI
 
     IEnumerator TryConnect(bool isHost)
     {
-        Manager.Network.Open();
         yield return new WaitForSeconds(3.0f);
-        Manager.UI.CloseAllPopupUI();
-        if (isHost)
-            Manager.UI.ShowPopupUI<HostSettingsView>();
-        else
-            Manager.UI.ShowPopupUI<ClientSettingsView>();
+
     }
 }

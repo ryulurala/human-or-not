@@ -36,6 +36,7 @@ public class LoadingMessage : PopupUI
             ClosePopupUI();
 
             // TODO: 취소
+            Manager.Network.Close();
         });
     }
 

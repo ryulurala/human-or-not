@@ -2,55 +2,55 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using WebSocketSharp;
+using HybridWebSocket;
+using System.Text;
 
 public abstract class Session
 {
     WebSocket _ws;
-    public bool IsConnected { get; private set; } = false;
+
+    public Uri Url { get; private set; }
+    public bool HasConnected { get; private set; } = false;
 
     public abstract void OnConnected(Uri url);
     public abstract void OnRecv(string data);
     public abstract void OnSend(int length);
     public abstract void OnDisconnected(Uri url);
 
-    public void Open(WebSocket socket)
+    public void Open(WebSocket socket, string url)
     {
-        IsConnected = true;
-        OnConnected(socket.Url);
+        if (socket == null)
+            return;
 
         _ws = socket;
+        Url = new Uri(url);
 
-        // Init
-        _ws.OnError += (sender, eventArgs) => { Debug.Log($"{eventArgs.Message}"); Close(); };
-        _ws.OnMessage += (sender, eventArgs) => { OnRecv(eventArgs.Data); };
-        _ws.OnClose += (sender, eventArgs) => { Debug.Log($"OnClose()"); Close(); };
+        Init();
+
+        OnConnected(Url);
     }
 
     public void Close()
     {
-        if (_ws == null)
+        if (HasConnected == false)
             return;
 
-        IsConnected = false;
-        OnDisconnected(_ws.Url);
+        HasConnected = false;
+        _ws.Close();
 
-        _ws.CloseAsync();
-        _ws = null;
+        Clear();
+
+        OnDisconnected(Url);
     }
 
     public void Send(IPacket packet = null)
     {
-        if (_ws == null)
+        if (HasConnected == false)
             return;
 
         try
         {
-            _ws.SendAsync("hi!", (bool isCompleted) =>
-            {
-                if (isCompleted)
-                    OnSend(length: 0);
-            });
+            _ws.Send(Encoding.UTF8.GetBytes("Hi! WebGL Websocket"));
         }
         catch (Exception e)
         {
@@ -58,5 +58,36 @@ public abstract class Session
 
             Debug.LogError(e);
         }
+    }
+
+    void Init()
+    {
+        if (_ws == null)
+            return;
+
+        HasConnected = true;
+
+        _ws.OnError += (string errMsg) =>
+        {
+            Debug.Log($"{errMsg}");
+            Close();
+        };
+
+        _ws.OnMessage += (byte[] msg) =>
+        {
+            OnRecv(Encoding.UTF8.GetString(msg));
+        };
+
+        _ws.OnClose += (WebSocketCloseCode code) =>
+        {
+            Debug.Log($"OnClose() {code.ToString()}");
+            Close();
+        };
+    }
+
+    void Clear()
+    {
+        Url = null;
+        _ws = null;
     }
 }
