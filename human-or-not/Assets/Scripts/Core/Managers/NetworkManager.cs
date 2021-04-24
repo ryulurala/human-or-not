@@ -28,7 +28,7 @@ public class NetworkManager
     {
         // 연결돼있다면 연결 종료 보내기
         if (_session.HasConnected)
-            _session.Close();
+            _session.Close("Exit Button Cliked");
 
         _callback = null;
     }
@@ -42,9 +42,23 @@ public class NetworkManager
         //     PacketManager.Instance.HandlePacket(_session, pkt);
     }
 
-    public void Send<T>() where T : IPacket
+    public void Send<T>(IPacket packet) where T : IPacket
     {
-        // _session.Send();
+        if (packet == null)
+            return;
+
+        T body = (T)packet;
+        string message = JsonUtility.ToJson(body);
+
+        Send(message);
+    }
+
+    public void Send(string message)
+    {
+        if (_session == null)
+            return;
+
+        _session.Send(message);
     }
 
     IEnumerator TryConnect()

@@ -4,8 +4,10 @@ using UnityEngine;
 
 public enum PacketId
 {
-    // Server, Client 둘다.
-    S_BroadcastEnterGame,
+    // S: Server's packet, C: Client's packet
+    C_CreateRoom = 1,
+    C_EnterRoom = 2,
+    S_BroadcastEnterRoom = 3,
 }
 
 public interface IPacket
@@ -15,9 +17,31 @@ public interface IPacket
     string Write();
 }
 
-public class S_BroadcastEnterGame : IPacket
+public class C_CreateRoom : IPacket
 {
-    public ushort Protocol => (ushort)PacketId.S_BroadcastEnterGame;
+    public ushort playerId;
+
+    public ushort Protocol => (ushort)PacketId.C_CreateRoom;
+
+    public void Read(string data)
+    {
+        // TODO: 읽기
+    }
+
+    public string Write()
+    {
+        // TODO: 쓰기
+        string str = "";
+
+        return str;
+    }
+}
+
+public class C_EnterRoom : IPacket
+{
+    public ushort playerId;
+
+    public ushort Protocol => (ushort)PacketId.C_EnterRoom;
 
     public void Read(string data)
     {

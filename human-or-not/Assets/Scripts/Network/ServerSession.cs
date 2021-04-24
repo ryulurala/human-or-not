@@ -7,12 +7,12 @@ public class ServerSession : Session
 {
     public override void OnConnected(Uri url)
     {
-        Debug.Log($"Onconnected: {url}");
+        Debug.Log($"{url} Onconnected");
     }
 
-    public override void OnDisconnected(Uri url)
+    public override void OnDisconnected(Uri url, string message)
     {
-        Debug.Log($"Disconnected: {url}");
+        Debug.Log($"{url} Disconnected: {message}");
     }
 
     public override void OnRecv(string data)

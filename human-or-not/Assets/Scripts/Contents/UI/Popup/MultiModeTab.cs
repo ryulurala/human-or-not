@@ -47,11 +47,11 @@ public class MultiModeTab : PopupUI
 
         BindEvent(createRoom.gameObject, (PointerEventData) =>
         {
-            Debug.Log($"Creat Room Cliked !");
             Manager.Network.Open(() =>
             {
                 Manager.UI.CloseAllPopupUI();
                 Manager.UI.ShowPopupUI<HostSettingsView>();
+                Manager.Network.Send<C_CreateRoom>(new C_CreateRoom() { playerId = 456, });
             });
         });
     }
@@ -62,15 +62,19 @@ public class MultiModeTab : PopupUI
         InputField inputRoomKey = GetInputField((int)InputFields.InputRoomKey);
         Button accessBtn = GetButton((int)Buttons.Access);
 
-        BindEvent(inputRoomKey.gameObject, (PointerEventData) => { inputRoomKey.text = ""; });
+        BindEvent(inputRoomKey.gameObject, (PointerEventData) =>
+        {
+            inputRoomKey.text = "";     // Clear
+        });
 
         BindEvent(accessBtn.gameObject, (PointerEventData) =>
         {
-            Debug.Log($"Access Button Cliked ! {inputRoomKey.text}");
+            // Debug.Log($"Access Button Cliked ! {inputRoomKey.text}");
             Manager.Network.Open(() =>
             {
                 Manager.UI.CloseAllPopupUI();
                 Manager.UI.ShowPopupUI<ClientSettingsView>();
+                Manager.Network.Send<C_EnterRoom>(new C_EnterRoom() { playerId = 123, });
             });
         });
 

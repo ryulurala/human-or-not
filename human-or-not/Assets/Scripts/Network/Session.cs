@@ -7,7 +7,7 @@ using System.Text;
 
 public abstract class Session
 {
-    WebSocket _ws;
+    WebSocket _socket;
 
     public Uri Url { get; private set; }
     public bool HasConnected { get; private set; } = false;
@@ -15,79 +15,78 @@ public abstract class Session
     public abstract void OnConnected(Uri url);
     public abstract void OnRecv(string data);
     public abstract void OnSend(int length);
-    public abstract void OnDisconnected(Uri url);
+    public abstract void OnDisconnected(Uri url, string message);
 
     public void Open(WebSocket socket, string url)
     {
         if (socket == null)
             return;
 
-        _ws = socket;
+        _socket = socket;
         Url = new Uri(url);
 
         Init();
+        Send("Hi Websocket server !");
 
         OnConnected(Url);
     }
 
-    public void Close()
+    public void Close(string message)
     {
         if (HasConnected == false)
             return;
 
         HasConnected = false;
-        _ws.Close();
+        _socket.Close();
 
         Clear();
 
-        OnDisconnected(Url);
+        OnDisconnected(Url, message);
     }
 
-    public void Send(IPacket packet = null)
+    public void Send(string message)
     {
         if (HasConnected == false)
             return;
 
         try
         {
-            _ws.Send(Encoding.UTF8.GetBytes("Hi! WebGL Websocket"));
+            _socket.Send(Encoding.UTF8.GetBytes(message));
+
+            OnSend(message.Length);
         }
         catch (Exception e)
         {
-            Close();
-
-            Debug.LogError(e);
+            Close(e.ToString());
         }
     }
 
     void Init()
     {
-        if (_ws == null)
+        if (_socket == null)
             return;
 
         HasConnected = true;
 
-        _ws.OnError += (string errMsg) =>
+        _socket.OnError += (string errMsg) =>
         {
-            Debug.Log($"{errMsg}");
-            Close();
+            Close(errMsg);
         };
 
-        _ws.OnMessage += (byte[] msg) =>
+        _socket.OnMessage += (byte[] msg) =>
         {
             OnRecv(Encoding.UTF8.GetString(msg));
         };
 
-        _ws.OnClose += (WebSocketCloseCode code) =>
+        _socket.OnClose += (WebSocketCloseCode code) =>
         {
-            Debug.Log($"OnClose() {code.ToString()}");
-            Close();
+            Close(code.ToString());
         };
     }
 
     void Clear()
     {
         Url = null;
-        _ws = null;
+        _socket = null;
     }
 }
