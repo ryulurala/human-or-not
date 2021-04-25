@@ -1,17 +1,19 @@
+const PacketId = require("./Packet/packet.json");
 const util = require("./utils");
 const ws = require("ws");
+const { makePacket } = require("./Packet/packet");
 const wss = new ws.Server({ port: 9536 }, () => {
   console.log("Server Started...");
 });
 
-const ClientIds = new Set();
+const ClientIdSet = new Set();
 
 wss.on("connection", (socket) => {
   if (InitClientId(socket) === false) {
     socket.close(1013, "Try Again Later");
   }
-  console.log(`connected current clients: ${ClientIds.size}`);
-  socket.send(JSON.stringify({ id: socket.id }));
+  console.log(`connected current clients: ${ClientIdSet.size}`);
+  socket.send(makePacket(PacketId.S_ConnectedClient, socket));
 
   // id 받으면 superClient로 왔는지 client로 왔는지
 
@@ -38,15 +40,15 @@ wss.on("connection", (socket) => {
   socket.onclose = () => {
     // 연결 종료 시
     console.log("closed !");
-    ClientIds.delete(socket.id);
+    ClientIdSet.delete(socket.id);
   };
 });
 
 const InitClientId = (socket) => {
   for (let i = 0; i < 1000; i++) {
-    const id = util.makeId(6);
-    if (ClientIds.has(id) === false) {
-      ClientIds.add(id);
+    const id = util.makeId("123456789", 4);
+    if (ClientIdSet.has(id) === false) {
+      ClientIdSet.add(id);
       socket.id = id;
       return true;
     }

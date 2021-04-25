@@ -1,0 +1,6 @@
+{
+  "S_ConnectedClient": 1,
+  "C_CreateRoom": 2,
+  "C_EnterRoom": 3,
+  "S_BroadcastEnterRoom": 4
+}
