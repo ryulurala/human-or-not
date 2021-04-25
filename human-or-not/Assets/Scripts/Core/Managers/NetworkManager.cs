@@ -7,6 +7,7 @@ public class NetworkManager
 {
     ServerSession _session = new ServerSession();
     Action _callback = null;
+    Coroutine _tryConnect;
 
 #if UNITY_EDITOR
     const string url = "ws://localhost:9536";
@@ -20,12 +21,19 @@ public class NetworkManager
 
         // 연결중 팝업 띄우기
         Manager.UI.ShowPopupUI<LoadingMessage>();
-
-        Manager.OpenCoroutine(TryConnect());
+        _tryConnect = Manager.OpenCoroutine(TryConnect());
+        Manager.Packet.Init();
     }
 
     public void Close()
     {
+        if (_tryConnect != null)
+        {
+            Manager.CloseCoroutine(_tryConnect);
+            _tryConnect = null;
+            return;
+        }
+
         // 연결돼있다면 연결 종료 보내기
         if (_session.HasConnected)
             _session.Close("Exit Button Cliked");
@@ -69,5 +77,7 @@ public class NetworkManager
             yield return null;
         }
         _callback.Invoke();
+        _tryConnect = null;
+
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,54 +6,38 @@ using UnityEngine;
 public enum PacketId
 {
     // S: Server's packet, C: Client's packet
-    C_CreateRoom = 1,
-    C_EnterRoom = 2,
-    S_BroadcastEnterRoom = 3,
+    S_ConnectedClient = 1,
+    C_CreateRoom = 2,
+    C_EnterRoom = 3,
+    S_BroadcastEnterRoom = 4,
 }
 
 public interface IPacket
 {
     ushort Protocol { get; }
-    void Read(string data);
-    string Write();
 }
 
-public class C_CreateRoom : IPacket
+[Serializable]
+public class S_ConnectedClient : IPacket
 {
     public ushort playerId;
 
-    public ushort Protocol => (ushort)PacketId.C_CreateRoom;
-
-    public void Read(string data)
-    {
-        // TODO: 읽기
-    }
-
-    public string Write()
-    {
-        // TODO: 쓰기
-        string str = "";
-
-        return str;
-    }
+    public ushort Protocol => (ushort)PacketId.S_ConnectedClient;
 }
 
+[Serializable]
+public class C_CreateRoom : IPacket
+{
+    public ushort playerId;
+    public ushort Protocol => (ushort)PacketId.C_CreateRoom;
+
+
+}
+
+[Serializable]
 public class C_EnterRoom : IPacket
 {
     public ushort playerId;
 
     public ushort Protocol => (ushort)PacketId.C_EnterRoom;
-
-    public void Read(string data)
-    {
-        // TODO: 읽기
-    }
-
-    public string Write()
-    {
-        // TODO: 쓰기
-        string str = "";
-
-        return str;
-    }
 }

@@ -13,7 +13,7 @@ public abstract class Session
     public bool HasConnected { get; private set; } = false;
 
     public abstract void OnConnected(Uri url);
-    public abstract void OnRecv(string data);
+    public abstract void OnRecv(byte[] data);
     public abstract void OnSend(int length);
     public abstract void OnDisconnected(Uri url, string message);
 
@@ -73,9 +73,11 @@ public abstract class Session
             Close(errMsg);
         };
 
-        _socket.OnMessage += (byte[] msg) =>
+        _socket.OnMessage += (byte[] data) =>
         {
-            OnRecv(Encoding.UTF8.GetString(msg));
+            OnRecv(data);
+            // IPacket packet = JsonUtility.FromJson<IPacket>(Encoding.UTF8.GetString(msg));
+            // Debug.Log($"msg: {packet.Protocol}");
         };
 
         _socket.OnClose += (WebSocketCloseCode code) =>

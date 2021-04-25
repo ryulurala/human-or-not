@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PacketHandler : MonoBehaviour
+public class PacketHandler
 {
-    // Start is called before the first frame update
-    void Start()
+    public void S_ConnectedClientHandler(Session session, IPacket packet)
     {
-        
-    }
+        S_ConnectedClient body = packet as S_ConnectedClient;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log($"S_ConnectedClientHandler: {body.Protocol}, {body.playerId}");
     }
 }

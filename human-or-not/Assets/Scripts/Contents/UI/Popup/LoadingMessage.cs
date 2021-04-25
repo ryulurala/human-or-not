@@ -33,10 +33,8 @@ public class LoadingMessage : PopupUI
 
         BindEvent(cancelBtn.gameObject, (PointerEventData) =>
         {
-            ClosePopupUI();
-
-            // TODO: 취소
             Manager.Network.Close();
+            ClosePopupUI();
         });
     }
 

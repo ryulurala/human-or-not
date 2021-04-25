@@ -11,12 +11,14 @@ public class Manager : MonoBehaviour
     DataManager _data = new DataManager();
     GameManager _game = new GameManager();
     NetworkManager _network = new NetworkManager();
-    PoolManager _pool = new PoolManager();
+    PacketManager _packet = new PacketManager();
     PlayerManager _player = new PlayerManager();
+    PoolManager _pool = new PoolManager();
 
     public static DataManager Data { get { return Instance._data; } }
     public static GameManager Game { get { return Instance._game; } }
     public static NetworkManager Network { get { return Instance._network; } }
+    public static PacketManager Packet { get { return Instance._packet; } }
     public static PlayerManager Player { get { return Instance._player; } }
     public static PoolManager Pool { get { return Instance._pool; } }
     #endregion
@@ -28,7 +30,6 @@ public class Manager : MonoBehaviour
     UIManager _ui = new UIManager();
 
     public static InputManager Input { get { return Instance._input; } }
-
     public static ResourceManager Resource { get { return Instance._resource; } }
     public static SceneManagerEx Scene { get { return Instance._scene; } }
     public static UIManager UI { get { return Instance._ui; } }
@@ -57,19 +58,19 @@ public class Manager : MonoBehaviour
         UI.Clear();
     }
 
-    public static void OpenCoroutine(IEnumerator coroutineFunc)
+    public static Coroutine OpenCoroutine(IEnumerator coroutineFunc)
     {
-        _instance.StartCoroutine(coroutineFunc);
+        Coroutine coroutine = _instance.StartCoroutine(coroutineFunc);
+        return coroutine;
     }
 
-    public static void CloseCoroutine(IEnumerator coroutineFunc)
+    public static void CloseCoroutine(Coroutine coroutine)
     {
-        _instance.StopCoroutine(coroutineFunc);
+        _instance.StopCoroutine(coroutine);
     }
 
     void OnApplicationQuit()
     {
-        Debug.Log("종료될 경우!");
         Network.Close();
     }
 }

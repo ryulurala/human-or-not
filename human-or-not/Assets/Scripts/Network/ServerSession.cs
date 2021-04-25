@@ -15,9 +15,10 @@ public class ServerSession : Session
         Debug.Log($"{url} Disconnected: {message}");
     }
 
-    public override void OnRecv(string data)
+    public override void OnRecv(byte[] data)
     {
-        Debug.Log($"OnRecv: {data}");
+        Debug.Log($"OnRecv: {System.Text.Encoding.UTF8.GetString(data)}");
+        Manager.Packet.OnRecvPacket(this, data);
     }
 
     public override void OnSend(int length)
