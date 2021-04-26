@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class PacketHandler
 {
-    public void S_ConnectedClientHandler(Session session, IPacket packet)
+    public void S_BroadcastEnterRoom(Session session, Packet packet)
     {
-        S_ConnectedClient body = packet as S_ConnectedClient;
+        S_BroadcastEnterRoom body = packet as S_BroadcastEnterRoom;
 
-        Debug.Log($"S_ConnectedClientHandler: {body.Protocol}, {body.playerId}");
+        Debug.Log($"S_ConnectedClientHandler: {body.Protocol}");
+    }
+
+    public void S_PlayerList(Session session, Packet packet)
+    {
+
     }
 }

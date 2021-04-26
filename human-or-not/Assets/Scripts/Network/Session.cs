@@ -26,7 +26,6 @@ public abstract class Session
         Url = new Uri(url);
 
         Init();
-        Send("Hi Websocket server !");
 
         OnConnected(Url);
     }

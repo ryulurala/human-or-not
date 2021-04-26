@@ -49,9 +49,12 @@ public class MultiModeTab : PopupUI
         {
             Manager.Network.Open(() =>
             {
+                // UI
                 Manager.UI.CloseAllPopupUI();
                 Manager.UI.ShowPopupUI<HostSettingsView>();
-                // Manager.Network.Send<C_CreateRoom>(new C_CreateRoom() { playerId = 456, });
+
+                // I'm super client
+                Manager.Network.Send<C_CreateRoom>(new C_CreateRoom());
             });
         });
     }
@@ -74,7 +77,9 @@ public class MultiModeTab : PopupUI
             {
                 Manager.UI.CloseAllPopupUI();
                 Manager.UI.ShowPopupUI<ClientSettingsView>();
-                // Manager.Network.Send<C_EnterRoom>(new C_EnterRoom((ushort)123));
+
+                // I'm just client
+                Manager.Network.Send<C_EnterRoom>(new C_EnterRoom());
             });
         });
 

@@ -49,6 +49,9 @@ public class Manager : MonoBehaviour
         // Scene이 이동해도 삭제 [X]
         DontDestroyOnLoad(go);
         _instance = go.GetOrAddComponent<Manager>();
+
+        // Inititialize the other managers
+        _instance.InitManagers();
     }
 
     public static void Clear()
@@ -69,8 +72,13 @@ public class Manager : MonoBehaviour
         _instance.StopCoroutine(coroutine);
     }
 
+    void InitManagers()
+    {
+        _packet.Init();
+    }
+
     void OnApplicationQuit()
     {
-        Network.Close();
+        _network.Close();
     }
 }

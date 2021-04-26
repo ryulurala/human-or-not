@@ -8,7 +8,7 @@ public class Connector
 {
     WebSocket _socket;
 
-    public void Connect(string url, Session session)
+    public Coroutine Connect(Session session, string url, Action callback)
     {
         _socket = WebSocketFactory.CreateInstance(url);
 
@@ -17,6 +17,15 @@ public class Connector
             session.Open(_socket, url);
         };
 
+        return Manager.OpenCoroutine(TryConnect(session, callback));
+    }
+
+    IEnumerator TryConnect(Session session, Action callback)
+    {
         _socket.Connect();      // Boxing Async
+        while (!session.HasConnected)
+            yield return null;
+
+        callback.Invoke();
     }
 }

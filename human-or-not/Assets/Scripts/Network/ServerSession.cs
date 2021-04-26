@@ -23,6 +23,6 @@ public class ServerSession : Session
 
     public override void OnSend(int length)
     {
-        Debug.Log($"OnSend: {length}");
+        Debug.Log($"OnSend: {length} bytes");
     }
 }

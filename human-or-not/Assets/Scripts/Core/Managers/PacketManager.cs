@@ -7,58 +7,57 @@ using UnityEngine;
 
 public class PacketManager
 {
-    Dictionary<ushort, Func<Session, byte[], IPacket>> _makeFunc = new Dictionary<ushort, Func<Session, byte[], IPacket>>();
-    Dictionary<ushort, Action<Session, IPacket>> _handler = new Dictionary<ushort, Action<Session, IPacket>>();
-
-    bool _isInit = false;
+    Dictionary<ushort, Func<Session, byte[], Packet>> _makeFunc = new Dictionary<ushort, Func<Session, byte[], Packet>>();
+    Dictionary<ushort, Action<Session, Packet>> _handler = new Dictionary<ushort, Action<Session, Packet>>();
 
     public void Init()
     {
-        if (_isInit)
-            return;
-
         PacketHandler handler = new PacketHandler();
 
         // _makeFunc 등록
-        _makeFunc.Add((ushort)PacketId.S_ConnectedClient, MakePacket<S_ConnectedClient>);
+        _makeFunc.Add((ushort)PacketId.S_BroadcastEnterRoom, MakePacket<S_BroadcastEnterRoom>);
 
         // _handler 등록
-        _handler.Add((ushort)PacketId.S_ConnectedClient, handler.S_ConnectedClientHandler);
-
-        _isInit = true;
+        _handler.Add((ushort)PacketId.S_BroadcastEnterRoom, handler.S_BroadcastEnterRoom);
     }
 
     public void OnRecvPacket(Session session, byte[] data)
     {
-        // Protocol 파싱
-        Regex regex = new Regex(@"(?:(""Protocol""\:\d+))");
-        string str = regex.Match(Encoding.UTF8.GetString(data)).Value;
-        if (String.IsNullOrEmpty(str))
+        ushort protocol = ParseProtocol(data);
+        if (protocol == 0)
             return;
 
-        ushort protocol = Convert.ToUInt16(str.Substring(str.LastIndexOf(':') + 1));
-
         // MakePacket Call-back 실행
-        Func<Session, byte[], IPacket> func = null;
+        Func<Session, byte[], Packet> func = null;
         if (_makeFunc.TryGetValue(protocol, out func))
         {
             // 패킷 조립(MakePacket)
-            IPacket packet = func.Invoke(session, data);
-            Debug.Log($"Make Packet: {packet.Protocol}");
+            Packet packet = func.Invoke(session, data);
             HandlePacket(session, packet);
         }
     }
 
-    public void HandlePacket(Session session, IPacket packet)
+    public void HandlePacket(Session session, Packet packet)
     {
         // Packet Handling
-        Action<Session, IPacket> action = null;
-        Debug.Log($"Handle Packet: {packet.Protocol}");
+        Action<Session, Packet> action = null;
         if (_handler.TryGetValue(packet.Protocol, out action))
             action.Invoke(session, packet);
     }
 
-    T MakePacket<T>(Session session, byte[] bytes) where T : IPacket, new()
+    ushort ParseProtocol(byte[] data)
+    {
+        // Parsing protocol
+        string pattern = @"(""Protocol"":\d+)";
+        string protocolData = Regex.Match(Encoding.UTF8.GetString(data), pattern).Value;
+        if (String.IsNullOrEmpty(protocolData))
+            return 0;
+
+        ushort protocol = Convert.ToUInt16(protocolData.Substring(protocolData.LastIndexOf(':') + 1));
+        return protocol;
+    }
+
+    T MakePacket<T>(Session session, byte[] bytes) where T : Packet
     {
         // Deserializing Packet data
         T packet = JsonUtility.FromJson<T>(Encoding.UTF8.GetString(bytes));

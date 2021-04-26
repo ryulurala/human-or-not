@@ -6,8 +6,7 @@ using UnityEngine;
 public class NetworkManager
 {
     ServerSession _session = new ServerSession();
-    Action _callback = null;
-    Coroutine _tryConnect;
+    Coroutine _tryConnect = null;
 
 #if UNITY_EDITOR
     const string url = "ws://localhost:9536";
@@ -17,12 +16,10 @@ public class NetworkManager
 
     public void Open(Action callback)
     {
-        _callback = callback;
-
         // 연결중 팝업 띄우기
-        Manager.UI.ShowPopupUI<LoadingMessage>();
-        _tryConnect = Manager.OpenCoroutine(TryConnect());
-        Manager.Packet.Init();
+        LoadingMessage loadingMessage = Manager.UI.ShowPopupUI<LoadingMessage>();
+
+        _tryConnect = new Connector().Connect(_session, url, callback);
     }
 
     public void Close()
@@ -31,26 +28,15 @@ public class NetworkManager
         {
             Manager.CloseCoroutine(_tryConnect);
             _tryConnect = null;
-            return;
         }
 
         // 연결돼있다면 연결 종료 보내기
         if (_session.HasConnected)
             _session.Close("Exit Button Cliked");
 
-        _callback = null;
     }
 
-    public void OnUpdate()
-    {
-        // 1frame 마다...
-
-        // List<IPacket> list = PacketQueue.Instance.PopAll();
-        // foreach (IPacket pkt in list)
-        //     PacketManager.Instance.HandlePacket(_session, pkt);
-    }
-
-    public void Send<T>(IPacket packet) where T : IPacket
+    public void Send<T>(Packet packet) where T : Packet
     {
         if (packet == null)
             return;
@@ -67,17 +53,5 @@ public class NetworkManager
             return;
 
         _session.Send(message);
-    }
-
-    IEnumerator TryConnect()
-    {
-        new Connector().Connect(url, _session);
-        while (!_session.HasConnected)
-        {
-            yield return null;
-        }
-        _callback.Invoke();
-        _tryConnect = null;
-
     }
 }
