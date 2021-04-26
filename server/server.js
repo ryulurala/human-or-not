@@ -1,57 +1,92 @@
-const PacketId = require("./Packet/packet.json");
-const util = require("./utils");
-const ws = require("ws");
-const { makePacket } = require("./Packet/packet");
-const wss = new ws.Server({ port: 9536 }, () => {
-  console.log("Server Started...");
-});
+{
+  const ws = require("ws");
 
-const ClientIdSet = new Set();
+  const wss = new ws.Server({ port: 9536 }, () => {
+    console.log("Server Started...");
+  });
 
-wss.on("connection", (socket) => {
-  if (InitClientId(socket) === false) {
-    socket.close(1013, "Try Again Later");
-  }
-  console.log(`connected current clients: ${ClientIdSet.size}`);
-  socket.send(makePacket(PacketId.S_ConnectedClient, socket));
+  wss.on("connection", (socket) => {
+    if (initSocket(socket) === false) {
+      socket.close(1013, "Try Again Later");
+      return;
+    }
+    console.log(`connected client: ${socket.id}`);
 
-  // id 받으면 superClient로 왔는지 client로 왔는지
+    socket.onclose = () => {
+      // 연결 종료 시
+      clearSocket(socket);
 
-  socket.onerror = (err) => {
-    // Client와 Error났을 경우
-    console.error(err);
-  };
+      console.log("Closed");
+    };
 
-  socket.onopen = () => {
-    // Client와 연결됐을 경우
-    console.log("opened !");
-  };
+    socket.onerror = (err) => {
+      // 에러날 경우
+      clearSocket(socket);
+      socket.close(1011, "Internal Server Error");
 
-  socket.onmessage = (message) => {
-    // Client로부터 메시지 수신 시
-    // switch (msg.event) {
-    //   case "hi":
-    //     console.log(msg.data);
-    //     break;
-    // }
-    console.log(`message received: ${message.data}`);
-  };
+      console.error(err);
+    };
 
-  socket.onclose = () => {
-    // 연결 종료 시
-    console.log("closed !");
-    ClientIdSet.delete(socket.id);
-  };
-});
+    socket.onmessage = (message) => {
+      // 패킷 받을 경우
+      const data = message.data;
+      if (data.includes("Protocol")) {
+        const json = JSON.parse(data);
+        handlePacket(socket, json["Protocol"]);
+      } else {
+        clearSocket(socket);
+        socket.close(1002, "Bad Request");
 
-const InitClientId = (socket) => {
+        console.log(`Bad Request data: ${data}`);
+      }
+    };
+  });
+}
+
+// ------------------Handling--------------------
+const { makeID } = require("./utils");
+const { PACKET_ID } = require("./Packet/packet");
+
+const clientIDs = new Set();
+
+function initSocket(socket) {
+  // Create CLient ID
+  if (createClientID(socket) === false) return false;
+
+  console.log(`current clients: ${clientIDs.size}`);
+  return true;
+}
+
+function clearSocket(socket) {
+  deleteClientID(socket);
+
+  console.log(`Clear socket: ${socket.id}`);
+}
+
+function createClientID(socket) {
   for (let i = 0; i < 1000; i++) {
-    const id = util.makeId("123456789", 4);
-    if (ClientIdSet.has(id) === false) {
-      ClientIdSet.add(id);
+    const id = makeID("123456789", 4);
+    if (clientIDs.has(id) === false) {
+      clientIDs.add(id);
       socket.id = id;
       return true;
     }
   }
+
   return false;
-};
+}
+
+function deleteClientID(socket) {
+  if (clientIDs.has(socket.id)) clientIDs.delete(socket.id);
+}
+
+function handlePacket(socket, protocol) {
+  switch (protocol) {
+    case PACKET_ID.C_CreateRoom:
+      console.log(`CreateRoom: clientID(${socket.id})`);
+      break;
+    case PACKET_ID.C_EnterRoom:
+      console.log(`EnterRoom: clientID(${socket.id})`);
+      break;
+  }
+}

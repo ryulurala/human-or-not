@@ -1,0 +1,5 @@
+{
+  "C_CreateRoom": 1,
+  "C_EnterRoom": 2,
+  "S_BroadcastEnterRoom": 3
+}
