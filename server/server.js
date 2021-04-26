@@ -6,7 +6,7 @@
   });
 
   wss.on("connection", (socket) => {
-    if (initSocket(socket) === false) {
+    if (!initSocket(socket)) {
       socket.close(1013, "Try Again Later");
       return;
     }
@@ -45,30 +45,34 @@
 
 // ------------------Handling--------------------
 const { makeID } = require("./utils");
-const { PACKET_ID } = require("./Packet/packet");
+const { PACKET_ID, S_BroadcastEnterRoom } = require("./Packet/packet");
+const { Room } = require("./room");
+const { Session } = require("./session");
 
-const clientIDs = new Set();
+const clients = new Map(); // Session Manager??
+const rooms = new Map(); // room Manager??
 
 function initSocket(socket) {
   // Create CLient ID
-  if (createClientID(socket) === false) return false;
+  if (!addClient(socket)) return false;
 
-  console.log(`current clients: ${clientIDs.size}`);
+  console.log(`current clients: ${clients.size}`);
   return true;
 }
 
 function clearSocket(socket) {
-  deleteClientID(socket);
+  removeClient(socket);
 
   console.log(`Clear socket: ${socket.id}`);
 }
 
-function createClientID(socket) {
+function addClient(socket) {
   for (let i = 0; i < 1000; i++) {
+    // Try 1000 times
     const id = makeID("123456789", 4);
-    if (clientIDs.has(id) === false) {
-      clientIDs.add(id);
+    if (!clients.has(id)) {
       socket.id = id;
+      clients.set(id, new Session(socket, id));
       return true;
     }
   }
@@ -76,8 +80,8 @@ function createClientID(socket) {
   return false;
 }
 
-function deleteClientID(socket) {
-  if (clientIDs.has(socket.id)) clientIDs.delete(socket.id);
+function removeClient(socket) {
+  if (clients.has(socket.id)) clients.delete(socket.id);
 }
 
 function handlePacket(socket, protocol) {
