@@ -1,9 +1,6 @@
-const { PACKET_ID } = require("./packet");
-const { RoomManager } = require("./room");
-const { SessionManager } = require("./session");
-
-const roomManager = new RoomManager();
-const sessionManager = new SessionManager();
+const { PACKET_ID, S_BroadcastEnterRoom } = require("./packet");
+const { roomManager } = require("./room");
+const { sessionManager } = require("./session");
 
 function initSocket(socket) {
   // Create CLient ID
@@ -11,27 +8,38 @@ function initSocket(socket) {
     return false;
   }
 
-  console.log(`current sessions: ${sessionManager.sessions.size}`);
+  console.log(`Current number of sessions: ${sessionManager.sessions.size}`);
   return true;
 }
 
 function clearSocket(socket) {
   sessionManager.removeSession(socket);
 
-  console.log(`Clear socket: ${socket.id}`);
+  console.log(`Current number of sessions: ${sessionManager.sessions.size}`);
 }
 
 function handlePacket(socket, data) {
+  if (!sessionManager.sessions.has(socket.id)) return;
+
+  const session = sessionManager.sessions.get(socket.id);
+
   switch (data.Protocol) {
     case PACKET_ID.C_CreateRoom:
       {
-        roomManager.createRoom(socket);
-        console.log(`CreateRoom: sessionId(${socket.id})`);
+        roomManager.createRoom(session);
+        console.log(`Current number of rooms: ${roomManager.rooms.size}`);
       }
       break;
     case PACKET_ID.C_EnterRoom:
       {
-        console.log(`EnterRoom: sessionId(${socket.id}), ${data.roomId}`);
+        if (roomManager.rooms.has(data.roomId)) {
+          // 있으면
+        } else {
+          // 없으면
+        }
+        console.log(
+          `EnterRoom: sessionId(${session.socket.id}), ${data.roomId}`
+        );
       }
       break;
   }

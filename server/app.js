@@ -15,15 +15,12 @@ wss.on("connection", (socket) => {
   socket.onclose = () => {
     // 연결 종료 시
     clearSocket(socket);
-
     console.log("Closed");
   };
 
   socket.onerror = (err) => {
     // 에러날 경우
-    clearSocket(socket);
-    socket.close(1011, "Internal Server Error");
-
+    clearSocket(socket, () => socket.close(1011, "Internal Server Error"));
     console.error(err);
   };
 
@@ -34,8 +31,7 @@ wss.on("connection", (socket) => {
       const json = JSON.parse(data);
       handlePacket(socket, json);
     } else {
-      clearSocket(socket);
-      socket.close(1002, "Bad Request");
+      clearSocket(socket, () => socket.close(1002, "Bad Request"));
 
       console.log(`Bad Request data: ${data}`);
     }
