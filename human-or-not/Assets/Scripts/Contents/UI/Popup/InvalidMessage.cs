@@ -1,14 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadingMessage : PopupUI
+public class InvalidMessage : PopupUI
 {
     enum Buttons
     {
-        Cancel,
+        Close,
     }
 
     protected override void OnStart()
@@ -22,11 +21,10 @@ public class LoadingMessage : PopupUI
 
     void InitButtons()
     {
-        Button cancelBtn = GetButton((int)Buttons.Cancel);
+        Button closeBtn = GetButton((int)Buttons.Close);
 
-        BindEvent(cancelBtn.gameObject, (PointerEventData) =>
+        BindEvent(closeBtn.gameObject, (PointerEventData) =>
         {
-            Manager.Network.Close();
             ClosePopupUI();
         });
     }

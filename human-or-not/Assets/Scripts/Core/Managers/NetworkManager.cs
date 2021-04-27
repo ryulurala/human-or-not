@@ -41,7 +41,7 @@ public class NetworkManager
         if (packet == null)
             return;
 
-        T body = (T)packet;
+        T body = packet as T;
         string message = JsonUtility.ToJson(body);
 
         Send(message);

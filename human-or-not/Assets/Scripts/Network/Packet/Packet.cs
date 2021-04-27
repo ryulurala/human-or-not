@@ -11,8 +11,7 @@ public enum PacketId
     S_BroadcastEnterRoom = 3,
 }
 
-[Serializable]
-public class Packet
+public abstract class Packet
 {
     public ushort Protocol;
 }
@@ -29,9 +28,12 @@ public class C_CreateRoom : Packet
 [Serializable]
 public class C_EnterRoom : Packet
 {
-    public C_EnterRoom()
+    public string roomId;
+
+    public C_EnterRoom(string roomId)
     {
         Protocol = (ushort)PacketId.C_EnterRoom;
+        this.roomId = roomId;
     }
 }
 

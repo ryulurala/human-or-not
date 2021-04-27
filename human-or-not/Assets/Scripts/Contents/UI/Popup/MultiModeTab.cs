@@ -73,14 +73,24 @@ public class MultiModeTab : PopupUI
         BindEvent(accessBtn.gameObject, (PointerEventData) =>
         {
             // Debug.Log($"Access Button Cliked ! {inputRoomKey.text}");
-            Manager.Network.Open(() =>
+            string text = inputRoomKey.text;
+            if (text.Length == 5 && text == text.ToUpper())
             {
-                Manager.UI.CloseAllPopupUI();
-                Manager.UI.ShowPopupUI<ClientSettingsView>();
+                // Only upper-case and 5 characters
+                Manager.Network.Open(() =>
+                {
+                    Manager.UI.CloseAllPopupUI();
+                    Manager.UI.ShowPopupUI<ClientSettingsView>();
 
-                // I'm just client
-                Manager.Network.Send<C_EnterRoom>(new C_EnterRoom());
-            });
+                    // I'm just client
+                    Manager.Network.Send<C_EnterRoom>(new C_EnterRoom(inputRoomKey.text));
+                });
+            }
+            else
+            {
+                InvalidMessage message = Manager.UI.ShowPopupUI<InvalidMessage>();
+                inputRoomKey.text = "";
+            }
         });
 
         // Input A_Z
