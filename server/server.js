@@ -32,7 +32,7 @@
       const data = message.data;
       if (data.includes("Protocol")) {
         const json = JSON.parse(data);
-        handlePacket(socket, json["Protocol"]);
+        handlePacket(socket, json);
       } else {
         clearSocket(socket);
         socket.close(1002, "Bad Request");
@@ -44,53 +44,36 @@
 }
 
 // ------------------Handling--------------------
-const { makeID } = require("./utils");
 const { PACKET_ID, S_BroadcastEnterRoom } = require("./Packet/packet");
-const { Room } = require("./room");
-const { Session } = require("./session");
+const { RoomManager } = require("./room");
+const { SessionManager } = require("./session");
 
-const clients = new Map(); // Session Manager??
-const rooms = new Map(); // room Manager??
+const roomManager = new RoomManager();
+const sessionManager = new SessionManager();
 
 function initSocket(socket) {
   // Create CLient ID
-  if (!addClient(socket)) return false;
+  if (!sessionManager.addSession(socket)) {
+    return false;
+  }
 
-  console.log(`current clients: ${clients.size}`);
+  console.log(`current sessions: ${sessionManager.sessions.size}`);
   return true;
 }
 
 function clearSocket(socket) {
-  removeClient(socket);
+  sessionManager.removeSession(socket);
 
   console.log(`Clear socket: ${socket.id}`);
 }
 
-function addClient(socket) {
-  for (let i = 0; i < 1000; i++) {
-    // Try 1000 times
-    const id = makeID("123456789", 4);
-    if (!clients.has(id)) {
-      socket.id = id;
-      clients.set(id, new Session(socket, id));
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function removeClient(socket) {
-  if (clients.has(socket.id)) clients.delete(socket.id);
-}
-
-function handlePacket(socket, protocol) {
-  switch (protocol) {
+function handlePacket(socket, data) {
+  switch (data["Protocol"]) {
     case PACKET_ID.C_CreateRoom:
-      console.log(`CreateRoom: clientID(${socket.id})`);
+      console.log(`CreateRoom: sessionID(${socket.id})`);
       break;
     case PACKET_ID.C_EnterRoom:
-      console.log(`EnterRoom: clientID(${socket.id})`);
+      console.log(`EnterRoom: sessionID(${socket.id})`);
       break;
   }
 }
