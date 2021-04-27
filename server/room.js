@@ -1,4 +1,4 @@
-const { makeID } = require("./utils");
+const { makeId } = require("./utils");
 
 class RoomManager {
   constructor() {
@@ -7,11 +7,11 @@ class RoomManager {
 
   createRoom(socket) {
     for (let i = 0; i < 1000; i++) {
-      const roomID = makeID("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 5);
-      if (!this.rooms.has(roomID)) {
-        const room = new Room(roomID);
+      const roomId = makeId("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 5);
+      if (!this.rooms.has(roomId)) {
+        const room = new Room(roomId);
         room.addPlayer(socket.id);
-        this.rooms.set(roomID, room);
+        this.rooms.set(roomId, room);
         return true;
       }
     }
@@ -23,17 +23,17 @@ class RoomManager {
 }
 
 class Room {
-  constructor(roomID) {
-    this.roomID = roomID;
+  constructor(roomId) {
+    this.roomId = roomId;
     this.players = [];
   }
 
-  addPlayer(playerID) {
-    this.players.push(playerID);
+  addPlayer(playerId) {
+    this.players.push(playerId);
   }
 
-  removePlayer(playerID) {
-    const idx = this.players.indexOf(playerID);
+  removePlayer(playerId) {
+    const idx = this.players.indexOf(playerId);
     this.players.splice(idx, 1);
   }
 }

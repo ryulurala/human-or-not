@@ -4,7 +4,7 @@
   "description": "This is human-or-not game server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon app.js"
   },
   "author": "ryulurala",
   "license": "MIT",

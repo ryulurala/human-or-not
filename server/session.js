@@ -1,4 +1,4 @@
-const { makeID } = require("./utils");
+const { makeId } = require("./utils");
 
 class SessionManager {
   constructor() {
@@ -8,11 +8,11 @@ class SessionManager {
   addSession(socket) {
     for (let i = 0; i < 1000; i++) {
       // try 1000 times
-      const sessionID = makeID("123456789", 4);
-      if (!this.sessions.has(sessionID)) {
-        socket.id = sessionID;
-        const session = new Session(socket, sessionID);
-        this.sessions.set(sessionID, session);
+      const sessionId = makeId("123456789", 4);
+      if (!this.sessions.has(sessionId)) {
+        socket.id = sessionId;
+        const session = new Session(socket, sessionId);
+        this.sessions.set(sessionId, session);
         return true;
       }
     }
@@ -28,9 +28,9 @@ class SessionManager {
 }
 
 class Session {
-  constructor(socket, clientID) {
+  constructor(socket, clientId) {
     this.socket = socket;
-    this.clientID = clientID;
+    this.clientId = clientId;
   }
 
   Send(packet) {
