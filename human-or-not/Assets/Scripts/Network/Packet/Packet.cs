@@ -17,15 +17,21 @@ public abstract class Packet
     public ushort Protocol;
 }
 
+#region Server's packet
 [Serializable]
 public class S_Connected : Packet
 {
-    public S_Connected()
-    {
-        Protocol = (ushort)PacketId.S_Connected;
-    }
+    public ushort playerId;
 }
 
+[Serializable]
+public class S_BroadcastEnterRoom : Packet
+{
+    // List<ushort> playerIds
+}
+#endregion
+
+#region Client's packet
 [Serializable]
 public class C_CreateRoom : Packet
 {
@@ -46,12 +52,4 @@ public class C_EnterRoom : Packet
         this.roomId = roomId;
     }
 }
-
-[Serializable]
-public class S_BroadcastEnterRoom : Packet
-{
-    public S_BroadcastEnterRoom()
-    {
-        Protocol = (ushort)PacketId.S_BroadcastEnterRoom;
-    }
-}
+#endregion

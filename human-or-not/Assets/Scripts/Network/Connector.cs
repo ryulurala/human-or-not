@@ -6,18 +6,17 @@ using HybridWebSocket;
 
 public class Connector
 {
-    WebSocket _socket;
-
-    public void Connect(Session session, string url, Action callback)
+    public void Connect(Session session, string url, Action action)
     {
-        _socket = WebSocketFactory.CreateInstance(url);
+        WebSocket socket = WebSocketFactory.CreateInstance(url);
 
-        _socket.OnOpen += () =>
+        socket.OnOpen += () =>
         {
             // 연결됐을 경우
-            session.Open(_socket, url);
+            session.Open(socket, url);
+            action.Invoke();
         };
 
-        _socket.Connect();
+        socket.Connect();
     }
 }

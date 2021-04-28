@@ -20,9 +20,7 @@ public class NetworkManager
 
     public void Close()
     {
-        // 연결돼있다면 연결 종료 보내기
-        if (_session.HasConnected)
-            _session.Close("Exit Button Cliked");
+        _session.Close("Exit Button Cliked");
     }
 
     public void Send<T>(Packet packet) where T : Packet

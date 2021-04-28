@@ -159,7 +159,7 @@ namespace HybridWebSocket
         public static WebSocketException GetErrorMessageFromCode(int errorCode, Exception inner)
         {
 
-            switch(errorCode)
+            switch (errorCode)
             {
 
                 case -1: return new WebSocketUnexpectedException("WebSocket instance not found.", inner);
@@ -204,9 +204,9 @@ namespace HybridWebSocket
     /// </summary>
     public class WebSocketUnexpectedException : WebSocketException
     {
-        public WebSocketUnexpectedException(){}
-        public WebSocketUnexpectedException(string message) : base(message){}
-        public WebSocketUnexpectedException(string message, Exception inner) : base(message, inner) {}
+        public WebSocketUnexpectedException() { }
+        public WebSocketUnexpectedException(string message) : base(message) { }
+        public WebSocketUnexpectedException(string message, Exception inner) : base(message, inner) { }
     }
 
     /// <summary>
@@ -466,7 +466,7 @@ namespace HybridWebSocket
 
             try
             {
-                   
+
                 // Create WebSocket instance
                 this.ws = new WebSocketSharp.WebSocket(url);
 
@@ -493,7 +493,7 @@ namespace HybridWebSocket
                 this.ws.OnClose += (sender, ev) =>
                 {
                     this.OnClose?.Invoke(
-                        WebSocketHelpers.ParseCloseCodeEnum( (int)ev.Code )
+                        WebSocketHelpers.ParseCloseCodeEnum((int)ev.Code)
                     );
                 };
 

@@ -8,9 +8,7 @@ using System.Text;
 public abstract class Session
 {
     WebSocket _socket;
-
-    public Uri Url { get; private set; }
-    public bool HasConnected { get; private set; } = false;
+    Uri _url;
 
     public abstract void OnConnected(Uri url);
     public abstract void OnRecv(byte[] data);
@@ -23,35 +21,37 @@ public abstract class Session
             return;
 
         _socket = socket;
-        Url = new Uri(url);
+        _url = new Uri(url);
 
+        OnConnected(_url);
         Init();
-
-        OnConnected(Url);
     }
 
     public void Close(string message)
     {
-        if (HasConnected == false)
+        if (_socket == null)
             return;
+        try
+        {
+            _socket.Close();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.ToString());
+        }
 
-        HasConnected = false;
-        _socket.Close();
-
+        OnDisconnected(_url, message);
         Clear();
-
-        OnDisconnected(Url, message);
     }
 
     public void Send(string message)
     {
-        if (HasConnected == false)
+        if (_socket == null)
             return;
 
         try
         {
             _socket.Send(Encoding.UTF8.GetBytes(message));
-
             OnSend(message.Length);
         }
         catch (Exception e)
@@ -62,11 +62,6 @@ public abstract class Session
 
     void Init()
     {
-        if (_socket == null)
-            return;
-
-        HasConnected = true;
-
         _socket.OnError += (string errMsg) =>
         {
             Close(errMsg);
@@ -75,8 +70,6 @@ public abstract class Session
         _socket.OnMessage += (byte[] data) =>
         {
             OnRecv(data);
-            // IPacket packet = JsonUtility.FromJson<IPacket>(Encoding.UTF8.GetString(msg));
-            // Debug.Log($"msg: {packet.Protocol}");
         };
 
         _socket.OnClose += (WebSocketCloseCode code) =>
@@ -87,7 +80,7 @@ public abstract class Session
 
     void Clear()
     {
-        Url = null;
+        _url = null;
         _socket = null;
     }
 }

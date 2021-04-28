@@ -20,10 +20,10 @@ public class PacketManager
         PacketHandler handler = new PacketHandler();
 
         // _makeFunc 등록
-        _makeFunc.Add((ushort)PacketId.S_BroadcastEnterRoom, MakePacket<S_BroadcastEnterRoom>);
+        _makeFunc.Add((ushort)PacketId.S_Connected, MakePacket<S_Connected>);
 
         // _handler 등록
-        _handler.Add((ushort)PacketId.S_BroadcastEnterRoom, handler.S_BroadcastEnterRoom);
+        _handler.Add((ushort)PacketId.S_Connected, handler.S_Connected);
     }
 
     public void OnRecvPacket(Session session, byte[] data)
