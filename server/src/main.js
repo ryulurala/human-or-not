@@ -5,7 +5,7 @@ const SESSION_LIMIT = 9999;
 
 function init(socket) {
   if (sessionManager.sessionCount > SESSION_LIMIT) {
-    return;
+    return false;
   }
 
   // session 생성
@@ -16,6 +16,7 @@ function init(socket) {
   // Job Queue에 push: Sending client id
 
   console.log(`Current number of sessions: ${sessionManager.sessionCount}`);
+  return true;
 }
 
 function clear(socket, callback) {
@@ -28,12 +29,14 @@ function clear(socket, callback) {
 
 function handle(socket, data) {
   if (data.includes("Protocol") || !sessionManager.find(socket.id)) {
-    return;
+    return false;
   }
 
   console.log(data);
 
   // JobQueue에 push
+
+  return true;
 }
 
 module.exports = {
