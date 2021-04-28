@@ -1,43 +1,32 @@
-const { makeId } = require("./utils");
-
 class SessionManager {
   constructor() {
+    this.sessionId = 0;
     this.sessions = new Map();
   }
 
-  addSession(socket) {
-    for (let i = 0; i < 1000; i++) {
-      // try 1000 times
-      const id = makeId("123456789", 4);
-      if (!this.sessions.has(id)) {
-        socket.id = id;
-        const session = new Session(socket);
-        this.sessions.set(id, session);
-        return true;
-      }
-    }
+  generate(socket) {
+    const sessionId = ++this.sessionId; // 무한 서버 [X]
+    const session = new Session(sessionId, socket);
+    this.sessions.set(sessionId, session);
 
-    return false;
+    console.log(`Generate session: ${sessionId}`);
+
+    return session;
   }
 
-  removeSession(socket, callback) {
-    if (this.sessions.has(socket.id)) {
-      const session = this.sessions.get(socket.id);
-      session.clear();
-      this.sessions.delete(socket.id);
-
-      if (callback) callback();
-      return true;
-    }
-
-    return false;
+  remove(socket, closeCallback) {
+    this.sessions.delete(socket.id);
+    if (closeCallback) closeCallback();
   }
 }
 
 class Session {
-  constructor(socket) {
+  constructor(id, socket) {
+    this.id = id;
     this.socket = socket;
     this.room = null;
+
+    socket.id = id; // need to send on event
   }
 
   send(packet) {
@@ -53,12 +42,13 @@ class Session {
     this.room = null;
   }
 
-  // manager한테 부탁?
+  callbackClear() {
+    sessionManager.removeSession(this.socket);
+  }
 }
 
 // Singleton
 const sessionManager = new SessionManager();
-Object.freeze(sessionManager);
 
 module.exports = {
   sessionManager,
