@@ -101,10 +101,6 @@ public class UIManager
             ClosePopupUI();
     }
 
-    public void Init()
-    {
-    }
-
     public void Clear()
     {
         CloseAllPopupUI();

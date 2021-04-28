@@ -10,6 +10,11 @@ public class PacketManager
     Dictionary<ushort, Func<Session, byte[], Packet>> _makeFunc = new Dictionary<ushort, Func<Session, byte[], Packet>>();
     Dictionary<ushort, Action<Session, Packet>> _handler = new Dictionary<ushort, Action<Session, Packet>>();
 
+    public PacketManager()
+    {
+        Init();
+    }
+
     public void Init()
     {
         PacketHandler handler = new PacketHandler();
