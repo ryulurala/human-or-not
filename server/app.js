@@ -1,5 +1,5 @@
 const ws = require("ws");
-const { initSocket, clearSocket, handlePacket } = require("./server");
+const { initSocket, clearSocket, handlePacket } = require("./src/main");
 
 const wss = new ws.Server({ port: 9536 }, () => {
   console.log("Server Started...");
