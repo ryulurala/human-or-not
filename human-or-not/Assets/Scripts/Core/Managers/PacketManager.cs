@@ -9,21 +9,24 @@ public class PacketManager
 {
     Dictionary<ushort, Func<Session, byte[], Packet>> _makeFunc = new Dictionary<ushort, Func<Session, byte[], Packet>>();
     Dictionary<ushort, Action<Session, Packet>> _handler = new Dictionary<ushort, Action<Session, Packet>>();
+    PacketQueue _queue = new PacketQueue();
+
+    public PacketQueue Queue { get => _queue; }
 
     public PacketManager()
     {
-        Init();
+        Register();
     }
 
-    public void Init()
+    public void Register()
     {
         PacketHandler handler = new PacketHandler();
 
         // _makeFunc 등록
-        _makeFunc.Add((ushort)PacketId.S_Connected, MakePacket<S_Connected>);
+        _makeFunc.Add((ushort)PacketId.S_PlayerOrder, MakePacket<S_PlayerOrder>);
 
         // _handler 등록
-        _handler.Add((ushort)PacketId.S_Connected, handler.S_Connected);
+        _handler.Add((ushort)PacketId.S_PlayerOrder, handler.S_PlayerOrderHandler);
     }
 
     public void OnRecvPacket(Session session, byte[] data)
@@ -38,7 +41,11 @@ public class PacketManager
         {
             // 패킷 조립(MakePacket)
             Packet packet = func.Invoke(session, data);
-            HandlePacket(session, packet);
+
+            // Packet Queue에 push
+            _queue.Push(packet);
+
+            // HandlePacket(session, packet);
         }
     }
 

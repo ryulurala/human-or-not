@@ -6,9 +6,9 @@ using UnityEngine;
 public enum PacketId
 {
     // S: Server's packet, C: Client's packet
-    S_Connected = 1,
-    C_CreateRoom = 2,
-    C_EnterRoom = 3,
+    C_CreateRoom = 1,
+    C_EnterRoom = 2,
+    S_PlayerOrder = 3,      // temp
     S_BroadcastEnterRoom = 4,
 }
 
@@ -19,15 +19,17 @@ public abstract class Packet
 
 #region Server's packet
 [Serializable]
-public class S_Connected : Packet
+public class S_PlayerOrder : Packet
 {
     public ushort playerId;
+    public byte order;
 }
 
 [Serializable]
 public class S_BroadcastEnterRoom : Packet
 {
     // List<ushort> playerIds
+    // List<byte> order
 }
 #endregion
 

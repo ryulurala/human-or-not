@@ -13,6 +13,14 @@ public class NetworkManager
     const string url = "ws://localhost:9536";
 #endif
 
+    public void OnUpdate()
+    {
+        // 1-frame
+        List<Packet> list = Manager.Packet.Queue.PopAll();
+        foreach (Packet packet in list)
+            Manager.Packet.HandlePacket(_session, packet);
+    }
+
     public void Open(Action callback)
     {
         new Connector().Connect(_session, url, callback);

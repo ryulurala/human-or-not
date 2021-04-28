@@ -52,10 +52,6 @@ public class MultiModeTab : PopupUI
 
             Manager.Network.Open(() =>
             {
-                // UI callback
-                // Manager.UI.ClosePopupUI();
-                // Manager.UI.ShowPopupUI<HostSettingsView>();
-
                 // Send packet callback
                 Manager.Network.Send<C_CreateRoom>(new C_CreateRoom());
             });
@@ -86,11 +82,7 @@ public class MultiModeTab : PopupUI
 
                 Manager.Network.Open(() =>
                 {
-                    // UI callback
-                    Manager.UI.CloseAllPopupUI();
-                    Manager.UI.ShowPopupUI<ClientSettingsView>();
-
-                    // Send callback
+                    // Send packet callback
                     Manager.Network.Send<C_EnterRoom>(new C_EnterRoom(inputRoomKey.text));
                 });
             }

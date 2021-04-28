@@ -38,6 +38,7 @@ public class Manager : MonoBehaviour
     void Update()
     {
         _input.OnUpdate();
+        _network.OnUpdate();
     }
 
     static void Init()
