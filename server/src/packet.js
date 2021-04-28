@@ -1,12 +1,21 @@
 const PACKET_ID = {
-  C_CreateRoom: 1,
-  C_EnterRoom: 2,
-  S_BroadcastEnterRoom: 3,
+  S_Connected: 1,
+  C_CreateRoom: 2,
+  C_EnterRoom: 3,
+  S_BroadcastEnterRoom: 4,
 };
 
 class Packet {
   constructor(protocol) {
     this.Protocol = protocol;
+  }
+}
+
+class S_Connected extends Packet {
+  constructor(playerId) {
+    super(PACKET_ID.S_Connected);
+
+    this.playerId = playerId;
   }
 }
 
@@ -32,6 +41,7 @@ class S_BroadcastEnterRoom extends Packet {
 
 module.exports = {
   PACKET_ID,
+  S_Connected,
   C_CreateRoom,
   C_EnterRoom,
   S_BroadcastEnterRoom,

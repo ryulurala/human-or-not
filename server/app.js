@@ -1,39 +1,35 @@
 const ws = require("ws");
-const { initSocket, clearSocket, handlePacket } = require("./src/main");
+const { init, clear, handle } = require("./src/main");
 
 const wss = new ws.Server({ port: 9536 }, () => {
   console.log("Server Started...");
 });
 
 wss.on("connection", (socket) => {
-  if (!initSocket(socket)) {
+  // 연결 성공할 경우
+  if (!init(socket)) {
     socket.close(1013, "Try Again Later");
     return;
   }
-  console.log(`connected client: ${socket.id}`);
 
   socket.onclose = () => {
-    // 연결 종료 시
-    clearSocket(socket);
-    console.log("Closed");
+    // 연결 종료할 경우
+    clear(socket);
+    console.log("Closed client");
   };
 
   socket.onerror = (err) => {
     // 에러날 경우
-    clearSocket(socket, () => socket.close(1011, "Internal Server Error"));
+    clear(socket, () => socket.close(1011, "Internal Server Error"));
     console.error(err);
   };
 
   socket.onmessage = (message) => {
     // 패킷 받을 경우
-    const data = message.data;
-    if (data.includes("Protocol")) {
-      const json = JSON.parse(data);
-      handlePacket(socket, json);
+    if (handle(socket, message.data)) {
     } else {
-      clearSocket(socket, () => socket.close(1002, "Bad Request"));
-
-      console.log(`Bad Request data: ${data}`);
+      clear(socket, () => socket.close(1002, "Bad Request"));
+      console.log(`Bad Request data: ${message.data}`);
     }
   };
 });

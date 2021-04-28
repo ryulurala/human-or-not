@@ -70,7 +70,6 @@ class Room {
 
 // Singleton
 const roomManager = new RoomManager();
-Object.freeze(roomManager);
 
 module.exports = {
   roomManager,
