@@ -1,6 +1,8 @@
-const { S_Connected } = require("./packet");
-
 class SessionManager {
+  // private
+  #sessionId;
+  #sessions;
+
   constructor() {
     this.#sessionId = 0;
     this.#sessions = new Map();
@@ -37,6 +39,11 @@ class SessionManager {
 }
 
 class Session {
+  // private
+  #id;
+  #socket;
+  #room;
+
   constructor(id, socket) {
     this.#id = id;
     this.#socket = socket;
