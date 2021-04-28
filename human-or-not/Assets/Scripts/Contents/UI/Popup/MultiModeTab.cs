@@ -47,13 +47,16 @@ public class MultiModeTab : PopupUI
 
         BindEvent(createRoom.gameObject, (PointerEventData) =>
         {
+            // 연결중 팝업 띄우기
+            Manager.UI.ShowPopupUI<LoadingMessage>();
+
             Manager.Network.Open(() =>
             {
-                // UI
+                // UI callback
                 Manager.UI.CloseAllPopupUI();
                 Manager.UI.ShowPopupUI<HostSettingsView>();
 
-                // I'm super client
+                // Send packet callback
                 Manager.Network.Send<C_CreateRoom>(new C_CreateRoom());
             });
         });
@@ -67,22 +70,27 @@ public class MultiModeTab : PopupUI
 
         BindEvent(inputRoomKey.gameObject, (PointerEventData) =>
         {
-            inputRoomKey.text = "";     // Clear
+            // Clear
+            inputRoomKey.text = "";
         });
 
         BindEvent(accessBtn.gameObject, (PointerEventData) =>
         {
-            // Debug.Log($"Access Button Cliked ! {inputRoomKey.text}");
             string text = inputRoomKey.text;
+
+            // Only upper-case and 5 characters
             if (text.Length == 5 && text == text.ToUpper())
             {
-                // Only upper-case and 5 characters
+                // 연결중 팝업 띄우기
+                Manager.UI.ShowPopupUI<LoadingMessage>();
+
                 Manager.Network.Open(() =>
                 {
+                    // UI callback
                     Manager.UI.CloseAllPopupUI();
                     Manager.UI.ShowPopupUI<ClientSettingsView>();
 
-                    // I'm just client
+                    // Send callback
                     Manager.Network.Send<C_EnterRoom>(new C_EnterRoom(inputRoomKey.text));
                 });
             }

@@ -8,24 +8,16 @@ public class Connector
 {
     WebSocket _socket;
 
-    public Coroutine Connect(Session session, string url, Action callback)
+    public void Connect(Session session, string url, Action callback)
     {
         _socket = WebSocketFactory.CreateInstance(url);
 
         _socket.OnOpen += () =>
         {
+            // 연결됐을 경우
             session.Open(_socket, url);
         };
 
-        return Manager.OpenCoroutine(TryConnect(session, callback));
-    }
-
-    IEnumerator TryConnect(Session session, Action callback)
-    {
-        _socket.Connect();      // Boxing Async
-        while (!session.HasConnected)
-            yield return null;
-
-        callback.Invoke();
+        _socket.Connect();
     }
 }

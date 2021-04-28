@@ -6,14 +6,24 @@ using UnityEngine;
 public enum PacketId
 {
     // S: Server's packet, C: Client's packet
-    C_CreateRoom = 1,
-    C_EnterRoom = 2,
-    S_BroadcastEnterRoom = 3,
+    S_Connected = 1,
+    C_CreateRoom = 2,
+    C_EnterRoom = 3,
+    S_BroadcastEnterRoom = 4,
 }
 
 public abstract class Packet
 {
     public ushort Protocol;
+}
+
+[Serializable]
+public class S_Connected : Packet
+{
+    public S_Connected()
+    {
+        Protocol = (ushort)PacketId.S_Connected;
+    }
 }
 
 [Serializable]
