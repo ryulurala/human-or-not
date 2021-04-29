@@ -1,58 +1,69 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
-// Use plugin namespace
-using HybridWebSocket;
+using NativeWebSocket;
 
-public class WebSocketDemo : MonoBehaviour
+public class Connection : MonoBehaviour
 {
+  WebSocket websocket;
 
-    // Use this for initialization
-    void Start()
+  // Start is called before the first frame update
+  async void Start()
+  {
+    // websocket = new WebSocket("ws://echo.websocket.org");
+    websocket = new WebSocket("ws://localhost:8080");
+
+    websocket.OnOpen += () =>
     {
+      Debug.Log("Connection open!");
+    };
 
-        // Create WebSocket instance
-        WebSocket ws = WebSocketFactory.CreateInstance("ws://localhost:9536");
-
-        // Add OnOpen event listener
-        ws.OnOpen += () =>
-        {
-            Debug.Log("WS connected!");
-            Debug.Log("WS state: " + ws.GetState().ToString());
-
-            ws.Send(Encoding.UTF8.GetBytes("Hello from Unity 3D!"));
-        };
-
-        // Add OnMessage event listener
-        ws.OnMessage += (byte[] msg) =>
-        {
-            Debug.Log("WS received message: " + Encoding.UTF8.GetString(msg));
-
-            ws.Close();
-        };
-
-        // Add OnError event listener
-        ws.OnError += (string errMsg) =>
-        {
-            Debug.Log("WS error: " + errMsg);
-        };
-
-        // Add OnClose event listener
-        ws.OnClose += (WebSocketCloseCode code) =>
-        {
-            Debug.Log("WS closed with code: " + code.ToString());
-        };
-
-        // Connect to the server
-        ws.Connect();
-
-    }
-
-    // Update is called once per frame
-    void Update()
+    websocket.OnError += (e) =>
     {
+      Debug.Log("Error! " + e);
+    };
 
+    websocket.OnClose += (e) =>
+    {
+      Debug.Log("Connection closed!");
+    };
+
+    websocket.OnMessage += (bytes) =>
+    {
+      // Reading a plain text message
+      var message = System.Text.Encoding.UTF8.GetString(bytes);
+      Debug.Log("Received OnMessage! (" + bytes.Length + " bytes) " + message);
+    };
+
+    // Keep sending messages at every 0.3s
+    InvokeRepeating("SendWebSocketMessage", 0.0f, 0.3f);
+
+    await websocket.Connect();
+  }
+
+  void Update()
+  {
+#if !UNITY_WEBGL || UNITY_EDITOR
+    websocket.DispatchMessageQueue();
+#endif
+  }
+
+  async void SendWebSocketMessage()
+  {
+    if (websocket.State == WebSocketState.Open)
+    {
+      // Sending bytes
+      await websocket.Send(new byte[] { 10, 20, 30 });
+
+      // Sending plain text
+      await websocket.SendText("plain text message");
     }
+  }
+
+  private async void OnApplicationQuit()
+  {
+    await websocket.Close();
+  }
 }

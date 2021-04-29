@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using HybridWebSocket;
 using System.Text;
+using NativeWebSocket;
 
 public abstract class Session
 {
@@ -14,6 +14,14 @@ public abstract class Session
     public abstract void OnRecv(byte[] data);
     public abstract void OnSend(int length);
     public abstract void OnDisconnected(Uri url, string message);
+
+    public void OnDispatch()
+    {
+#if !UNITY_WEBGL || UNITY_EDITOR
+        if (_socket != null)
+            _socket.DispatchMessageQueue();
+#endif
+    }
 
     public void Open(WebSocket socket, string url)
     {
@@ -27,13 +35,13 @@ public abstract class Session
         Init();
     }
 
-    public void Close(string message)
+    public async void Close(string message)
     {
         if (_socket == null)
             return;
         try
         {
-            _socket.Close();
+            await _socket.Close();
         }
         catch (Exception e)
         {
@@ -44,14 +52,14 @@ public abstract class Session
         Clear();
     }
 
-    public void Send(string message)
+    public async void Send(string message)
     {
         if (_socket == null)
             return;
 
         try
         {
-            _socket.Send(Encoding.UTF8.GetBytes(message));
+            await _socket.Send(Encoding.UTF8.GetBytes(message));
             OnSend(message.Length);
         }
         catch (Exception e)
@@ -69,6 +77,7 @@ public abstract class Session
 
         _socket.OnMessage += (byte[] data) =>
         {
+            Debug.Log(System.Text.Encoding.UTF8.GetString(data));
             OnRecv(data);
         };
 

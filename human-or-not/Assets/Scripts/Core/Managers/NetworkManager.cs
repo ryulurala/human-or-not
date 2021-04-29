@@ -8,13 +8,15 @@ public class NetworkManager
     ServerSession _session = new ServerSession();
 
 #if UNITY_EDITOR
-    const string url = "ws://localhost:9536";
+    const string url = "ws://localhost";
 #else
-    const string url = "ws://localhost:9536";
+    const string url = "ws://localhost";
 #endif
 
     public void OnUpdate()
     {
+        _session.OnDispatch();
+
         // 1-frame
         List<Packet> list = Manager.Packet.Queue.PopAll();
         foreach (Packet packet in list)

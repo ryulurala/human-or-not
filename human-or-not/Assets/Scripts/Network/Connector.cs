@@ -1,14 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NativeWebSocket;
 using UnityEngine;
-using HybridWebSocket;
 
 public class Connector
 {
-    public void Connect(Session session, string url, Action action)
+    public async void Connect(Session session, string url, Action action)
     {
-        WebSocket socket = WebSocketFactory.CreateInstance(url);
+        WebSocket socket = new WebSocket(url);
 
         socket.OnOpen += () =>
         {
@@ -17,6 +17,6 @@ public class Connector
             action.Invoke();
         };
 
-        socket.Connect();
+        await socket.Connect();
     }
 }
