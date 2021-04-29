@@ -1,36 +1,14 @@
-const ws = require("ws");
-const { init, clear, handle } = require("./src/main");
+const crypto = require("crypto");
+const express = require("express");
+const { createServer } = require("http");
+const webSocket = require("./src/socket");
 
-const wss = new ws.Server({ port: 9536 }, () => {
-  console.log("Server Started...");
-});
+const PORT = process.env.PORT || 80;
+const app = express();
+const server = createServer(app);
 
-wss.on("connection", (socket) => {
-  // 연결 성공할 경우
-  if (!init(socket)) {
-    socket.close(1013, "Try Again Later");
-    console.log("Initialization failed!");
-  }
+webSocket(server);
 
-  socket.onclose = () => {
-    // 연결 종료할 경우
-    clear(socket);
-    console.log("Closed client");
-  };
-
-  socket.onerror = (err) => {
-    // 에러날 경우
-    clear(socket, () => socket.close(1011, "Internal Server Error"));
-    console.error(err);
-  };
-
-  socket.onmessage = (message) => {
-    // 패킷 받을 경우
-    if (handle(socket, message.data)) {
-      console.log(`OnMessage: ${message.data}`);
-    } else {
-      clear(socket, () => socket.close(1002, "Bad Request"));
-      console.log(`Bad Request data: ${message.data}`);
-    }
-  };
+server.listen(PORT, () => {
+  console.log("Listening on http://localhost:80");
 });

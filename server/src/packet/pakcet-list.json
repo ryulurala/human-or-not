@@ -1,0 +1,6 @@
+{
+  "C_CreateRoom": 1,
+  "C_EnterRoom": 2,
+  "S_PlayerOrder": 3,
+  "S_BroadcastEnterRoom": 4
+}

@@ -1,5 +1,5 @@
-const { sessionManager } = require("./session");
-const { S_PlayerOrder } = require("./packet"); // temp
+const sessionManager = require("./session");
+const { serverPacket } = require("./packet"); // temp
 
 const SESSION_LIMIT = 9999;
 
@@ -32,10 +32,11 @@ function handle(socket, data) {
 
   // temp---
   const session = sessionManager.find(socket.id);
+  session.send;
   if (json.Protocol === 1) {
-    session.send(new S_PlayerOrder(session.id, 0));
+    session.send(new serverPacket.S_PlayerOrder(session.id, 0));
   } else if (json.Protocol === 2) {
-    session.send(new S_PlayerOrder(session.id, 1));
+    session.send(new serverPacket.S_PlayerOrder(session.id, 1));
   }
   // ---temp
 

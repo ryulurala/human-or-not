@@ -9,6 +9,7 @@
   "author": "ryulurala",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.17.1",
     "ws": "^7.4.5"
   },
   "devDependencies": {

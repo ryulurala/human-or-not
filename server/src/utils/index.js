@@ -1,4 +1,4 @@
-const makeId = (characters, length) => {
+function makeId(characters, length) {
   let result = "";
   for (let i = 0; i < length; i++) {
     const randIdx = Math.floor(Math.random() * characters.length);
@@ -6,7 +6,7 @@ const makeId = (characters, length) => {
   }
 
   return result;
-};
+}
 
 module.exports = {
   makeId,
