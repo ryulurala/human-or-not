@@ -1,13 +1,7 @@
-function makeId(characters, length) {
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    const randIdx = Math.floor(Math.random() * characters.length);
-    result += characters.charAt(randIdx);
-  }
-
-  return result;
-}
+const util = require("./util");
+const { Queue } = require("./queue");
 
 module.exports = {
-  makeId,
+  util,
+  Queue,
 };
