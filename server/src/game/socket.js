@@ -9,6 +9,7 @@ module.exports = (server) => {
     if (!init(socket)) {
       socket.close(1013, "Try Again Later");
       console.log("Initialization failed!");
+      return;
     }
 
     socket.onclose = () => {
