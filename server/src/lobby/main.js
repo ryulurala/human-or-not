@@ -1,16 +1,18 @@
 const sessionManager = require("../session");
-const { Packet } = require("../packet"); // temp
+const { lobbyPacketManager: packetManager } = require("../packet");
 
 const SESSION_LIMIT = 9999;
 
-const init = (socket) => {
+const init = (socket, callback) => {
   if (sessionManager.totalSession > SESSION_LIMIT) {
-    return false;
+    socket.close(1013, "Try Again Later");
+    console.log(`Exceeded maximum session count`);
   } else if (!sessionManager.generate(socket)) {
-    return false;
+    socket.close(1013, "Try Again Later");
+    console.log(`Session generation failed`);
   } else {
+    callback();
     console.log(`Current number of sessions: ${sessionManager.totalSession}`);
-    return true;
   }
 };
 
@@ -23,19 +25,18 @@ const clear = (socket, callback) => {
 };
 
 const handle = (socket, data) => {
-  if (!data.includes("Protocol") || !sessionManager.find(socket.id)) {
+  if (!data.includes("Protocol")) {
     return false;
+  } else {
+    const session = sessionManager.find(socket.id);
+    if (!session) return false;
+
+    // handle packet
+    const json = JSON.parse(data);
+    packetManager.handle(session, json);
+
+    return true;
   }
-
-  const json = JSON.parse(data);
-  console.log(json["Protocol"]);
-
-  /**
-   * @TODO
-   * 로비에 대한 패킷을 핸들링.
-   */
-
-  return true;
 };
 
 module.exports = {
