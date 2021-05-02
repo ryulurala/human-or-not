@@ -15,6 +15,19 @@ public class Util
     // public static bool IsMobile { get; } = true;
 #endif
 
+    static JsonHelper _jsonHelper;
+    public static JsonHelper JsonHelper
+    {
+        get
+        {
+            if (_jsonHelper == null)
+            {
+                _jsonHelper = new JsonHelper();
+            }
+            return _jsonHelper;
+        }
+    }
+
     public static T GetEnumValue<T>(string str) where T : System.Enum
     {
         string[] enums = Enum.GetNames(typeof(T));
