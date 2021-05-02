@@ -13,31 +13,33 @@ class C_CreateRoom extends Packet {
 }
 
 class C_EnterRoom extends Packet {
-  constructor(roomId) {
-    super(PACKET_ID.C_EnterRoom);
+  roomId;
 
-    this.roomId = roomId;
+  constructor() {
+    super(PACKET_ID.C_EnterRoom);
   }
 }
 
 class S_BroadcastEnterRoom extends Packet {
+  playerId;
+
   constructor(playerId) {
     super(PACKET_ID.S_BroadcastEnterRoom);
-
-    this.playerId = playerId;
   }
 }
 
 class S_BroadcastLeaveRoom extends Packet {
-  constructor(playerId) {
-    super(PACKET_ID.S_BroadcastLeaveRoom);
+  playerId;
 
-    this.playerId = playerId;
+  constructor() {
+    super(PACKET_ID.S_BroadcastLeaveRoom);
   }
 }
 
 class S_PlayerList extends Packet {
-  constructor(playerId) {
+  players;
+
+  constructor() {
     super(PACKET_ID.S_PlayerList);
 
     this.players = [];
