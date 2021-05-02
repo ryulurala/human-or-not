@@ -10,7 +10,7 @@ class SessionManager {
     this.#sessions = new Map();
   }
 
-  get sessionCount() {
+  get totalSession() {
     return this.#sessions.size;
   }
 
