@@ -8,16 +8,13 @@ const cluster = require("cluster");
 const express = require("express");
 const { createServer } = require("http");
 
-const lobbySocket = require("./src/lobby");
-const gameSocket = require("./src/game");
-
-const LOBBY_PORT = process.env.PORT || 80;
-const GAME_PORT = process.env.GAME_PORT || 9536;
-
 const app = express();
 const server = createServer(app);
 
 if (cluster.isMaster) {
+  const lobbySocket = require("./src/lobby");
+  const LOBBY_PORT = process.env.PORT || 80;
+
   // 로비 서버
   lobbySocket(server);
   server.listen(LOBBY_PORT, () => {
@@ -31,6 +28,9 @@ if (cluster.isMaster) {
     // });
   });
 } else {
+  const gameSocket = require("./src/game");
+  const GAME_PORT = process.env.GAME_PORT || 9536;
+
   // 게임 서버
   gameSocket(server);
   server.listen(GAME_PORT, () => {
