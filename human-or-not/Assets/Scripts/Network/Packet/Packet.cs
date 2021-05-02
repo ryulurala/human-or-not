@@ -8,8 +8,9 @@ public enum PacketId
     // S: Server's packet, C: Client's packet
     C_CreateRoom = 1,
     C_EnterRoom = 2,
-    S_PlayerOrder = 3,      // temp
-    S_BroadcastEnterRoom = 4,
+    S_BroadcastEnterRoom = 3,
+    S_BroadcastLeaveRoom = 4,
+    S_PlayerList = 5,
 }
 
 public abstract class Packet
@@ -19,18 +20,23 @@ public abstract class Packet
 
 #region Server's packet
 [Serializable]
-public class S_PlayerOrder : Packet
+public class S_BroadcastEnterRoom : Packet
 {
     public ushort playerId;
-    public byte order;
 }
 
 [Serializable]
-public class S_BroadcastEnterRoom : Packet
+public class S_BroadcastLeaveRoom : Packet
 {
-    // List<ushort> playerIds
-    // List<byte> order
+    public ushort playerId;
 }
+
+[Serializable]
+public class S_PlayerList : Packet
+{
+    public ushort[] players;
+}
+
 #endregion
 
 #region Client's packet

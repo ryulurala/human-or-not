@@ -23,10 +23,14 @@ public class PacketManager
         PacketHandler handler = new PacketHandler();
 
         // _makeFunc 등록
-        _makeFunc.Add((ushort)PacketId.S_PlayerOrder, MakePacket<S_PlayerOrder>);
+        _makeFunc.Add((ushort)PacketId.S_BroadcastEnterRoom, MakePacket<S_BroadcastEnterRoom>);
+        _makeFunc.Add((ushort)PacketId.S_BroadcastLeaveRoom, MakePacket<S_BroadcastLeaveRoom>);
+        _makeFunc.Add((ushort)PacketId.S_PlayerList, MakePacket<S_PlayerList>);
 
         // _handler 등록
-        _handler.Add((ushort)PacketId.S_PlayerOrder, handler.S_PlayerOrderHandler);
+        _handler.Add((ushort)PacketId.S_BroadcastEnterRoom, handler.S_BroadcastEnterRoom);
+        _handler.Add((ushort)PacketId.S_BroadcastLeaveRoom, handler.S_BroadcastLeaveRoom);
+        _handler.Add((ushort)PacketId.S_PlayerList, handler.S_PlayerListHandler);
     }
 
     public void OnRecvPacket(Session session, byte[] data)
@@ -42,10 +46,8 @@ public class PacketManager
             // 패킷 조립(MakePacket)
             Packet packet = func.Invoke(session, data);
 
-            // Packet Queue에 push
+            // Packet Queue에 push: Unity는 Main thread가 처리해야 함.
             _queue.Push(packet);
-
-            // HandlePacket(session, packet);
         }
     }
 
@@ -72,7 +74,8 @@ public class PacketManager
     T MakePacket<T>(Session session, byte[] bytes) where T : Packet
     {
         // Deserializing Packet data
-        T packet = JsonUtility.FromJson<T>(Encoding.UTF8.GetString(bytes));
+        string jsonStr = Encoding.UTF8.GetString(bytes);
+        T packet = JsonUtility.FromJson<T>(jsonStr);
 
         return packet;
     }

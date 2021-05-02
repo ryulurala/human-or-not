@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerManager
 {
+    ushort _myPlayerId;
+    HashSet<ushort> _playerIds = new HashSet<ushort>();
+
     PlayerInfo _myPlayer;
     Dictionary<ushort, PlayerInfo> _players = new Dictionary<ushort, PlayerInfo>();
 
@@ -17,7 +20,17 @@ public class PlayerManager
     }
 
     #region Network
-    // public void Add(S_PlayerList packet) { }
+    public void Add(S_PlayerList packet)
+    {
+        ushort[] playerIds = packet.players;
+        int idx = 0;
+        while (idx < playerIds.Length - 1)
+        {
+            _players.Add(playerIds[idx], null);
+            idx++;
+        }
+        _myPlayerId = playerIds[idx];
+    }
 
     // public void Move(S_BroadcaseMove packet) { }
 
