@@ -102,6 +102,19 @@ public class PlayerController : BaseController
         }
     }
 
+    void Move(float speed, Define.State state, Vector3 velocity)
+    {
+        if (velocity == Vector3.zero)
+            return;
+
+        // 방향
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), _angularSpeed * Time.deltaTime);
+
+        // transform.Translate(velocity * speed * Time.deltaTime, Space.World);
+        _characterController.Move(velocity * speed * Time.deltaTime);
+        State = state;
+    }
+
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.layer.Equals(LayerMask.NameToLayer("Ground")))
@@ -192,17 +205,4 @@ public class PlayerController : BaseController
         }
     }
     #endregion
-
-    void Move(float speed, Define.State state, Vector3 velocity)
-    {
-        if (velocity == Vector3.zero)
-            return;
-
-        // 방향
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), _angularSpeed * Time.deltaTime);
-
-        // transform.Translate(velocity * speed * Time.deltaTime, Space.World);
-        _characterController.Move(velocity * speed * Time.deltaTime);
-        State = state;
-    }
 }
