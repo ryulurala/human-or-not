@@ -120,7 +120,7 @@ public class PlayerController : BaseController
         if (hit.gameObject.layer.Equals(LayerMask.NameToLayer("Ground")))
             return;
 
-        if (Manager.Game.GetWorldObjectType(hit.gameObject) == Define.WorldObject.Player && Manager.Player.GetPlayerState(hit.gameObject) == Define.State.Attack)
+        if (Manager.Game.GetWorldObjectType(hit.gameObject) == Define.WorldObject.Player && Manager.Object.GetPlayerState(hit.gameObject) == Define.State.Attack)
         {
             if (State != Define.State.Jump)
                 State = Define.State.Died;
@@ -135,12 +135,12 @@ public class PlayerController : BaseController
     void UpdateAttack()
     {
         if (_hasEndedState == true)
-            State = Define.State.Idle;
+            State = Define.State.Idle;  // 코루틴으로?: 대기 시간 후 idle로 변경
     }
     void UpdateJump()
     {
         if (_hasEndedState == true)
-            State = Define.State.Idle;
+            State = Define.State.Idle;  // 코루틴으로?: 대기 시간 후 idle로 변경
     }
     #endregion
 

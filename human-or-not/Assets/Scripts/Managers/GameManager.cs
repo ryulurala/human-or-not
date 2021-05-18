@@ -5,9 +5,6 @@ using UnityEngine.AI;
 
 public class GameManager
 {
-    public HashSet<BotInfo> Bots = new HashSet<BotInfo>();
-    public HashSet<ObjectInfo> Objects = new HashSet<ObjectInfo>();
-
     public ushort BotCount { get; set; } = 5;
     public ushort PlayerCount { get; set; }
 
@@ -31,7 +28,7 @@ public class GameManager
         GameObject root = new GameObject() { name = "TouchDowns" };
         for (int i = 0; i < count; i++)
         {
-            GameObject go = Spawn("Contents/TouchDown", Define.WorldObject.Unknown, root.transform);
+            GameObject go = CreateObject("Contents/TouchDown", Define.WorldObject.Unknown, root.transform);
             TouchDown touchDown = go.GetOrAddComponent<TouchDown>();
 
             Vector3 resultPos;
@@ -47,7 +44,7 @@ public class GameManager
         string characterName = GetCharacterName(type);
 
         // Spawn player
-        GameObject player = Spawn($"Character/{characterName}/Player", Define.WorldObject.Player);
+        GameObject player = CreateObject($"Character/{characterName}/Player", Define.WorldObject.Player);
 
         Vector3 resultPos;
         if (Manager.Game.RandomPoint(Vector3.zero, 100.0f, out resultPos, routineCount: 1000))
@@ -64,7 +61,7 @@ public class GameManager
         for (int i = 0; i < BotCount; i++)
         {
             // Bot Spawn
-            GameObject bot = Spawn($"Character/{characterName}/Bot", Define.WorldObject.Bot, root.transform);
+            GameObject bot = CreateObject($"Character/{characterName}/Bot", Define.WorldObject.Bot, root.transform);
 
             Vector3 resultPos;
             if (Manager.Game.RandomPoint(Vector3.zero, 100.0f, out resultPos, routineCount: 1000))
@@ -74,7 +71,7 @@ public class GameManager
         return root;
     }
 
-    public GameObject Spawn(string path, Define.WorldObject type = Define.WorldObject.Unknown, Transform parent = null)
+    GameObject CreateObject(string path, Define.WorldObject type = Define.WorldObject.Unknown, Transform parent = null)
     {
         GameObject go = Manager.Resource.Instaniate(path, parent);
 
@@ -82,34 +79,38 @@ public class GameManager
         {
             case Define.WorldObject.Unknown:
                 ObjectInfo objectInfo = go.GetOrAddComponent<ObjectInfo>();
-                Objects.Add(objectInfo);
+                // TODO: _Object와 연결
                 break;
             case Define.WorldObject.Bot:
                 BotInfo botInfo = go.GetOrAddComponent<BotInfo>();
-                Objects.Add(botInfo);
+                // TODO: _Bots와 연결
                 break;
             case Define.WorldObject.Player:
                 PlayerInfo playerInfo = go.GetOrAddComponent<PlayerInfo>();
-                Objects.Add(playerInfo);
+                // TODO: _players와 연결
                 break;
         }
 
         return go;
     }
 
-    public void Despawn(ushort id, GameObject go)
+    public void DestroyObject(GameObject go, ushort id = 0)
     {
-        Define.WorldObject type = GetWorldObjectType(go);
-
-        switch (type)
+        if (id != 0)
         {
-            case Define.WorldObject.Bot:
-                // TODO: _bots에 삭제
-                break;
-            case Define.WorldObject.Player:
-                // TODO: _players에 삭제
-                break;
+            Define.WorldObject type = GetWorldObjectType(go);
+            switch (type)
+            {
+                case Define.WorldObject.Bot:
+                    // TODO: _bots에 삭제
+                    break;
+                case Define.WorldObject.Player:
+                    // TODO: _players에 삭제
+                    break;
+            }
         }
+
+        Manager.Resource.Destroy(go);
     }
 
     public bool RandomPoint(Vector3 center, float range, out Vector3 result, int routineCount = 30)

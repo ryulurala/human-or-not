@@ -19,7 +19,7 @@ public class PacketHandler
         S_PlayerList body = packet as S_PlayerList;
 
         // Player 추가
-        Manager.Player.Add(body);
+        Manager.Object.Add(body);
 
         // UI
         Manager.UI.CloseAllPopupUI();

@@ -12,14 +12,14 @@ public class Manager : MonoBehaviour
     GameManager _game = new GameManager();
     NetworkManager _network = new NetworkManager();
     PacketManager _packet = new PacketManager();
-    PlayerManager _player = new PlayerManager();
+    ObjectManager _object = new ObjectManager();
     PoolManager _pool = new PoolManager();
 
     public static DataManager Data { get { return Instance._data; } }
     public static GameManager Game { get { return Instance._game; } }
     public static NetworkManager Network { get { return Instance._network; } }
     public static PacketManager Packet { get { return Instance._packet; } }
-    public static PlayerManager Player { get { return Instance._player; } }
+    public static ObjectManager Object { get { return Instance._object; } }
     public static PoolManager Pool { get { return Instance._pool; } }
     #endregion
 

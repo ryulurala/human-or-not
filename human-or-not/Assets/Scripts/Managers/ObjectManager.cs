@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager
+public class ObjectManager
 {
     ushort _myPlayerId;
     HashSet<ushort> _playerIds = new HashSet<ushort>();
@@ -30,6 +30,11 @@ public class PlayerManager
             idx++;
         }
         _myPlayerId = playerIds[idx];
+    }
+
+    public void Remove()
+    {
+
     }
 
     // public void Move(S_BroadcaseMove packet) { }
