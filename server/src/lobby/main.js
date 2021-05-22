@@ -1,5 +1,5 @@
 const sessionManager = require("../session");
-const { lobbyPacketManager: packetManager } = require("../packet");
+const { lobbyPacketManager: packetManager } = require("./packet");
 
 const SESSION_LIMIT = 9999;
 

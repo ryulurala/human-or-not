@@ -41,20 +41,7 @@ class Session {
     this.#socket = null;
   }
 
-  send(packets) {
-    if (Array.isArray(packets)) {
-      // array
-      for (const packet of packets) {
-        this.#send(packet);
-      }
-    } else {
-      // single
-      const packet = packets;
-      this.#send(packet);
-    }
-  }
-
-  #send(packet) {
+  send(packet) {
     const str = JSON.stringify(packet);
     this.#socket.send(str);
     console.log(`On Send packet: ${str}`);

@@ -1,0 +1,8 @@
+{
+  "C_CreateRoom": 1,
+  "C_EnterRoom": 2,
+  "S_EnterRoom": 3,
+  "S_LeaveRoom": 4,
+  "S_Spawn": 5,
+  "S_Despawn": 6
+}

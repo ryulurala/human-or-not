@@ -20,36 +20,42 @@ class C_EnterRoom extends Packet {
   }
 }
 
-class S_BroadcastEnterRoom extends Packet {
-  playerId;
+class S_EnterRoom extends Packet {
+  user;
 
-  constructor(playerId) {
-    super(PACKET_ID.S_BroadcastEnterRoom);
+  constructor() {
+    super(PACKET_ID.S_EnterRoom);
   }
 }
 
-class S_BroadcastLeaveRoom extends Packet {
-  playerId;
-
+class S_LeaveRoom extends Packet {
   constructor() {
-    super(PACKET_ID.S_BroadcastLeaveRoom);
+    super(PACKET_ID.S_LeaveRoom);
   }
 }
 
-class S_PlayerList extends Packet {
-  players;
+class S_Spawn extends Packet {
+  users = [];
 
   constructor() {
-    super(PACKET_ID.S_PlayerList);
+    super(PACKET_ID.S_Spawn);
+  }
+}
 
-    this.players = [];
+class S_Despawn extends Packet {
+  userIds = [];
+
+  constructor() {
+    super(PACKET_ID.S_Despawn);
   }
 }
 
 module.exports = {
+  ID: PACKET_ID,
   C_CreateRoom,
   C_EnterRoom,
-  S_BroadcastEnterRoom,
-  S_BroadcastLeaveRoom,
-  S_PlayerList,
+  S_EnterRoom,
+  S_LeaveRoom,
+  S_Spawn,
+  S_Despawn,
 };

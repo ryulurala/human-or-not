@@ -1,7 +1,0 @@
-{
-  "C_CreateRoom": 1,
-  "C_EnterRoom": 2,
-  "S_BroadcastEnterRoom": 3,
-  "S_BroadcastLeaveRoom": 4,
-  "S_PlayerList": 5
-}

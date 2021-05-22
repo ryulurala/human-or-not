@@ -1,4 +1,4 @@
-const { makeId } = require("../utils");
+const { makeId } = require("../../utils");
 const Room = require("./room");
 
 class RoomManager {
@@ -9,9 +9,10 @@ class RoomManager {
   createRoom(session) {
     for (let i = 0; i < 1000; i++) {
       const roomId = makeId("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 5);
+
       if (!this.rooms.has(roomId)) {
         const room = new Room(roomId);
-        room.addPlayer(session);
+        room.addUser(session);
         this.rooms.set(roomId, room);
         return true;
       }
