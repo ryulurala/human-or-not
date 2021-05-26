@@ -59,7 +59,7 @@ public class GameSceneUI : SceneUI
     {
         _remainSeconds = 10f;
         GetText((int)Texts.Time).text = SecondsToTimerStr(_remainSeconds);
-        StartCoroutine(FlowTime());
+        // StartCoroutine(FlowTime());
     }
 
     IEnumerator FlowTime()
