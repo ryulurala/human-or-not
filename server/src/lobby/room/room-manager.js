@@ -1,35 +1,38 @@
-const { makeId } = require("../../utils");
 const Room = require("./room");
+const { util } = require("../../utils");
 
 class RoomManager {
   constructor() {
     this.rooms = new Map();
   }
 
-  createRoom(session) {
+  createRoom() {
+    // 1000번만 시도
     for (let i = 0; i < 1000; i++) {
-      const roomId = makeId("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 5);
+      const roomId = util.makeId("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 5);
 
       if (!this.rooms.has(roomId)) {
         const room = new Room(roomId);
-        room.addUser(session);
         this.rooms.set(roomId, room);
-        return true;
+
+        return room;
       }
     }
 
-    return false;
+    return null;
   }
 
   removeRoom(roomId) {
-    if (this.rooms.has(roomId)) {
-      const room = this.rooms.get(roomId);
-      room.clear();
-      this.rooms.delete(roomId);
-      return true;
-    }
+    if (!this.rooms.has(roomId)) return;
 
-    return false;
+    this.rooms.delete(roomId);
+  }
+
+  findRoom(roomId) {
+    const room = this.rooms.get(roomId);
+    if (!room) return null;
+
+    return room;
   }
 }
 

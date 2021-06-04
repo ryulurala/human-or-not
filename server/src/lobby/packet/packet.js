@@ -7,12 +7,15 @@ class Packet {
 }
 
 class C_CreateRoom extends Packet {
+  userName;
+
   constructor() {
     super(PACKET_ID.C_CreateRoom);
   }
 }
 
 class C_EnterRoom extends Packet {
+  userName;
   roomId;
 
   constructor() {
@@ -20,17 +23,30 @@ class C_EnterRoom extends Packet {
   }
 }
 
-class S_EnterRoom extends Packet {
-  user;
+class C_LeaveRoom extends Packet {
+  userId;
 
-  constructor() {
-    super(PACKET_ID.S_EnterRoom);
+  constructor(id) {
+    super(PACKET_ID.C_LeaveRoom);
+    this.userId = id;
   }
 }
 
-class S_LeaveRoom extends Packet {
+class S_CreateRoom extends Packet {
+  user;
+  roomId;
+
   constructor() {
-    super(PACKET_ID.S_LeaveRoom);
+    super(PACKET_ID.S_CreateRoom);
+  }
+}
+
+class S_EnterRoom extends Packet {
+  user;
+  roomId;
+
+  constructor() {
+    super(PACKET_ID.S_EnterRoom);
   }
 }
 
@@ -54,8 +70,9 @@ module.exports = {
   ID: PACKET_ID,
   C_CreateRoom,
   C_EnterRoom,
+  C_LeaveRoom,
+  S_CreateRoom,
   S_EnterRoom,
-  S_LeaveRoom,
   S_Spawn,
   S_Despawn,
 };

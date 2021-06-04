@@ -1,5 +1,5 @@
 const sessionManager = require("../session");
-const { lobbyPacketManager: packetManager } = require("./packet");
+const packetManager = require("./packet");
 
 const SESSION_LIMIT = 9999;
 
@@ -17,10 +17,9 @@ const init = (socket, callback) => {
 };
 
 const clear = (socket, callback) => {
-  sessionManager.destroy(socket, callback);
-  if (callback) {
-    callback();
-  }
+  sessionManager.destroy(socket);
+  if (callback) callback();
+
   console.log(`Current number of sessions: ${sessionManager.totalSession}`);
 };
 
@@ -28,7 +27,7 @@ const handle = (socket, data) => {
   if (!data.includes("Protocol")) {
     return false;
   } else {
-    const session = sessionManager.find(socket.id);
+    const session = sessionManager.find(socket.id); // socket보다 socket.id로 찾는 것이 더 효율적?
     if (!session) return false;
 
     // handle packet

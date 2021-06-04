@@ -15,12 +15,12 @@ const initLobbyPacket = () => {
     PacketHandler.C_EnterRoomHandler
   );
 
+  lobbyPacketManager.Register(
+    Packet.ID.C_LeaveRoom,
+    PacketHandler.C_LeaveRoomHandler
+  );
+
   return lobbyPacketManager;
 };
 
-const lobbyPacketManager = initLobbyPacket();
-
-module.exports = {
-  lobbyPacketManager,
-  Packet,
-};
+module.exports = initLobbyPacket();

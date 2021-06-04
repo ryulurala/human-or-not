@@ -18,6 +18,7 @@ class SessionManager {
     const sessionId = ++this.#sessionId; // 무한 서버 [X]
     const session = new Session(sessionId, socket);
     this.#sessions.set(sessionId, session);
+
     session.onConnected();
 
     return session;
@@ -27,6 +28,7 @@ class SessionManager {
     const session = this.#sessions.get(socket.id);
     if (session) {
       this.#sessions.delete(socket.id);
+
       session.onDisconnected();
     }
   }

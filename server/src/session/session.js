@@ -2,12 +2,10 @@ class Session {
   // private
   #id;
   #socket;
-  #room;
 
   constructor(id, socket) {
     this.#id = id;
     this.#socket = socket;
-    this.#room = null;
 
     socket.id = id; // need to send on event
   }
@@ -16,26 +14,14 @@ class Session {
     return this.#id;
   }
 
-  get room() {
-    return this.#room;
-  }
-
-  set room(room) {
-    if (room) {
-      this.#room = room;
-    }
-  }
-
   onConnected() {
     console.log(`Connected session id: ${this.#id}`);
+
+    // TODO: DB에서 User 정보 가져오기
   }
 
   onDisconnected() {
-    if (this.#room) {
-      // room에서 나가기
-      this.#room.removePlayer(this);
-      this.#room = null;
-    }
+    console.log(`Disconnected session id: ${this.#id}`);
 
     this.#id = null;
     this.#socket = null;
