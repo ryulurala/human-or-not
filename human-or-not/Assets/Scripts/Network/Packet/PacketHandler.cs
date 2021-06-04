@@ -4,28 +4,32 @@ using UnityEngine;
 
 public class PacketHandler
 {
-    public void S_BroadcastEnterRoom(Session session, Packet packet)
+
+    public void S_CreateRoom(Session session, Packet packet)
     {
+        S_CreateRoom body = packet as S_CreateRoom;
 
-    }
-
-    public void S_BroadcastLeaveRoom(Session session, Packet packet)
-    {
-
-    }
-
-    public void S_PlayerListHandler(Session session, Packet packet)
-    {
-        S_PlayerList body = packet as S_PlayerList;
-
-        // Player 추가
-        Manager.Object.Add(body);
+        // TODO: 본인 Player 등록
 
         // UI
         Manager.UI.CloseAllPopupUI();
-        if (body.players.Length == 1)
-            Manager.UI.ShowPopupUI<HostSettingsView>();     // I'm host
-        else
-            Manager.UI.ShowPopupUI<ClientSettingsView>();   // I'm client
+        Manager.UI.ShowPopupUI<HostSettingsView>();
+    }
+
+    public void S_EnterRoom(Session session, Packet packet)
+    {
+        S_EnterRoom body = packet as S_EnterRoom;
+
+        // TODO: 본인 Player 등록
+
+        // UI
+        Manager.UI.CloseAllPopupUI();
+        Manager.UI.ShowPopupUI<ClientSettingsView>();
+    }
+
+    public void S_Spawn(Session session, Packet packet)
+    {
+        // TODO: 다른 Player 등록
+
     }
 }

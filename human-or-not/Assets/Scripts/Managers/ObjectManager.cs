@@ -20,16 +20,16 @@ public class ObjectManager
     }
 
     #region Network
-    public void Add(S_PlayerList packet)
+    public void Add()
     {
-        ushort[] playerIds = packet.players;
-        int idx = 0;
-        while (idx < playerIds.Length - 1)
-        {
-            _players.Add(playerIds[idx], null);
-            idx++;
-        }
-        _myPlayerId = playerIds[idx];
+        // ushort[] playerIds = packet.players;
+        // int idx = 0;
+        // while (idx < playerIds.Length - 1)
+        // {
+        //     _players.Add(playerIds[idx], null);
+        //     idx++;
+        // }
+        // _myPlayerId = playerIds[idx];
     }
 
     public void Remove()

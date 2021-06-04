@@ -23,14 +23,12 @@ public class PacketManager
         PacketHandler handler = new PacketHandler();
 
         // _makeFunc 등록
-        _makeFunc.Add((ushort)PacketId.S_BroadcastEnterRoom, MakePacket<S_BroadcastEnterRoom>);
-        _makeFunc.Add((ushort)PacketId.S_BroadcastLeaveRoom, MakePacket<S_BroadcastLeaveRoom>);
-        _makeFunc.Add((ushort)PacketId.S_PlayerList, MakePacket<S_PlayerList>);
+        _makeFunc.Add((ushort)PacketId.S_CreateRoom, MakePacket<S_CreateRoom>);
+        _makeFunc.Add((ushort)PacketId.S_EnterRoom, MakePacket<S_EnterRoom>);
 
         // _handler 등록
-        _handler.Add((ushort)PacketId.S_BroadcastEnterRoom, handler.S_BroadcastEnterRoom);
-        _handler.Add((ushort)PacketId.S_BroadcastLeaveRoom, handler.S_BroadcastLeaveRoom);
-        _handler.Add((ushort)PacketId.S_PlayerList, handler.S_PlayerListHandler);
+        _handler.Add((ushort)PacketId.S_CreateRoom, handler.S_CreateRoom);
+        _handler.Add((ushort)PacketId.S_EnterRoom, handler.S_EnterRoom);
     }
 
     public void OnRecvPacket(Session session, byte[] data)

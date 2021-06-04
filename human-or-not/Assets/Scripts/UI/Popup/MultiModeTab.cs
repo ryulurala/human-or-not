@@ -83,7 +83,7 @@ public class MultiModeTab : PopupUI
                 Manager.Network.Open(() =>
                 {
                     // Send packet callback
-                    Manager.Network.Send<C_EnterRoom>(new C_EnterRoom(inputRoomKey.text));
+                    Manager.Network.Send<C_EnterRoom>(new C_EnterRoom() { roomId = inputRoomKey.text });
                 });
             }
             else

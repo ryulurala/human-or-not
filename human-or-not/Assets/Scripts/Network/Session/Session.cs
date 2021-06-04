@@ -77,7 +77,6 @@ public abstract class Session
 
         _socket.OnMessage += (byte[] data) =>
         {
-            Debug.Log(System.Text.Encoding.UTF8.GetString(data));
             OnRecv(data);
         };
 
