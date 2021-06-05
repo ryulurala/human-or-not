@@ -8,12 +8,10 @@ public enum PacketId
     // S: Server's packet, C: Client's packet
     C_CreateRoom = 1,
     C_EnterRoom = 2,
-    C_LeaveRoom = 3,
-    S_CreateRoom = 4,
-    S_EnterRoom = 5,
-    S_LeaveRoom = 6,
-    S_Spawn = 7,
-    S_Despawn = 8,
+    S_CreateRoom = 11,
+    S_EnterRoom = 12,
+    S_LeaveRoom = 13,
+    S_UserList = 14,
 }
 
 public abstract class Packet
@@ -37,7 +35,13 @@ public class S_EnterRoom : Packet
 }
 
 [Serializable]
-public class S_Spawn : Packet
+public class S_LeaveRoom : Packet
+{
+    public PlayerInfo user;
+}
+
+[Serializable]
+public class S_UserList : Packet
 {
     public PlayerInfo[] users;
 }
@@ -57,7 +61,7 @@ public class C_CreateRoom : Packet
 [Serializable]
 public class C_EnterRoom : Packet
 {
-    public string playerName;
+    public string userName;
     public string roomId;
 
     public C_EnterRoom()
