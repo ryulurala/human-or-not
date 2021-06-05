@@ -1,5 +1,7 @@
 const sessionManager = require("../session");
 const packetManager = require("./packet");
+const roomManager = require("./room");
+const userManager = require("./user");
 
 const SESSION_LIMIT = 9999;
 
@@ -17,7 +19,21 @@ const init = (socket, callback) => {
 };
 
 const clear = (socket, callback) => {
-  sessionManager.destroy(socket);
+  // 나중에 고쳐야할 코드 -> 구조 변경
+  sessionManager.destroy(socket, (session) => {
+    const user = userManager.findUser(session.id);
+    if (user) {
+      // room 나가기
+      if (user.room) {
+        user.room.removeUser(user.id);
+        if (user.room.userCount === 0) roomManager.removeRoom(user.room.id);
+      }
+
+      // user 삭제
+      userManager.removeUser(session.id);
+    }
+  });
+
   if (callback) callback();
 
   console.log(`Current number of sessions: ${sessionManager.totalSession}`);

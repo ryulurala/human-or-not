@@ -24,9 +24,11 @@ class SessionManager {
     return session;
   }
 
-  destroy(socket) {
+  destroy(socket, callback) {
     const session = this.#sessions.get(socket.id);
     if (session) {
+      if (callback) callback(session);
+
       this.#sessions.delete(socket.id);
 
       session.onDisconnected();

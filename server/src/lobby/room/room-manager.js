@@ -2,8 +2,15 @@ const Room = require("./room");
 const { util } = require("../../utils");
 
 class RoomManager {
+  // private
+  #rooms;
+
   constructor() {
-    this.rooms = new Map();
+    this.#rooms = new Map();
+  }
+
+  get totalCount() {
+    return this.#rooms.size;
   }
 
   createRoom() {
@@ -11,9 +18,9 @@ class RoomManager {
     for (let i = 0; i < 1000; i++) {
       const roomId = util.makeId("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 5);
 
-      if (!this.rooms.has(roomId)) {
+      if (!this.#rooms.has(roomId)) {
         const room = new Room(roomId);
-        this.rooms.set(roomId, room);
+        this.#rooms.set(roomId, room);
 
         return room;
       }
@@ -23,13 +30,13 @@ class RoomManager {
   }
 
   removeRoom(roomId) {
-    if (!this.rooms.has(roomId)) return;
+    if (!this.#rooms.has(roomId)) return;
 
-    this.rooms.delete(roomId);
+    this.#rooms.delete(roomId);
   }
 
   findRoom(roomId) {
-    const room = this.rooms.get(roomId);
+    const room = this.#rooms.get(roomId);
     if (!room) return null;
 
     return room;

@@ -15,11 +15,6 @@ const initLobbyPacket = () => {
     PacketHandler.C_EnterRoomHandler
   );
 
-  lobbyPacketManager.Register(
-    Packet.ID.C_LeaveRoom,
-    PacketHandler.C_LeaveRoomHandler
-  );
-
   return lobbyPacketManager;
 };
 

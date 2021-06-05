@@ -1,10 +1,35 @@
 class User {
-  session;
-  info;
-  room;
+  #session;
+  #room;
+  #info;
 
-  constructor(id) {
-    this.info = { id: id };
+  constructor(session, id) {
+    this.#session = session;
+    this.#info = { id: id, name: null };
+  }
+
+  get session() {
+    return this.#session;
+  }
+
+  get room() {
+    return this.#room;
+  }
+
+  set room(value) {
+    if (value) this.#room = value;
+  }
+
+  get id() {
+    return this.#info.id;
+  }
+
+  get name() {
+    return this.#info.name;
+  }
+
+  set name(value) {
+    this.#info.name = value;
   }
 }
 
