@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MultiModeTab : PopupUI
+public class PlayClientTab : PopupUI
 {
     enum Buttons
     {

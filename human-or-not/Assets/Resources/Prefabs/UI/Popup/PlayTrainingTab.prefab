@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Single Mode
+  m_Text: Training Mode
 --- !u!1 &172082815884060036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1786,7 +1786,7 @@ GameObject:
   - component: {fileID: 5790923500785115786}
   - component: {fileID: 5790923500785115787}
   m_Layer: 5
-  m_Name: SingleModeTab
+  m_Name: PlayTrainingTab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

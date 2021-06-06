@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1119168155038477311}
   - component: {fileID: 4827010224995813361}
   m_Layer: 5
-  m_Name: Single_Mode
+  m_Name: ClientMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 2996586344288963075}
   - component: {fileID: 1064336391093360357}
   m_Layer: 5
-  m_Name: How_To_Play
+  m_Name: TrainingMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -405,7 +405,7 @@ GameObject:
   - component: {fileID: 3111775510369815262}
   - component: {fileID: 3111775510369815263}
   m_Layer: 5
-  m_Name: Multi_Mode
+  m_Name: HostMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

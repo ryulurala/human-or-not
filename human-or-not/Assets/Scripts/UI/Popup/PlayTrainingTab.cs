@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SingleModeTab : PopupUI
+public class PlayTrainingTab : PopupUI
 {
     enum Buttons
     {
@@ -119,10 +119,10 @@ public class SingleModeTab : PopupUI
 
             if (idx == 0)
                 leftBtn.gameObject.SetActive(false);
+
             if (rightBtn.gameObject.activeSelf == false)
                 rightBtn.gameObject.SetActive(true);
         });
-
 
         BindEvent(rightBtn.gameObject, (PointerEventData) =>
         {
@@ -131,6 +131,7 @@ public class SingleModeTab : PopupUI
 
             if (idx == maps.Length - 1)
                 rightBtn.gameObject.SetActive(false);
+
             if (leftBtn.gameObject.activeSelf == false)
                 leftBtn.gameObject.SetActive(true);
         });
