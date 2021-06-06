@@ -9,6 +9,7 @@ public class PlayHostTab : PopupUI
     enum Buttons
     {
         CreateRoom,
+        InputClear,
         PrevA_Z,
         CurrA_Z,
         NextA_Z,
@@ -39,16 +40,14 @@ public class PlayHostTab : PopupUI
         InitSelection();
     }
 
-    void InitAccessSelection()
-    {
-    }
-
     void InitSelection()
     {
-        // Access
+        // Input name
         InputField inputName = GetInputField((int)InputFields.InputName);
 
-        BindEvent(inputName.gameObject, (PointerEventData) =>
+        Button clearBtn = GetButton((int)Buttons.InputClear);
+
+        BindEvent(clearBtn.gameObject, (PointerEventData) =>
         {
             // Clear
             inputName.text = "";
