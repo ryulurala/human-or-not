@@ -13,7 +13,7 @@ public class PacketHandler
 
         // UI
         Manager.UI.CloseAllPopupUI();
-        Manager.UI.ShowPopupUI<HostSettingsView>();
+        Manager.UI.ShowPopupUI<OnlineSettingsView>();
     }
 
     public void S_EnterRoom(Session session, Packet packet)
@@ -24,7 +24,7 @@ public class PacketHandler
 
         // UI
         Manager.UI.CloseAllPopupUI();
-        Manager.UI.ShowPopupUI<ClientSettingsView>();
+        Manager.UI.ShowPopupUI<OnlineSettingsView>();
     }
 
     public void S_Spawn(Session session, Packet packet)
