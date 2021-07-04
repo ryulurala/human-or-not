@@ -12,7 +12,6 @@ const C_CreateRoomHandler = (session, packet) => {
     roomManager.removeRoom(room.id);
     return;
   }
-
   user.name = packet.userName;
 
   // room에 추가
@@ -27,7 +26,6 @@ const C_EnterRoomHandler = (session, packet) => {
   // user 만들기
   const user = userManager.createUser(session);
   if (!user) return;
-
   user.name = packet.userName;
 
   // room에 추가

@@ -37,6 +37,7 @@ class Room {
         // 본인에게 정보 전송
         const enterPacket = new S_EnterRoom();
         enterPacket.user = newUserInfo;
+        enterPacket.roomId = this.#id;
 
         // Send
         newUser.session.send(enterPacket);
@@ -44,7 +45,7 @@ class Room {
         const userListPacket = new S_UserList();
         for (const user of this.#users) {
           if (user !== newUser) {
-            userListPacket.users.push(newUserInfo);
+            userListPacket.users.push({ id: user.id, name: user.name });
           }
         }
 

@@ -19,8 +19,8 @@ const init = (socket, callback) => {
 };
 
 const clear = (socket, callback) => {
-  // 나중에 고쳐야할 코드 -> 구조 변경
   sessionManager.destroy(socket, (session) => {
+    // 나중에 고쳐야할 코드 -> 구조 변경
     const user = userManager.findUser(session.id);
     if (user) {
       // room 나가기
