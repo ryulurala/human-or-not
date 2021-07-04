@@ -19,7 +19,8 @@ public class OnlineSettingsView : PopupUI
 
     enum Texts
     {
-        RoomID,
+        Room_Id,
+        My_Name,
         Map_Name,
         Bot_Count,
     }
@@ -62,8 +63,11 @@ public class OnlineSettingsView : PopupUI
 
     void InitSettings()
     {
-        Text roomId = GetText((int)Texts.RoomID);
+        Text roomId = GetText((int)Texts.Room_Id);
         roomId.text = Manager.Game.RoomId;
+
+        Text myName = GetText((int)Texts.My_Name);
+        myName.text = Manager.Player.MyPlayer.PlayerName;
     }
 
     void InitMapSelection()
