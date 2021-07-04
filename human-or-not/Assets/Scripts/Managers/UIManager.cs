@@ -9,6 +9,8 @@ public class UIManager
     Stack<PopupUI> _popupStack = new Stack<PopupUI>();
     SceneUI _sceneUI = null;
 
+    public PopupUI CurrentPopupUI { get => _popupStack.Peek(); }
+
     public GameObject Root
     {
         get

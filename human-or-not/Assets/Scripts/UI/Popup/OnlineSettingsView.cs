@@ -20,9 +20,14 @@ public class OnlineSettingsView : PopupUI
     enum Texts
     {
         Room_Id,
-        My_Name,
         Map_Name,
         Bot_Count,
+        My_Name,
+        User1_Name,
+        User2_Name,
+        User3_Name,
+        User4_Name,
+        User5_Name,
     }
 
     enum GameObjects
@@ -31,6 +36,24 @@ public class OnlineSettingsView : PopupUI
         Character,
         Bots,
     }
+
+    // user1~5 Name
+    Text[] userNames = new Text[5];
+    public void UpdateUser(string[] names)
+    {
+        Debug.Log("UpdateUser!");
+
+        int i = 0;
+        foreach (string userName in names)
+        {
+            userNames[i].text = userName;
+            i++;
+        }
+    }
+
+    // map name, image
+
+    // character image
 
     protected override void OnStart()
     {
@@ -68,11 +91,30 @@ public class OnlineSettingsView : PopupUI
 
         Text myName = GetText((int)Texts.My_Name);
         myName.text = Manager.Player.MyPlayer.PlayerName;
+
+        Text user1Name = GetText((int)Texts.User1_Name);
+        user1Name.text = "";
+        userNames[0] = user1Name;
+
+        Text user2Name = GetText((int)Texts.User2_Name);
+        user2Name.text = "";
+        userNames[1] = user2Name;
+
+        Text user3Name = GetText((int)Texts.User3_Name);
+        user3Name.text = "";
+        userNames[2] = user3Name;
+
+        Text user4Name = GetText((int)Texts.User4_Name);
+        user4Name.text = "";
+        userNames[3] = user4Name;
+
+        Text user5Name = GetText((int)Texts.User5_Name);
+        user5Name.text = "";
+        userNames[4] = user5Name;
     }
 
     void InitMapSelection()
     {
-
         Text mapName = GetText((int)Texts.Map_Name);
         mapName.text = "SSU";       // temp
 

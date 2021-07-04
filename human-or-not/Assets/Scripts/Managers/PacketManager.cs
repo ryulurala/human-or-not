@@ -9,6 +9,7 @@ public class PacketManager
 {
     Dictionary<ushort, Func<Session, byte[], Packet>> _makeFunc = new Dictionary<ushort, Func<Session, byte[], Packet>>();
     Dictionary<ushort, Action<Session, Packet>> _handler = new Dictionary<ushort, Action<Session, Packet>>();
+
     PacketQueue _queue = new PacketQueue();
 
     public PacketQueue Queue { get => _queue; }
@@ -20,15 +21,15 @@ public class PacketManager
 
     public void Register()
     {
-        PacketHandler handler = new PacketHandler();
-
         // _makeFunc 등록
         _makeFunc.Add((ushort)PacketId.S_CreateRoom, MakePacket<S_CreateRoom>);
         _makeFunc.Add((ushort)PacketId.S_EnterRoom, MakePacket<S_EnterRoom>);
+        _makeFunc.Add((ushort)PacketId.S_UserList, MakePacket<S_UserList>);
 
         // _handler 등록
-        _handler.Add((ushort)PacketId.S_CreateRoom, handler.S_CreateRoom);
-        _handler.Add((ushort)PacketId.S_EnterRoom, handler.S_EnterRoom);
+        _handler.Add((ushort)PacketId.S_CreateRoom, PacketHandler.S_CreateRoom);
+        _handler.Add((ushort)PacketId.S_EnterRoom, PacketHandler.S_EnterRoom);
+        _handler.Add((ushort)PacketId.S_UserList, PacketHandler.S_UserList);
     }
 
     public void OnRecvPacket(Session session, byte[] data)

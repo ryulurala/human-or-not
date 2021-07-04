@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerManager
 {
     Dictionary<string, PlayerInfo> _players = new Dictionary<string, PlayerInfo>();
-    public PlayerInfo MyPlayer { get; set; }
+    public PlayerInfo MyPlayer { get; private set; }
 
     public Define.State GetPlayerState(GameObject go)
     {
@@ -14,6 +14,18 @@ public class PlayerManager
             return Define.State.Unknown;
 
         return bc.State;
+    }
+
+    public string[] GetOtherPlayerNames()
+    {
+        List<string> names = new List<string>();
+        foreach (string playerId in _players.Keys)
+        {
+            if (playerId != MyPlayer.PlayerId)
+                names.Add(_players[playerId].PlayerName);
+        }
+
+        return names.ToArray();
     }
 
     #region Network
