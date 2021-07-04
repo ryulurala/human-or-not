@@ -11,6 +11,19 @@ public class OnlineSettingsView : PopupUI
         Close,
     }
 
+    enum Images
+    {
+        Map_Image,
+        Character_Image,
+    }
+
+    enum Texts
+    {
+        RoomID,
+        Map_Name,
+        Bot_Count,
+    }
+
     enum GameObjects
     {
         Map,
@@ -18,15 +31,18 @@ public class OnlineSettingsView : PopupUI
         Bots,
     }
 
-
     protected override void OnStart()
     {
         base.OnStart();
 
         Bind<Button>(typeof(Buttons));
+        Bind<Image>(typeof(Images));
+        Bind<Text>(typeof(Texts));
         Bind<GameObject>(typeof(GameObjects));
 
         InitTabs();
+        InitSettings();
+
         InitMapSelection();
         InitCharacterSelection();
         InitBotsSelection();
@@ -44,8 +60,22 @@ public class OnlineSettingsView : PopupUI
         });
     }
 
+    void InitSettings()
+    {
+        Text roomId = GetText((int)Texts.RoomID);
+        roomId.text = Manager.Game.RoomId;
+    }
+
     void InitMapSelection()
     {
+
+        Text mapName = GetText((int)Texts.Map_Name);
+        mapName.text = "SSU";       // temp
+
+        Image mapImange = GetImage((int)Images.Map_Image);
+
+
+        // Host일 때
         GameObject map = GetObject((int)GameObjects.Map);
 
         BindEvent(map.gameObject, (PointerEventData) =>
@@ -58,6 +88,7 @@ public class OnlineSettingsView : PopupUI
     {
         GameObject character = GetObject((int)GameObjects.Character);
 
+        // Host일 때
         BindEvent(character.gameObject, (PointerEventData) =>
         {
             Debug.Log("Character Click!!");
@@ -68,6 +99,7 @@ public class OnlineSettingsView : PopupUI
     {
         GameObject bots = GetObject((int)GameObjects.Bots);
 
+        // Host일 때
         BindEvent(bots.gameObject, (PointerEventData) =>
         {
             Debug.Log("Bot Count Click!!");

@@ -43,7 +43,7 @@ public class BotController : BaseController
     void OnTriggerStay(Collider other)
     {
         // Die
-        if (Manager.Game.GetWorldObjectType(other.gameObject) == Define.WorldObject.Player && Manager.Object.GetPlayerState(other.gameObject) == Define.State.Attack)
+        if (Manager.Game.GetWorldObjectType(other.gameObject) == Define.WorldObject.Player && Manager.Player.GetPlayerState(other.gameObject) == Define.State.Attack)
             State = Define.State.Died;
     }
 

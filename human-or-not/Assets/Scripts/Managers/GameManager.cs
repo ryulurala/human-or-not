@@ -5,8 +5,9 @@ using UnityEngine.AI;
 
 public class GameManager
 {
+    public string RoomId { get; set; }
+
     public ushort BotCount { get; set; } = 5;
-    public ushort PlayerCount { get; set; }
 
     public void Init()
     {
@@ -78,15 +79,15 @@ public class GameManager
         switch (type)
         {
             case Define.WorldObject.Unknown:
-                ObjectInfo objectInfo = go.GetOrAddComponent<ObjectInfo>();
+                // ObjectInfo objectInfo = go.GetOrAddComponent<ObjectInfo>();
                 // TODO: _Object와 연결
                 break;
             case Define.WorldObject.Bot:
-                BotInfo botInfo = go.GetOrAddComponent<BotInfo>();
+                // BotInfo botInfo = go.GetOrAddComponent<BotInfo>();
                 // TODO: _Bots와 연결
                 break;
             case Define.WorldObject.Player:
-                PlayerInfo playerInfo = go.GetOrAddComponent<PlayerInfo>();
+                // PlayerInfo playerInfo = go.GetOrAddComponent<PlayerInfo>();
                 // TODO: _players와 연결
                 break;
         }

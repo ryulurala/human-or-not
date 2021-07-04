@@ -2,13 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectManager
+public class PlayerManager
 {
-    ushort _myPlayerId;
-    HashSet<ushort> _playerIds = new HashSet<ushort>();
-
-    PlayerInfo _myPlayer;
-    Dictionary<ushort, PlayerInfo> _players = new Dictionary<ushort, PlayerInfo>();
+    Dictionary<string, PlayerInfo> _players = new Dictionary<string, PlayerInfo>();
+    public PlayerInfo MyPlayer { get; set; }
 
     public Define.State GetPlayerState(GameObject go)
     {
@@ -20,21 +17,27 @@ public class ObjectManager
     }
 
     #region Network
-    public void Add()
+
+    public void Add(PlayerInfo info, bool myPlayer = false)
     {
-        // ushort[] playerIds = packet.players;
-        // int idx = 0;
-        // while (idx < playerIds.Length - 1)
-        // {
-        //     _players.Add(playerIds[idx], null);
-        //     idx++;
-        // }
-        // _myPlayerId = playerIds[idx];
+        if (myPlayer)
+            MyPlayer = info;    // 본인
+
+        _players.Add(info.PlayerId, info);
     }
 
-    public void Remove()
+    public void Remove(string id)
     {
+        _players.Remove(id);
+    }
 
+    public void RemoveMyPlayer()
+    {
+        if (MyPlayer == null)
+            return;
+
+        Remove(MyPlayer.PlayerId);
+        MyPlayer = null;
     }
 
     // public void Move(S_BroadcaseMove packet) { }

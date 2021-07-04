@@ -19,31 +19,40 @@ public abstract class Packet
     public ushort Protocol;
 }
 
+#region Interface
+[Serializable]
+public class UserInfo
+{
+    public string id;
+    public string name;
+}
+#endregion
+
 #region Server's packet
 [Serializable]
 public class S_CreateRoom : Packet
 {
-    public PlayerInfo user;
+    public UserInfo user;
     public string roomId;
 }
 
 [Serializable]
 public class S_EnterRoom : Packet
 {
-    public PlayerInfo user;
+    public UserInfo user;
     public string roomId;
 }
 
 [Serializable]
 public class S_LeaveRoom : Packet
 {
-    public PlayerInfo user;
+    public UserInfo user;
 }
 
 [Serializable]
 public class S_UserList : Packet
 {
-    public PlayerInfo[] users;
+    public UserInfo[] users;
 }
 #endregion
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8585281902980359058}
   - component: {fileID: 9181642700995947643}
   m_Layer: 5
-  m_Name: RoomId
+  m_Name: RoomID
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ABC12
+  m_Text: Room ID
 --- !u!1 &1122497048151614781
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 4616116040915873326}
   - component: {fileID: 5661949493126188912}
   m_Layer: 5
-  m_Name: Render_Image
+  m_Name: Character_Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -382,7 +382,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: map name
+  m_Text: Map name
 --- !u!1 &4007942619530458566
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 6460638157422915098}
   - component: {fileID: 3228093942237718440}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Map_Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1145,7 +1145,7 @@ GameObject:
   - component: {fileID: 1034045448851421081}
   - component: {fileID: 4844372791956515264}
   m_Layer: 5
-  m_Name: Count
+  m_Name: Bot_Count
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
