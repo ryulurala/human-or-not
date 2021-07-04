@@ -43,24 +43,24 @@ public class OnlineSettingsView : PopupUI
     {
         ClearUserName();
 
-        Debug.Log("Update user name!");
-
         int i = 0;
         foreach (string userName in names)
         {
             userNames[i].text = userName;
             i++;
         }
+
+        Debug.Log("Update user name!");
     }
 
     void ClearUserName()
     {
-        Debug.Log($"Clear user name!");
-
-        foreach (Text user in userNames)
+        foreach (Text userName in userNames)
         {
-            user.text = "";
+            userName.text = "";
         }
+
+        Debug.Log($"Clear user name!");
     }
 
     // map name, image
