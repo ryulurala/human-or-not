@@ -25,11 +25,13 @@ public class PacketManager
         _makeFunc.Add((ushort)PacketId.S_CreateRoom, MakePacket<S_CreateRoom>);
         _makeFunc.Add((ushort)PacketId.S_EnterRoom, MakePacket<S_EnterRoom>);
         _makeFunc.Add((ushort)PacketId.S_UserList, MakePacket<S_UserList>);
+        _makeFunc.Add((ushort)PacketId.S_LeaveRoom, MakePacket<S_LeaveRoom>);
 
         // _handler 등록
         _handler.Add((ushort)PacketId.S_CreateRoom, PacketHandler.S_CreateRoom);
         _handler.Add((ushort)PacketId.S_EnterRoom, PacketHandler.S_EnterRoom);
         _handler.Add((ushort)PacketId.S_UserList, PacketHandler.S_UserList);
+        _handler.Add((ushort)PacketId.S_LeaveRoom, PacketHandler.S_LeaveRoom);
     }
 
     public void OnRecvPacket(Session session, byte[] data)

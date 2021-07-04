@@ -39,15 +39,27 @@ public class OnlineSettingsView : PopupUI
 
     // user1~5 Name
     Text[] userNames = new Text[5];
-    public void UpdateUser(string[] names)
+    public void UpdateUserName(string[] names)
     {
-        Debug.Log("UpdateUser!");
+        ClearUserName();
+
+        Debug.Log("Update user name!");
 
         int i = 0;
         foreach (string userName in names)
         {
             userNames[i].text = userName;
             i++;
+        }
+    }
+
+    void ClearUserName()
+    {
+        Debug.Log($"Clear user name!");
+
+        foreach (Text user in userNames)
+        {
+            user.text = "";
         }
     }
 
@@ -92,25 +104,13 @@ public class OnlineSettingsView : PopupUI
         Text myName = GetText((int)Texts.My_Name);
         myName.text = Manager.Player.MyPlayer.PlayerName;
 
-        Text user1Name = GetText((int)Texts.User1_Name);
-        user1Name.text = "";
-        userNames[0] = user1Name;
+        userNames[0] = GetText((int)Texts.User1_Name);
+        userNames[1] = GetText((int)Texts.User2_Name);
+        userNames[2] = GetText((int)Texts.User3_Name);
+        userNames[3] = GetText((int)Texts.User4_Name);
+        userNames[4] = GetText((int)Texts.User5_Name);
 
-        Text user2Name = GetText((int)Texts.User2_Name);
-        user2Name.text = "";
-        userNames[1] = user2Name;
-
-        Text user3Name = GetText((int)Texts.User3_Name);
-        user3Name.text = "";
-        userNames[2] = user3Name;
-
-        Text user4Name = GetText((int)Texts.User4_Name);
-        user4Name.text = "";
-        userNames[3] = user4Name;
-
-        Text user5Name = GetText((int)Texts.User5_Name);
-        user5Name.text = "";
-        userNames[4] = user5Name;
+        ClearUserName();
     }
 
     void InitMapSelection()

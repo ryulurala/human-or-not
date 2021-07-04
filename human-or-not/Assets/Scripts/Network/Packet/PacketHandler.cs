@@ -46,17 +46,18 @@ public class PacketHandler
 
         // Update UI
         OnlineSettingsView view = Manager.UI.CurrentPopupUI as OnlineSettingsView;
-        view.UpdateUser(Manager.Player.GetOtherPlayerNames());
+        view.UpdateUserName(Manager.Player.GetOtherPlayerNames());
+    }
 
+    public static void S_LeaveRoom(Session session, Packet packet)
+    {
+        S_LeaveRoom body = packet as S_LeaveRoom;
 
-        // ushort[] playerIds = packet.players;
-        // int idx = 0;
-        // while (idx < playerIds.Length - 1)
-        // {
-        //     _players.Add(playerIds[idx], null);
-        //     idx++;
-        // }
-        // _myPlayerId = playerIds[idx];
+        // Player 삭제
+        Manager.Player.Remove(body.user.id);
 
+        // Update UI
+        OnlineSettingsView view = Manager.UI.CurrentPopupUI as OnlineSettingsView;
+        view.UpdateUserName(Manager.Player.GetOtherPlayerNames());
     }
 }
