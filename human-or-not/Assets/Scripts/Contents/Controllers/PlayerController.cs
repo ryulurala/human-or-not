@@ -102,10 +102,14 @@ public class PlayerController : MonoBehaviour
     {
         _hasExitState = true;
 
-        if (!_animator.IsInTransition(0))
-            yield return new WaitForSeconds(_animator.GetCurrentAnimatorStateInfo(0).length);
-        else
-            yield return new WaitForSeconds(1f);
+        while (System.Enum.GetName(typeof(Definition.State), _state) != _animator.GetCurrentAnimatorClipInfo(0)[0].clip.name)
+        {
+            Debug.Log($"Animation State: {_animator.GetCurrentAnimatorClipInfo(0)[0].clip.name}");
+            Debug.Log($"Definition State: {_state}");
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(_animator.GetCurrentAnimatorStateInfo(0).length * 0.8f);
 
         State = Definition.State.Idle;
 
@@ -116,7 +120,7 @@ public class PlayerController : MonoBehaviour
     void OnPadEvent(Definition.PadEvent padEvent, Vector3 dir)
     {
         // 끝날 때까지 기다려야 하는 State
-        if (_hasExitState == true)
+        if (_hasExitState)
             return;
 
         switch (padEvent)

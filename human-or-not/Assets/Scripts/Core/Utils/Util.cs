@@ -11,8 +11,8 @@ public class Util
     [DllImport("__Internal")] private static extern bool isMobile();
     public static bool IsMobile { get; } = isMobile();
 #else
-    public static bool IsMobile { get; } = false;
-    // public static bool IsMobile { get; } = true;
+    // public static bool IsMobile { get; } = false;
+    public static bool IsMobile { get; } = true;
 #endif
 
     static JsonHelper _jsonHelper;

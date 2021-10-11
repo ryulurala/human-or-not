@@ -10,14 +10,12 @@ public class GameScene : BaseScene
 
         Manager.Game.Init();
 
-        // GameObject player = Manager.Game.SpawnPlayer(Definition.Character.Dongdong);
+        GameObject player = Manager.Game.SpawnPlayer(Definition.Character.Dongdong);
         // GameObject spawningPool = Manager.Game.SpawnBots(Definition.Character.Dongdong);
         // GameObject touchDowns = Manager.Game.SpawnTouchDown(count: 5);
 
         // Camera Settings
-        if (GameObject.Find("CameraPivot") == null)
-            Manager.Resource.Instaniate("Camera/CameraPivot");
-        // Camera.main.GetComponent<CameraController>().Target = player;
+        Manager.Game.InitGameCamera(target: player);
     }
 
     public override void Clear()

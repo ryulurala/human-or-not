@@ -9,7 +9,7 @@ public class SceneManagerEx
 {
     public BaseScene CurrentScene { get => GameObject.FindObjectOfType<BaseScene>(); }
 
-    public void Clear()
+    void Clear()
     {
         CurrentScene.Clear();
     }

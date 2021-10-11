@@ -23,6 +23,8 @@ public class PlaySettingsView : PopupUI
 
     protected override void OnAwake()
     {
+        base.OnAwake();
+
         Bind<Button>(typeof(Buttons));
     }
 

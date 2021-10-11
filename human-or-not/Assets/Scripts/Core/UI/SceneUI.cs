@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SceneUI : BaseUI
 {
-    void Awake()
+    protected override void OnAwake()
     {
         Manager.UI.SetCanvas(gameObject, false);
     }

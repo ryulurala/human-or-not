@@ -10,6 +10,13 @@ public abstract class BaseUI : MonoBehaviour
     // Bind 된 모든 Objects
     Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
 
+    void Awake()
+    {
+        OnAwake();
+    }
+
+    protected abstract void OnAwake();
+
     protected void Bind<T>(Type type) where T : UnityEngine.Object
     {
         string[] names = Enum.GetNames(type);

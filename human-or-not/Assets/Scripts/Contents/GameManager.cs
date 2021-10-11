@@ -40,19 +40,20 @@ public class GameManager
     //     return root;
     // }
 
-    // public GameObject SpawnPlayer(Definition.Character type = Definition.Character.Dongdong)  // Default: Dongdong
-    // {
-    //     string characterName = GetCharacterName(type);
+    public GameObject SpawnPlayer(Definition.Character type = Definition.Character.Dongdong)  // Default: Dongdong
+    {
+        string characterName = GetCharacterName(type);
 
-    //     // Spawn player
-    //     GameObject player = CreateObject($"Character/{characterName}/Player", Definition.WorldObject.Player);
+        // Spawn player
+        // GameObject player = CreateObject($"Character/{characterName}/Player", Definition.WorldObject.Player);
+        GameObject player = Manager.Resource.Instaniate($"Character/{characterName}/Player");
 
-    //     Vector3 resultPos;
-    //     if (Manager.Game.RandomPoint(Vector3.zero, 100.0f, out resultPos, routineCount: 1000))
-    //         player.transform.position = resultPos;
+        Vector3 resultPos;
+        if (Manager.Game.RandomPoint(Vector3.zero, 100.0f, out resultPos, routineCount: 1000))
+            player.transform.position = resultPos;
 
-    //     return player;
-    // }
+        return player;
+    }
 
     // public GameObject SpawnBots(Definition.Character type = Definition.Character.Dongdong)    // Default: Dongdong
     // {
@@ -142,8 +143,9 @@ public class GameManager
         return System.Enum.GetName(typeof(Definition.Character), type);
     }
 
-    public void InitGameCamera()
+    public void InitGameCamera(GameObject target = null)
     {
         CameraController camera = Camera.main.gameObject.GetOrAddComponent<CameraController>();
+        camera.Target = target;
     }
 }

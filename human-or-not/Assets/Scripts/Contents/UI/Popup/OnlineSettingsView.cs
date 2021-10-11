@@ -69,6 +69,8 @@ public class OnlineSettingsView : PopupUI
 
     protected override void OnAwake()
     {
+        base.OnAwake();
+
         Bind<Button>(typeof(Buttons));
         Bind<Image>(typeof(Images));
         Bind<Text>(typeof(Texts));

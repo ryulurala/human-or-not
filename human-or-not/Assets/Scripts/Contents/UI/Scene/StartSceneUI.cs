@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MainMenu : SceneUI
+public class StartSceneUI : SceneUI
 {
     enum GameObjects
     {
@@ -12,8 +12,10 @@ public class MainMenu : SceneUI
         Credits,
     }
 
-    void Awake()
+    protected override void OnAwake()
     {
+        base.OnAwake();
+
         Bind<GameObject>(typeof(GameObjects));
     }
 

@@ -39,6 +39,8 @@ public class PlayClientTab : PopupUI
 
     protected override void OnAwake()
     {
+        base.OnAwake();
+
         Bind<Button>(typeof(Buttons));
         Bind<InputField>(typeof(InputFields));
     }

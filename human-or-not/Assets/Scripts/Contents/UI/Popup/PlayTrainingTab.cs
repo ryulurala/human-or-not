@@ -36,6 +36,8 @@ public class PlayTrainingTab : PopupUI
 
     protected override void OnAwake()
     {
+        base.OnAwake();
+
         Bind<Button>(typeof(Buttons));
         Bind<Dropdown>(typeof(Dropdowns));
         Bind<Image>(typeof(Images));

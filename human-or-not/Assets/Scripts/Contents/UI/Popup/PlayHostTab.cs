@@ -31,6 +31,8 @@ public class PlayHostTab : PopupUI
 
     protected override void OnAwake()
     {
+        base.OnAwake();
+
         Bind<Button>(typeof(Buttons));
         Bind<InputField>(typeof(InputFields));
         Bind<Text>(typeof(Texts));

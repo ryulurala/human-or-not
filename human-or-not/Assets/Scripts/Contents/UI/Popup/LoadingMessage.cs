@@ -13,6 +13,8 @@ public class LoadingMessage : PopupUI
 
     protected override void OnAwake()
     {
+        base.OnAwake();
+
         Bind<Button>(typeof(Buttons));
     }
 
