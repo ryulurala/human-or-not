@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     Animator _animator;
     CharacterController _characterController;
     bool _hasExitState;
-    bool _hasEndedState { get { return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f; } }
 
     public Definition.State State
     {
@@ -28,31 +27,24 @@ public class PlayerController : MonoBehaviour
             switch (_state)
             {
                 case Definition.State.Died:
-                    _animator.CrossFadeInFixedTime("Die", 0.05f);  // 바로 애니메이션 실행
-                    _hasExitState = true;
+                    _animator.CrossFade("Die", 0.05f);
                     break;
                 case Definition.State.Idle:
-                    if (_hasEndedState == true)
-                        _animator.CrossFadeInFixedTime("Idle", 0.05f);
-                    else
-                        _animator.CrossFade("Idle", 0.05f);
-                    _hasExitState = false;
+                    _animator.CrossFade("Idle", 0.05f);
                     break;
                 case Definition.State.Walking:
                     _animator.CrossFade("Walk", 0.05f);
-                    _hasExitState = false;
                     break;
                 case Definition.State.Running:
                     _animator.CrossFade("Run", 0.05f);
-                    _hasExitState = false;
                     break;
                 case Definition.State.Attack:
-                    _animator.CrossFadeInFixedTime("Attack", 0.05f);
-                    _hasExitState = true;
+                    _animator.CrossFade("Attack", 0.05f);
+                    StartCoroutine(WaitForExitState());
                     break;
                 case Definition.State.Jump:
-                    _animator.CrossFadeInFixedTime("Jump", 0.05f);
-                    _hasExitState = true;
+                    _animator.CrossFade("Jump", 0.05f);
+                    StartCoroutine(WaitForExitState());
                     break;
             }
         }
@@ -81,42 +73,17 @@ public class PlayerController : MonoBehaviour
         Manager.Input.KeyAction += OnKeyEvent;
     }
 
-    void Update()
-    {
-        switch (_state)
-        {
-            case Definition.State.Died:
-                UpdateDied();
-                break;
-            case Definition.State.Idle:
-                UpdateIdle();
-                break;
-            case Definition.State.Walking:
-                UpdateWalking();
-                break;
-            case Definition.State.Running:
-                UpdateRunning();
-                break;
-            case Definition.State.Attack:
-                UpdateAttack();
-                break;
-            case Definition.State.Jump:
-                UpdateJump();
-                break;
-        }
-    }
-
-    void Move(float speed, Definition.State state, Vector3 velocity)
+    void Move(float speed, Vector3 velocity)
     {
         if (velocity == Vector3.zero)
             return;
 
         // 방향
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), _angularSpeed * Time.deltaTime);
+        Quaternion direction = Quaternion.LookRotation(velocity);
+        transform.rotation = Quaternion.Slerp(transform.rotation, direction, _angularSpeed * Time.deltaTime);
 
-        // transform.Translate(velocity * speed * Time.deltaTime, Space.World);
+        // 위치
         _characterController.Move(velocity * speed * Time.deltaTime);
-        State = state;
     }
 
     // void OnControllerColliderHit(ControllerColliderHit hit)
@@ -131,26 +98,24 @@ public class PlayerController : MonoBehaviour
     //     }
     // }
 
-    #region UpdateState
-    void UpdateDied() { }
-    void UpdateIdle() { }
-    void UpdateWalking() { }
-    void UpdateRunning() { }
-    void UpdateAttack()
+    IEnumerator WaitForExitState()
     {
-        if (_hasEndedState == true)
-            State = Definition.State.Idle;  // 코루틴으로?: 대기 시간 후 idle로 변경
+        _hasExitState = true;
+
+        if (!_animator.IsInTransition(0))
+            yield return new WaitForSeconds(_animator.GetCurrentAnimatorStateInfo(0).length);
+        else
+            yield return new WaitForSeconds(1f);
+
+        State = Definition.State.Idle;
+
+        _hasExitState = false;
     }
-    void UpdateJump()
-    {
-        if (_hasEndedState == true)
-            State = Definition.State.Idle;  // 코루틴으로?: 대기 시간 후 idle로 변경
-    }
-    #endregion
 
     #region Mobile
     void OnPadEvent(Definition.PadEvent padEvent, Vector3 dir)
     {
+        // 끝날 때까지 기다려야 하는 State
         if (_hasExitState == true)
             return;
 
@@ -166,10 +131,12 @@ public class PlayerController : MonoBehaviour
                 State = Definition.State.Idle;
                 break;
             case Definition.PadEvent.OnWalk:
-                Move(_walkSpeed, Definition.State.Walking, dir);
+                Move(_walkSpeed, dir);          // Moving
+                State = Definition.State.Walking;
                 break;
             case Definition.PadEvent.OnRun:
-                Move(_runSpeed, Definition.State.Running, dir);
+                Move(_runSpeed, dir);           // Moving
+                State = Definition.State.Running;
                 break;
         }
     }
@@ -178,18 +145,18 @@ public class PlayerController : MonoBehaviour
     #region PC
     void OnMouseEvent(Definition.MouseEvent mouseEvent)
     {
-        if (_hasExitState == true)
+        // 끝날 때까지 기다려야 하는 State
+        if (_hasExitState)
             return;
 
         if (mouseEvent == Definition.MouseEvent.LeftClick)
             State = Definition.State.Attack;
-
     }
 
     void OnKeyEvent(Definition.KeyEvent keyEvent, Vector3 dir)
     {
-
-        if (_hasExitState == true)
+        // 끝날 때까지 기다려야 하는 State
+        if (_hasExitState)
             return;
 
         switch (keyEvent)
@@ -198,10 +165,12 @@ public class PlayerController : MonoBehaviour
                 State = Definition.State.Idle;
                 break;
             case Definition.KeyEvent.WASD:
-                Move(_walkSpeed, Definition.State.Walking, dir);
+                Move(_walkSpeed, dir);
+                State = Definition.State.Walking;
                 break;
             case Definition.KeyEvent.ShiftWASD:
-                Move(_runSpeed, Definition.State.Running, dir);
+                Move(_runSpeed, dir);
+                State = Definition.State.Running;
                 break;
             case Definition.KeyEvent.SpaceBar:
                 State = Definition.State.Jump;

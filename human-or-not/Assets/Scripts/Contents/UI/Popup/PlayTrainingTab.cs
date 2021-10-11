@@ -34,7 +34,7 @@ public class PlayTrainingTab : PopupUI
         BotCount_Slider,
     }
 
-    void Awake()
+    protected override void OnAwake()
     {
         Bind<Button>(typeof(Buttons));
         Bind<Dropdown>(typeof(Dropdowns));

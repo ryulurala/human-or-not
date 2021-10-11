@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public abstract class BaseScene : MonoBehaviour
 {
@@ -13,10 +14,11 @@ public abstract class BaseScene : MonoBehaviour
 
     protected virtual void OnAwake()
     {
-        Manager.UI.CreateEventSystem();
-
-        string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        string currentSceneName = SceneManager.GetActiveScene().name;
         SceneType = Util.GetEnumValue<Definition.Scene>(currentSceneName);
+
+        Manager.UI.CreateEventSystem();
     }
+
     public abstract void Clear();
 }

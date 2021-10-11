@@ -17,7 +17,7 @@ public class GameEndMessage : PopupUI
         Message,
     }
 
-    void Awake()
+    protected override void OnAwake()
     {
         Bind<Button>(typeof(Buttons));
     }

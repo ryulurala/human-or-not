@@ -11,7 +11,7 @@ public class LoadingMessage : PopupUI
         Cancel,
     }
 
-    void Awake()
+    protected override void OnAwake()
     {
         Bind<Button>(typeof(Buttons));
     }

@@ -67,7 +67,7 @@ public class OnlineSettingsView : PopupUI
 
     // character image
 
-    void Awake()
+    protected override void OnAwake()
     {
         Bind<Button>(typeof(Buttons));
         Bind<Image>(typeof(Images));

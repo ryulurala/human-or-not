@@ -26,10 +26,10 @@ public class UIManager
     public void SetCanvas(GameObject go, bool isSorting = true)
     {
         Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
         // Canvas 안에 Canvas가 중첩할 경우 자신만의 sorting order를 가짐.
         canvas.overrideSorting = true;
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
         if (isSorting)
             canvas.sortingOrder = _order++;     // Popup UI

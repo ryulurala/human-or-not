@@ -21,7 +21,7 @@ public class PlaySettingsView : PopupUI
         TraningMode,
     }
 
-    void Awake()
+    protected override void OnAwake()
     {
         Bind<Button>(typeof(Buttons));
     }

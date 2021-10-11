@@ -29,7 +29,7 @@ public class PlayHostTab : PopupUI
         Text0_9,
     }
 
-    void Awake()
+    protected override void OnAwake()
     {
         Bind<Button>(typeof(Buttons));
         Bind<InputField>(typeof(InputFields));

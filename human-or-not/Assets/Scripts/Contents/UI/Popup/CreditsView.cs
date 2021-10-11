@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CreditsView : PopupUI
 {
-    enum GameObjects
+    enum Buttons
     {
         Close,
     }
 
-    void Awake()
+    protected override void OnAwake()
     {
-        Bind<GameObject>(typeof(GameObjects));
+        Bind<Button>(typeof(Buttons));
     }
 
     void Start()
@@ -22,9 +23,9 @@ public class CreditsView : PopupUI
 
     void InitButtons()
     {
-        GameObject closeBtn = GetObject((int)GameObjects.Close);
+        Button closeBtn = GetButton((int)Buttons.Close);
 
-        BindEvent(closeBtn, (PointerEventData) =>
+        BindEvent(closeBtn.gameObject, (PointerEventData) =>
         {
             ClosePopupUI();
         });

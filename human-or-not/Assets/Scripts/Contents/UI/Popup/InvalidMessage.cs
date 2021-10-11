@@ -10,7 +10,7 @@ public class InvalidMessage : PopupUI
         Close,
     }
 
-    void Awake()
+    protected override void OnAwake()
     {
         Bind<Button>(typeof(Buttons));
     }

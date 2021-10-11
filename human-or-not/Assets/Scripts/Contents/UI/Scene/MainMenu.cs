@@ -15,7 +15,10 @@ public class MainMenu : SceneUI
     void Awake()
     {
         Bind<GameObject>(typeof(GameObjects));
+    }
 
+    void Start()
+    {
         InitButtons();
     }
 
