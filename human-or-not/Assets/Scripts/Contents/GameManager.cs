@@ -141,4 +141,9 @@ public class GameManager
         // Reflaction
         return System.Enum.GetName(typeof(Definition.Character), type);
     }
+
+    public void InitGameCamera()
+    {
+        CameraController camera = Camera.main.gameObject.GetOrAddComponent<CameraController>();
+    }
 }

@@ -6,25 +6,27 @@ using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] GameObject _target = null;
+    Transform _pivot;
     readonly Vector3 _delta = new Vector3(0f, 7.5f, -5f);
-    Vector3 _playerBellyPos;
-    Vector3 _prevPos;
-    float _pivotAngleX;
-    float _pivotAngleY;
-    float _zoomRatio;
-    const float _rotateSpeed = 1f;
-    const float _zoomSpeed = 0.1f;
+    [SerializeField] GameObject _target;
 
     public float MaxZoomRatio { get; } = 3.0f;
     public float MinZoomRatio { get; } = 1.0f;
-    public Transform Pivot { get; private set; } = null;
-    public GameObject Target { get { return _target; } set { _target = value; } }
+
+    public GameObject Target { get => _target; set => _target = value; }
+
+    void Awake()
+    {
+        // Create Pivot
+        if (_pivot == null)
+        {
+            _pivot = new GameObject() { name = "Camera Pivot" }.transform;
+            transform.parent = _pivot;
+        }
+    }
 
     void Start()
     {
-        Pivot = transform.parent;
-
         Manager.Input.MouseAction -= OnMouseEvent;
         Manager.Input.MouseAction += OnMouseEvent;
 
@@ -32,9 +34,6 @@ public class CameraController : MonoBehaviour
         Manager.Input.PadAction += OnPadEvent;
 
         _zoomRatio = (MinZoomRatio + MaxZoomRatio) / 2;
-        // Scene이 Awake에서 Player 미리 설정
-        if (_target.IsValid())
-            _playerBellyPos = new Vector3(0, 0, _target.GetComponent<CharacterController>().height / 2);
     }
 
     void LateUpdate()
@@ -42,9 +41,9 @@ public class CameraController : MonoBehaviour
         if (!_target.IsValid())
             return;
 
-        Pivot.position = _target.transform.position;
+        _pivot.position = _target.transform.position;
         transform.localPosition = _delta * _zoomRatio;
-        transform.LookAt(Pivot.transform.position + _playerBellyPos);
+        transform.LookAt(_pivot.transform.position);
     }
 
     #region Mobile
@@ -84,12 +83,16 @@ public class CameraController : MonoBehaviour
     }
     #endregion
 
+    Vector3 _prevPos;
+    float _pivotAngleX, _pivotAngleY;
+    const float _rotateSpeed = 1f;
+
     void StartRotate(Vector3 point)
     {
         _prevPos = Camera.main.ScreenToViewportPoint(point);
 
-        _pivotAngleX = Pivot.eulerAngles.x >= 310 ? Pivot.eulerAngles.x - 360 : Pivot.eulerAngles.x;
-        _pivotAngleY = Pivot.eulerAngles.y;
+        _pivotAngleX = _pivot.eulerAngles.x >= 310 ? _pivot.eulerAngles.x - 360 : _pivot.eulerAngles.x;
+        _pivotAngleY = _pivot.eulerAngles.y;
     }
 
     void Rotate(Vector3 point)
@@ -99,8 +102,11 @@ public class CameraController : MonoBehaviour
         float xAngle = Mathf.Clamp((_pivotAngleX - currPos.y * 90) * _rotateSpeed, -50, 30);
         float yAngle = (_pivotAngleY + currPos.x * 180) * _rotateSpeed;
 
-        Pivot.rotation = Quaternion.Euler(xAngle, yAngle, 0f);
+        _pivot.rotation = Quaternion.Euler(xAngle, yAngle, 0f);
     }
+
+    float _zoomRatio;
+    const float _zoomSpeed = 0.1f;
 
     void Zoom(float delta)
     {
